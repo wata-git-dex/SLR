@@ -1831,7 +1831,9 @@ let RAW_SESSIONS = [
  }
 ];
 
-const NOTION_MCP = "https://mcp.notion.com/mcp";
+const GH_TOKEN = "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";
+const GH_REPO = "wata-git-dex/SLR";
+const GH_WORKFLOW = "sync-notion.yml";
 const DS = {
   strains:  "collection://90289161-102c-4070-9fcf-1805edcd28c1",
   batches:  "collection://eab15a0d-95a3-4695-b106-62a1e52e312b",
@@ -2163,11 +2165,42 @@ function parseArr(x){ if(Array.isArray(x))return x; if(!x)return []; try{return 
 
 async function refresh(){
   const btn=$('#refreshBtn'); if(btn.classList.contains('spin'))return;
-  btn.classList.add('spin'); toast('Pulling from Notion…');
+  btn.classList.add('spin'); toast('Syncing with Notion…');
   try{
-    const sRows=await notionQuery('SELECT url, "Name", "Batches" FROM "'+DS.strains+'"', DS.strains);
-    const bRows=await notionQuery('SELECT url, "Brand", "Type", "THC %", "Terpenes (ms)", "Strains", "date:Purchase Date:start" FROM "'+DS.batches+'"', DS.batches);
-    const kRows=await notionQuery('SELECT url, "🌾 Batches", "Calm","Creative","Focused","Motivated","Social","Anxious","Headache","Paranoid","Sleepy","Washed" FROM "'+DS.sessions+'"', DS.sessions);
+    const dispatchRes = await fetch(
+      `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`,
+      { method:'POST',
+        headers:{'Authorization':`Bearer ${GH_TOKEN}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+        body: JSON.stringify({ref:'main'}) }
+    );
+    if(!dispatchRes.ok) throw new Error('Could not start sync ('+dispatchRes.status+')');
+    toast('Sync started — updating…');
+    const triggered = Date.now();
+    let attempts = 0;
+    while(attempts < 25){
+      await new Promise(r=>setTimeout(r,3000));
+      const runsRes = await fetch(
+        `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`,
+        {headers:{'Authorization':`Bearer ${GH_TOKEN}`,'Accept':'application/vnd.github+json'}}
+      );
+      const runs = await runsRes.json();
+      const newRun = runs.workflow_runs?.find(r=>new Date(r.created_at).getTime() >= triggered - 8000);
+      if(newRun){
+        if(newRun.status==='completed'){
+          if(newRun.conclusion==='success'){ toast('Done! Reloading…'); setTimeout(()=>location.reload(),1500); return; }
+          else throw new Error('Sync failed on GitHub');
+        }
+        toast('Syncing… ('+newRun.status+')');
+      }
+      attempts++;
+    }
+    throw new Error('Timed out — try reloading manually');
+  }catch(err){
+    toast(err.message,'err');
+  }finally{
+    btn.classList.remove('spin');
+  }
+}
 
     RAW_STRAINS = sRows.map(r=>({url:r.url, Name:r.Name, Batches:parseArr(r.Batches)}));
     RAW_BATCHES = bRows.map(r=>({url:r.url, Brand:r.Brand, Type:r.Type, THC:r["THC %"], Terps:parseArr(r["Terpenes (ms)"]), Strain:(parseArr(r.Strains)[0]||null), Date:r["date:Purchase Date:start"]}));
