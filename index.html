@@ -2202,23 +2202,6 @@ async function refresh(){
   }
 }
 
-    RAW_STRAINS = sRows.map(r=>({url:r.url, Name:r.Name, Batches:parseArr(r.Batches)}));
-    RAW_BATCHES = bRows.map(r=>({url:r.url, Brand:r.Brand, Type:r.Type, THC:r["THC %"], Terps:parseArr(r["Terpenes (ms)"]), Strain:(parseArr(r.Strains)[0]||null), Date:r["date:Purchase Date:start"]}));
-    RAW_SESSIONS = kRows.map(r=>({Batch:parseArr(r["🌾 Batches"]),
-      Calm:r["Calm"],Creative:r["Creative"],Focused:r["Focused"],Motivated:r["Motivated"],Social:r["Social"],
-      Anxious:r["Anxious"],Headache:r["Headache"],Paranoid:r["Paranoid"],Sleepy:r["Sleepy"],Washed:r["Washed"]}));
-
-    STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
-    const now=new Date();
-    setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
-    buildChips(); render();
-    toast('Updated — '+STRAINS.length+' strains',' ok');
-  }catch(err){
-    toast('Refresh needs the Claude app with Notion connected. ('+err.message+')','err');
-  }finally{
-    btn.classList.remove('spin');
-  }
-}
 $('#refreshBtn').addEventListener('click',refresh);
 
 // landing / enter the lab (doors part on entry)
