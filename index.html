@@ -2164,36 +2164,20 @@ function parseArr(x){ if(Array.isArray(x))return x; if(!x)return []; try{return 
 
 async function refresh(){
   const btn=$('#refreshBtn'); if(btn.classList.contains('spin'))return;
-  btn.classList.add('spin'); toast('Syncing with Notion…');
+  btn.classList.add('spin'); toast('Pulling from Notion…');
   try{
-    const dispatchRes = await fetch(
-      `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`,
-      { method:'POST',
-        headers:{'Authorization':`Bearer ${GH_TOKEN}`,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
-        body: JSON.stringify({ref:'main'}) }
-    );
-    if(!dispatchRes.ok) throw new Error('Could not start sync ('+dispatchRes.status+')');
-    toast('Sync started — updating…');
-    const triggered = Date.now();
-    let attempts = 0;
-    while(attempts < 25){
-      await new Promise(r=>setTimeout(r,3000));
-      const runsRes = await fetch(
-        `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/runs?per_page=5`,
-        {headers:{'Authorization':`Bearer ${GH_TOKEN}`,'Accept':'application/vnd.github+json'}}
-      );
-      const runs = await runsRes.json();
-      const newRun = runs.workflow_runs?.find(r=>new Date(r.created_at).getTime() >= triggered - 8000);
-      if(newRun){
-        if(newRun.status==='completed'){
-          if(newRun.conclusion==='success'){ toast('Done! Reloading…'); setTimeout(()=>location.reload(),1500); return; }
-          else throw new Error('Sync failed on GitHub');
-        }
-        toast('Syncing… ('+newRun.status+')');
-      }
-      attempts++;
-    }
-    throw new Error('Timed out — try reloading manually');
+    const res = await fetch('https://slr-notion.cleanwataorg.workers.dev');
+    if(!res.ok) throw new Error('Worker error '+res.status);
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    RAW_STRAINS = data.strains;
+    RAW_BATCHES = data.batches;
+    RAW_SESSIONS = data.sessions;
+    STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
+    const now=new Date();
+    setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
+    buildChips(); render();
+    toast('Updated — '+STRAINS.length+' strains','ok');
   }catch(err){
     toast(err.message,'err');
   }finally{
