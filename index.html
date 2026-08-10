@@ -2145,8 +2145,15 @@ function openSheet(s){
       </div>
     </div>
   </div>
-  <div class="sbody">`;
+<div class="s">`;
 
+  if(s.has_image){
+    const imgId=s.url.split('/').pop();
+    html+=`<div class="hero" style="margin-bottom:14px"><img src="images/${imgId}.jpg" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`;
+  }
+
+  // Type / THC
+  html+=`<div class="sect">...  
   // Type / THC
   html+=`<div class="sect"><div class="statgrid two">
     <div class="stat"><div class="v ${tcol}">${s.type||'—'}</div><div class="k">Type</div></div>
