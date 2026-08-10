@@ -24,6 +24,9 @@
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
 }
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
@@ -305,6 +308,9 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .toast.ok{border-color:rgba(99,211,116,.5);color:#a6e6ad}
 </style>
 </head>
+  <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
+  <img id="lightboxImg" src="" alt="">
+</div>
 <body>
 <div class="landing" id="landing">
   <div class="door dl"></div>
@@ -2133,7 +2139,7 @@ function openSheet(s){
   let html=`
   <div class="shead">
     <div class="row">
-      ${s.has_image?`<div style="flex:0 0 auto;width:88px;height:88px;border-radius:14px;overflow:hidden;border:2px solid var(--typecol,var(--line2));align-self:center"><img src="images/${s.url.split('/').pop()}.jpg" style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in" onclick="window.open(this.src,'_blank')"></div>`:''}
+      ${s.has_image?`<div style="flex:0 0 auto;width:88px;height:88px;border-radius:14px;overflow:hidden;border:2px solid var(--typecol,var(--line2));align-self:center"><img src="images/${s.url.split('/').pop()}.jpg" style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in" onclick="document.getElementById('lightboxImg').src=this.src;document.getElementById('lightbox').classList.add('show')"></div>`:''}
       <div style="flex:1;min-width:0">
         <div class="eyebrow">Strain</div>
         <div class="namebox t-${s.type||'x'}"><h2>${s.name}</h2></div>
