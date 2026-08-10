@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install image conversion support
-        run: sudo apt-get install -y imagemagick libheif-dev
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install heic-convert
+        run: npm install heic-convert
 
       - name: Fetch from Notion and update index.html
         env:
