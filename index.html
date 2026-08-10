@@ -1939,8 +1939,8 @@ function process(strains,batches,sessions){
     if(score!=null) verdict = score>=70?'loved':score>=55?'good':score>=40?'mixed':'avoid';
     else if(strainSessions.length>0) verdict='tried';
     else verdict='untested';
-    out.push({
-      name:st.Name, url:st.url, photo:st.photo||null,
+ out.push({
+  name:st.Name, url:st.url, photo:st.photo||null, has_image:st.has_image||false,
       type:mode(types), brands,
       thc_min: thc.length?Math.round(Math.min.apply(null,thc)*1000)/10:null,
       thc_max: thc.length?Math.round(Math.max.apply(null,thc)*1000)/10:null,
