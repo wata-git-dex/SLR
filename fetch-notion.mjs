@@ -149,6 +149,5 @@ html = html.replace(
   /specimens logged \xB7 updated [A-Za-z]+ \d+/,
   "specimens logged \xB7 updated " + syncDate
 );
-);
 writeFileSync("index.html", html, "utf8");
 console.log(`Done. ${RAW_STRAINS.filter(s=>s.has_image).length} photos, ${RAW_STRAINS.length} strains total.`);
