@@ -143,10 +143,11 @@ html = html.replace(
 const syncDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 html = html.replace(
   /setUpdated\('[^']+'\);/,
-  `setUpdated('${syncDate}');`
+  "setUpdated('" + syncDate + "');"
+);
 html = html.replace(
-  /specimens logged · updated [A-Za-z]+ \d+/,
-  `specimens logged · updated ${syncDate}`
+  /specimens logged \xB7 updated [A-Za-z]+ \d+/,
+  "specimens logged \xB7 updated " + syncDate
 );
 );
 writeFileSync("index.html", html, "utf8");
