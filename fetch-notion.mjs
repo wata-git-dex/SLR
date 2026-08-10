@@ -144,6 +144,10 @@ const syncDate = new Date().toLocaleDateString('en-US', { month: 'short', day: '
 html = html.replace(
   /setUpdated\('[^']+'\);/,
   `setUpdated('${syncDate}');`
+html = html.replace(
+  /specimens logged · updated [A-Za-z]+ \d+/,
+  `specimens logged · updated ${syncDate}`
+);
 );
 writeFileSync("index.html", html, "utf8");
 console.log(`Done. ${RAW_STRAINS.filter(s=>s.has_image).length} photos, ${RAW_STRAINS.length} strains total.`);
