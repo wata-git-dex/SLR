@@ -140,6 +140,10 @@ html = html.replace(
   /\/\/ last-sync:.*$/m,
   `// last-sync: ${new Date().toISOString()}`
 );
-
+const syncDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+html = html.replace(
+  /setUpdated\('[^']+'\);/,
+  `setUpdated('${syncDate}');`
+);
 writeFileSync("index.html", html, "utf8");
 console.log(`Done. ${RAW_STRAINS.filter(s=>s.has_image).length} photos, ${RAW_STRAINS.length} strains total.`);
