@@ -306,6 +306,29 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{border-color:rgba(228,106,84,.5);color:#f0a99a}
 .toast.ok{border-color:rgba(99,211,116,.5);color:#a6e6ad}
+  /* ---- Log Session form ---- */
+.log-form{padding:4px 0}
+.log-blazer{width:100%;padding:10px 12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;outline:none;margin-bottom:14px;box-sizing:border-box}
+.log-blazer:focus{border-color:var(--green-soft)}
+.log-blazer::placeholder{color:var(--faint)}
+.eff-section-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin:10px 0 6px;font-weight:500}
+.eff-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:4px}
+.eff-btn{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer;transition:.14s;font-size:12px;color:var(--dim);text-align:left;width:100%}
+.eff-btn:active{transform:scale(.96)}
+.eff-btn .efi{font-size:15px;line-height:1;flex:0 0 auto}
+.eff-btn .eval{margin-left:auto;font-family:'Space Mono',monospace;font-size:11px;min-width:24px;text-align:right}
+.eff-btn.pos-1{border-color:rgba(99,211,116,.45);color:var(--green)}
+.eff-btn.pos-2{border-color:rgba(99,211,116,.7);background:rgba(99,211,116,.1);color:var(--green)}
+.eff-btn.neg-1{border-color:rgba(228,106,84,.45);color:var(--red)}
+.eff-btn.neg-2{border-color:rgba(228,106,84,.7);background:rgba(228,106,84,.1);color:var(--red)}
+.batch-pick{margin-bottom:12px}
+.batch-opt{display:flex;align-items:center;padding:9px 12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;font-size:12px;color:var(--dim);transition:.14s;font-family:'Space Mono',monospace}
+.batch-opt.sel{border-color:var(--green-soft);color:var(--text)}
+.batch-opt:active{transform:scale(.97)}
+.log-submit{width:100%;margin-top:14px;padding:13px;background:linear-gradient(180deg,#6fdc7c,#49a457);color:#08120a;border:none;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:.15s}
+.log-submit:active{transform:scale(.97)}
+.log-submit:disabled{opacity:.5;cursor:default}
+
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -2217,11 +2240,15 @@ function openSheet(s){
     html+=`<div class="hint" style="margin-top:6px">Higher bar = stronger / more consistent across sessions.</div></div>`;
   }
 
-  html+=`</div>`;
-  $('#sheetContent').innerHTML=html;
-  $('#sheet').scrollTop=0;
-  $('#scrim').classList.add('show'); $('#sheet').classList.add('show');
-  document.body.style.overflow='hidden';
+  html += '<div class="sect"><h3>Log a Session</h3><div id="logSessionContainer"></div></div>';
+html += '</div>';
+
+$('#sheetContent').innerHTML = html;
+$('#sheet').scrollTop = 0;
+$('#scrim').classList.add('show');
+$('#sheet').classList.add('show');
+document.body.style.overflow = 'hidden';
+buildLogForm(s);  // ← add this line after innerHTML is set
 }
 function closeSheet(){$('#scrim').classList.remove('show');$('#sheet').classList.remove('show');document.body.style.overflow='';}
 $('#scrim').onclick=closeSheet;
@@ -2298,6 +2325,134 @@ document.querySelector('.brandbox').addEventListener('click',()=>{
   requestAnimationFrame(()=>requestAnimationFrame(()=>landing.classList.remove('opening')));
   window.scrollTo({top:0});
 });
+
+const EFFS_POS = [
+  {key:'Calm',      emoji:'🧘', label:'Calm'},
+  {key:'Creative',  emoji:'🎨', label:'Creative'},
+  {key:'Focused',   emoji:'🎯', label:'Focused'},
+  {key:'Motivated', emoji:'💪', label:'Motivated'},
+  {key:'Social',    emoji:'🎉', label:'Social'},
+];
+const EFFS_NEG = [
+  {key:'Sleepy',   emoji:'😴', label:'Sleepy'},
+  {key:'Headache', emoji:'🤕', label:'Headache'},
+  {key:'Anxious',  emoji:'😰', label:'Anxious'},
+  {key:'Washed',   emoji:'😶‍🌫️', label:'Washed'},
+  {key:'Paranoid', emoji:'👀', label:'Paranoid'},
+];
+
+let logState = {};
+
+function buildLogForm(s) {
+  const rawStrain = RAW_STRAINS.find(r => r.url === s.url);
+  const batchMap = {};
+  RAW_BATCHES.forEach(b => batchMap[b.url] = b);
+  const batches = (rawStrain?.Batches || []).map(u => batchMap[u]).filter(Boolean);
+
+  logState = { batchUrl: batches.length === 1 ? batches[0].url : null };
+  EFFS_POS.concat(EFFS_NEG).forEach(e => { logState[e.key] = '-'; });
+
+  let h = '<div class="log-form">';
+
+  if (batches.length > 1) {
+    h += '<div class="eff-section-lbl">Which batch?</div><div class="batch-pick">';
+    batches.forEach(b => {
+      h += '<div class="batch-opt" data-url="' + b.url + '" onclick="selectLogBatch(this)">' + (b.Batch || 'Batch') + '</div>';
+    });
+    h += '</div>';
+  }
+
+  h += '<input class="log-blazer" id="blazerInput" placeholder="Your name (Blazer)" autocomplete="off" spellcheck="false">';
+
+  h += '<div class="eff-section-lbl">✨ Positive effects — tap to rate</div><div class="eff-grid">';
+  EFFS_POS.forEach(e => {
+    h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',true)">' +
+         '<span class="efi">' + e.emoji + '</span>' + e.label +
+         '<span class="eval" id="eval-' + e.key + '">–</span></button>';
+  });
+  h += '</div>';
+
+  h += '<div class="eff-section-lbl">⚠️ Negative effects — tap to rate</div><div class="eff-grid">';
+  EFFS_NEG.forEach(e => {
+    h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',false)">' +
+         '<span class="efi">' + e.emoji + '</span>' + e.label +
+         '<span class="eval" id="eval-' + e.key + '">–</span></button>';
+  });
+  h += '</div>';
+
+  h += '<button class="log-submit" id="logSubmitBtn" onclick="submitSession()">Log Session</button>';
+  h += '</div>';
+
+  const container = document.getElementById('logSessionContainer');
+  if (container) container.innerHTML = h;
+}
+
+function selectLogBatch(el) {
+  document.querySelectorAll('.batch-opt').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  logState.batchUrl = el.dataset.url;
+}
+
+function cycleEff(key, isPos) {
+  const cycles = isPos ? ['-','🟢','🟢🟢'] : ['-','🔴','🔴🔴'];
+  const idx = cycles.indexOf(logState[key]);
+  logState[key] = cycles[(idx + 1) % cycles.length];
+  const val = logState[key];
+  const btn = document.getElementById('eff-' + key);
+  const lbl = document.getElementById('eval-' + key);
+  if (!btn) return;
+  btn.className = 'eff-btn';
+  lbl.textContent = val === '-' ? '–' : val;
+  if (isPos) {
+    if (val === '🟢')   btn.classList.add('pos-1');
+    if (val === '🟢🟢') btn.classList.add('pos-2');
+  } else {
+    if (val === '🔴')   btn.classList.add('neg-1');
+    if (val === '🔴🔴') btn.classList.add('neg-2');
+  }
+}
+
+async function submitSession() {
+  const blazer = document.getElementById('blazerInput')?.value.trim();
+  if (!blazer) { toast('Enter your name first', 'err'); return; }
+  if (!logState.batchUrl) { toast('Select a batch first', 'err'); return; }
+
+  const btn = document.getElementById('logSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Logging…';
+
+  const payload = {
+    batchUrl:  logState.batchUrl,
+    blazer,
+    Calm:      logState.Calm,
+    Creative:  logState.Creative,
+    Focused:   logState.Focused,
+    Motivated: logState.Motivated,
+    Social:    logState.Social,
+    Sleepy:    logState.Sleepy,
+    Headache:  logState.Headache,
+    Anxious:   logState.Anxious,
+    Washed:    logState.Washed,
+    Paranoid:  logState.Paranoid,
+  };
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'Write failed');
+    toast('Session logged! Refreshing…', 'ok');
+    closeSheet();
+    setTimeout(() => refresh(), 1200);
+  } catch (e) {
+    toast(e.message, 'err');
+    btn.disabled = false;
+    btn.textContent = 'Log Session';
+  }
+}
 
 buildChips(); render();
 </script>
