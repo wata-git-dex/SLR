@@ -2197,24 +2197,26 @@ function openSheet(s){
   const nextDis = currentIdx>=viewList.length-1 ? 'disabled' : '';
   const tcol = s.type==='Sativa'?'amber':s.type==='Hybrid'?'green':s.type==='Indica'?'purple':'';
 
-  let html=`
-  <div class="shead">
-    <div class="row">
-      ${s.has_image?`<div style="flex:0 0 auto;width:88px;height:88px;border-radius:14px;overflow:hidden;border:2px solid var(--typecol,var(--line2));align-self:center"><img src="images/${s.url.split('/').pop()}.jpg" style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in" onclick="document.getElementById('lightboxImg').src=this.src;document.getElementById('lightbox').classList.add('show')"></div>`:''}
-      <div style="flex:1;min-width:0">
-        <div class="eyebrow">Strain</div>
-        <div class="namebox t-${s.type||'x'}"><h2>${s.name}</h2></div>
-        ${s.brands&&s.brands.length?`<div class="eyebrow brandlbl">Brand</div><span class="brandpill">${s.brands.join(' · ')}</span>`:''}
-      </div>
-      <div class="sheetnav">
-        <button class="navbtn" ${prevDis} onclick="navSheet(-1)" aria-label="Previous strain">‹</button>
-        <button class="navbtn" ${nextDis} onclick="navSheet(1)" aria-label="Next strain">›</button>
-        <button class="closebtn" onclick="closeSheet()">✕</button>
-      </div>
+let html=`
+<div class="shead">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <div class="sheetnav">
+      <button class="navbtn" ${prevDis} onclick="navSheet(-1)" aria-label="Previous strain">‹</button>
+      <button class="navbtn" ${nextDis} onclick="navSheet(1)" aria-label="Next strain">›</button>
+      <button class="closebtn" onclick="closeSheet()">✕</button>
     </div>
   </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <div style="flex:0 0 auto;width:80px;height:80px;border-radius:12px;overflow:hidden;border:2px solid var(--typecol,var(--line2))">
+      ${s.has_image?`<img src="images/${s.url.split('/').pop()}.jpg" style="width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in" onclick="document.getElementById('lightboxImg').src=this.src;document.getElementById('lightbox').classList.add('show')">`:`<div style="width:100%;height:100%;display:grid;place-items:center">${leafSVG(s.type,false)}</div>`}
+    </div>
+    <div style="flex:1;min-width:0">
+      <div class="namebox t-${s.type||'x'}"><h2>${s.name}</h2></div>
+    </div>
+  </div>
+  ${s.brands&&s.brands.length?`<div class="eyebrow brandlbl">Brand</div><span class="brandpill">${s.brands.join(' · ')}</span>`:''}
+</div>
 <div class="s">`;
-
  
 
   // Type / THC
