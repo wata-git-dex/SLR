@@ -2224,7 +2224,7 @@ let html=`
  
   // Type / THC
 html+=`<div class="sect"><div class="statgrid two">
-    <div class="stat"><div class="k">Type</div><span class="typetag t-${s.type||'x'}" style="margin-top:4px">${s.type||'—'}</span></div>
+    <div class="stat"><div class="k">Type</div><div style="margin-top:6px"><span class="chip t-${s.type||'x'}" style="pointer-events:none">${s.type||'—'}</span></div></div>
     <div class="stat"><div class="k">THC</div><div class="v" style="color:${typeHex(s.type)};margin-top:4px">${thc||'—'}</div></div>
   </div></div>`;
 
