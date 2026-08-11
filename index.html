@@ -328,7 +328,9 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .log-submit{width:100%;margin-top:14px;padding:13px;background:linear-gradient(180deg,#6fdc7c,#49a457);color:#08120a;border:none;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:.15s}
 .log-submit:active{transform:scale(.97)}
 .log-submit:disabled{opacity:.5;cursor:default}
-
+.log-toggle{width:100%;text-align:left;background:none;border:none;color:var(--green);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;padding:0;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.log-toggle:active{opacity:.7}
+.log-hint{font-size:10px;color:var(--faint);margin:2px 0 10px;font-family:'Space Mono',monospace;letter-spacing:.02em}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -1950,8 +1952,18 @@ const DS = {
 
 const POS=['Calm','Creative','Focused','Motivated','Social'];
 const NEG=['Anxious','Headache','Paranoid','Sleepy','Washed'];
-const EFFECT_ICON={Calm:'🧘',Creative:'🎨',Focused:'🎯',Motivated:'⚡',Social:'💬',
-  Anxious:'😰',Headache:'🤕',Paranoid:'👀',Sleepy:'😴',Washed:'🥴'};
+const EFFECT_ICON = {
+  Calm:      '🧘',
+  Creative:  '🎨',
+  Focused:   '🎯',
+  Motivated: '💪',
+  Social:    '🎉',
+  Sleepy:    '😴',
+  Headache:  '🤕',
+  Anxious:   '😰',
+  Washed:    '😶‍🌫️',
+  Paranoid:  '👀',
+};
 const BRAND_ABBR={Oakfruitland:'OFL',Connected:'CON','Jet Set':'JS',UpNorth:'UN',Zombi:'ZOM','Fig Farms':'FF',Claybourne:'CLB',Traditional:'TRAD',Delighted:'DEL',Revelry:'REV',CAM:'CAM',Broccoli:'BRC',CDB:'CDB',KHYRS:'KHY',LOLO:'LOLO','Humbolt Farms':'HUM','Alien Labs':'AL','Pure Beauty':'PB'};
 
 function dotVal(v){ if(!v||v==='-')return 0; return (v.split('🟢').length-1)+(v.split('🔴').length-1); }
@@ -2240,7 +2252,7 @@ function openSheet(s){
     html+=`<div class="hint" style="margin-top:6px">Higher bar = stronger / more consistent across sessions.</div></div>`;
   }
 
-  html += '<div class="sect"><h3>Log a Session</h3><div id="logSessionContainer"></div></div>';
+ html += '<div class="sect"><button class="log-toggle" id="logToggleBtn" onclick="toggleLogSection()">🔥 Blaze +</button><div id="logSessionContainer" style="display:none"></div></div>';
 html += '</div>';
 
 $('#sheetContent').innerHTML = html;
@@ -2288,7 +2300,7 @@ function parseArr(x){ if(Array.isArray(x))return x; if(!x)return []; try{return 
 async function refresh(){
   const btn=$('#refreshBtn'); if(btn.classList.contains('spin'))return;
   btn.classList.add('spin'); toast('Pulling from Notion…');
-  try{
+try{
     const res = await fetch('https://slr-notion.cleanwataorg.workers.dev');
     if(!res.ok) throw new Error('Worker error '+res.status);
     const data = await res.json();
@@ -2297,7 +2309,7 @@ async function refresh(){
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
-    $('#lcount').textContent = STRAINS.length; 
+    $('#lcount').textContent = STRAINS.length;
     const now=new Date();
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
     buildChips(); render();
@@ -2307,6 +2319,15 @@ async function refresh(){
   }finally{
     btn.classList.remove('spin');
   }
+}
+
+function toggleLogSection() {
+  const c = document.getElementById('logSessionContainer');
+  const b = document.getElementById('logToggleBtn');
+  if (!c) return;
+  const open = c.style.display !== 'none';
+  c.style.display = open ? 'none' : 'block';
+  b.textContent = open ? '🌿 Log a Session +' : '🌿 Log a Session −';
 }
 
 $('#refreshBtn').addEventListener('click',refresh);
@@ -2349,7 +2370,7 @@ function buildLogForm(s) {
   RAW_BATCHES.forEach(b => batchMap[b.url] = b);
   const batches = (rawStrain?.Batches || []).map(u => batchMap[u]).filter(Boolean);
 
-  logState = { batchUrl: batches.length === 1 ? batches[0].url : null };
+  logState = { batchUrl: batches.length === 1 ? batches[0].url : null, strain: s };
   EFFS_POS.concat(EFFS_NEG).forEach(e => { logState[e.key] = '-'; });
 
   let h = '<div class="log-form">';
@@ -2362,9 +2383,11 @@ function buildLogForm(s) {
     h += '</div>';
   }
 
-  h += '<input class="log-blazer" id="blazerInput" placeholder="Your name (Blazer)" autocomplete="off" spellcheck="false">';
+  h += '<input class="log-blazer" id="blazerInput" placeholder="Name (comma-separate for multiple)" autocomplete="off" spellcheck="false">';
 
-  h += '<div class="eff-section-lbl">✨ Positive effects — tap to rate</div><div class="eff-grid">';
+  h += '<div class="eff-section-lbl">🟢 Positive effects — tap to rate</div>';
+  h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🟢 = kinda &nbsp;·&nbsp; 🟢🟢 = feel it</div>';
+  h += '<div class="eff-grid">';
   EFFS_POS.forEach(e => {
     h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',true)">' +
          '<span class="efi">' + e.emoji + '</span>' + e.label +
@@ -2372,7 +2395,9 @@ function buildLogForm(s) {
   });
   h += '</div>';
 
-  h += '<div class="eff-section-lbl">⚠️ Negative effects — tap to rate</div><div class="eff-grid">';
+  h += '<div class="eff-section-lbl">🔴 Negative effects — tap to rate</div>';
+  h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🔴 = kinda &nbsp;·&nbsp; 🔴🔴 = feel it</div>';
+  h += '<div class="eff-grid">';
   EFFS_NEG.forEach(e => {
     h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',false)">' +
          '<span class="efi">' + e.emoji + '</span>' + e.label +
@@ -2413,9 +2438,11 @@ function cycleEff(key, isPos) {
 }
 
 async function submitSession() {
-  const blazer = document.getElementById('blazerInput')?.value.trim();
-  if (!blazer) { toast('Enter your name first', 'err'); return; }
+  const raw = document.getElementById('blazerInput')?.value.trim();
+  if (!raw) { toast('Enter a name first', 'err'); return; }
   if (!logState.batchUrl) { toast('Select a batch first', 'err'); return; }
+
+  const blazers = raw.split(',').map(n => n.trim()).filter(Boolean);
 
   const btn = document.getElementById('logSubmitBtn');
   btn.disabled = true;
@@ -2423,7 +2450,7 @@ async function submitSession() {
 
   const payload = {
     batchUrl:  logState.batchUrl,
-    blazer,
+    blazers,
     Calm:      logState.Calm,
     Creative:  logState.Creative,
     Focused:   logState.Focused,
@@ -2444,16 +2471,24 @@ async function submitSession() {
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || 'Write failed');
-    toast('Session logged! Refreshing…', 'ok');
-    closeSheet();
-    setTimeout(() => refresh(), 1200);
+
+    // Success — collapse the form and show message
+    toast('Thanks, enjoy the high 🌿', 'ok');
+    const c = document.getElementById('logSessionContainer');
+    const b = document.getElementById('logToggleBtn');
+    if (c) c.style.display = 'none';
+    if (b) b.textContent = '🔥 Blaze +';
+
+    // Rebuild form for next use and refresh data
+    if (logState.strain) buildLogForm(logState.strain);
+    setTimeout(() => refresh(), 1500);
+
   } catch (e) {
     toast(e.message, 'err');
     btn.disabled = false;
     btn.textContent = 'Log Session';
   }
 }
-
 buildChips(); render();
 </script>
 </body>
