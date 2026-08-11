@@ -23,7 +23,15 @@
   --r:16px;
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
+
 }
+  .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
+.eff-group.pos{background:rgba(99,211,116,.06);border:1px solid rgba(99,211,116,.25)}
+.eff-group.neg{background:rgba(228,106,84,.06);border:1px solid rgba(228,106,84,.25)}
+.eff-group.pos .eff-btn{border-color:rgba(99,211,116,.3);color:var(--green)}
+.eff-group.neg .eff-btn{border-color:rgba(228,106,84,.3);color:var(--red)}
+.eff-group .eff-section-lbl{margin-top:0}
+.eff-group .log-hint{margin-bottom:8px}
 .lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
 .lightbox.show{display:flex}
 .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
@@ -2385,17 +2393,19 @@ function buildLogForm(s) {
 
   h += '<input class="log-blazer" id="blazerInput" placeholder="Name (comma-separate for multiple)" autocomplete="off" spellcheck="false">';
 
-  h += '<div class="eff-section-lbl">🟢 Positive effects — tap to rate</div>';
-  h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🟢 = kinda &nbsp;·&nbsp; 🟢🟢 = feel it</div>';
-  h += '<div class="eff-grid">';
-  EFFS_POS.forEach(e => {
-    h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',true)">' +
-         '<span class="efi">' + e.emoji + '</span>' + e.label +
-         '<span class="eval" id="eval-' + e.key + '">–</span></button>';
-  });
-  h += '</div>';
+h += '<div class="eff-group pos">';
+h += '<div class="eff-section-lbl">🟢 Positive effects — tap to rate</div>';
+h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🟢 = kinda &nbsp;·&nbsp; 🟢🟢 = feel it</div>';
+h += '<div class="eff-grid">';
+EFFS_POS.forEach(e => {
+  h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',true)">' +
+       '<span class="efi">' + e.emoji + '</span>' + e.label +
+       '<span class="eval" id="eval-' + e.key + '">–</span></button>';
+});
+h += '</div></div>';
 
-  h += '<div class="eff-section-lbl">🔴 Negative effects — tap to rate</div>';
+  h += '<div class="eff-group neg">';
+h += '<div class="eff-section-lbl">🔴 Negative effects — tap to rate</div>';
   h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🔴 = kinda &nbsp;·&nbsp; 🔴🔴 = feel it</div>';
   h += '<div class="eff-grid">';
   EFFS_NEG.forEach(e => {
@@ -2403,7 +2413,7 @@ function buildLogForm(s) {
          '<span class="efi">' + e.emoji + '</span>' + e.label +
          '<span class="eval" id="eval-' + e.key + '">–</span></button>';
   });
-  h += '</div>';
+  h += '</div></div>';
 
   h += '<button class="log-submit" id="logSubmitBtn" onclick="submitSession()">Log Session</button>';
   h += '</div>';
