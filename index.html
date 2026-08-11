@@ -321,7 +321,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 10</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 11</div>
   </div>
 </div>
 <header>
@@ -375,6 +375,14 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 <script>
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
+ {
+  "url": "https://app.notion.com/3b8d93f919bc8014bac3e66f93367b82",
+  "Name": "Euphoria",
+  "Batches": [
+   "https://app.notion.com/3b8d93f919bc8032b965ceef7e56abd2"
+  ],
+  "has_image": true
+ },
  {
   "url": "https://app.notion.com/3b7d93f919bc808abdb1d7a58431cde2",
   "Name": "OG Kush",
@@ -741,6 +749,16 @@ let RAW_STRAINS = [
  }
 ];
 let RAW_BATCHES = [
+ {
+  "url": "https://app.notion.com/3b8d93f919bc8032b965ceef7e56abd2",
+  "Batch": "Euphoria | SLUG | 23.5",
+  "Brand": "Sluggers",
+  "Type": "Sativa",
+  "THC": 0.235,
+  "Terps": [],
+  "Strain": "https://app.notion.com/3b8d93f919bc8014bac3e66f93367b82",
+  "Date": "2026-08-10"
+ },
  {
   "url": "https://app.notion.com/3b7d93f919bc80669072d2addebdf42c",
   "Batch": "OG Kush | Khrys |",
