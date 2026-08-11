@@ -2252,6 +2252,7 @@ async function refresh(){
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
+    $('#lcount').textContent = STRAINS.length; 
     const now=new Date();
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
     buildChips(); render();
