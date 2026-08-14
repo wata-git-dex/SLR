@@ -26,6 +26,16 @@
   --safe-b:env(safe-area-inset-bottom,0px);
 
 }
+ let activeBrand = '';
+function filterBrand(val){
+  activeBrand = val;
+  render();
+}
+ .brand-filter{position:relative;display:inline-block}
+.brand-filter select{background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:5px 28px 5px 12px;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none}
+.brand-filter select:focus{border-color:var(--green-soft);color:var(--text)}
+.brand-filter::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--dim)}
+ 
   .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
 .eff-group.pos{background:rgba(99,211,116,.06);border:1px solid rgba(99,211,116,.25)}
 .eff-group.neg{background:rgba(228,106,84,.06);border:1px solid rgba(228,106,84,.25)}
@@ -376,6 +386,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <button class="iconbtn" id="searchToggle" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     </button>
+   <div class="brand-filter"><select id="brandFilter" onchange="filterBrand(this.value)"><option value="">All Brands</option></select></div>
     <div class="typechips" id="typerow"></div>
     <select id="sort" class="sortsel">
       <option value="smart">Best</option>
@@ -2082,6 +2093,15 @@ function buildChips(){
     b.onclick=()=>{ftype=(ftype===t.id?'all':t.id);syncChips();render();};  // click active to clear
     tr.appendChild(b);
   });
+  // Add brand dropdown
+  const brands = [...new Set(RAW_BATCHES.map(b => b.Brand).filter(Boolean))].sort();
+  const brandSel = document.getElementById('brandFilter');
+  if(brandSel){
+    const current = brandSel.value;
+    brandSel.innerHTML = '<option value="">All Brands</option>' +
+      brands.map(b => '<option value="' + b + '"' + (b===current?' selected':'') + '>' + b + '</option>').join('');
+  }
+}
   syncChips();
 }
 function syncChips(){
@@ -2167,6 +2187,7 @@ function render(){
   let list=STRAINS.filter(s=>{
     if(!shTest(s))return false;
     if(ftype!=='all'&&s.type!==ftype)return false;
+   if(activeBrand && !(s.brands||[]).includes(activeBrand))return false;
     if(query){const hay=(s.name+' '+(s.brands||[]).join(' ')+' '+(s.terpenes||[]).join(' ')+' '+(s.type||'')).toLowerCase();if(!hay.includes(query))return false;}
     return true;
   });
