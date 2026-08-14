@@ -12,7 +12,10 @@
 <link rel="manifest" href="manifest.webmanifest"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
+
+.brand-filter{position:relative;display:inline-block}.brand-filter select{background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:5px 28px 5px 12px;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none}.brand-filter select:focus{border-color:var(--green-soft)}.brand-filter::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--dim)}
+ 
+ <style>
   * { touch-action: manipulation; }
 :root{
   --ink:#0d120e; --ink2:#131a14; --panel:#171f18; --panel2:#1d271e;
@@ -24,18 +27,7 @@
   --r:16px;
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
-
 }
- let activeBrand = '';
-function filterBrand(val){
-  activeBrand = val;
-  render();
-}
- .brand-filter{position:relative;display:inline-block}
-.brand-filter select{background:var(--panel);border:1px solid var(--line);border-radius:20px;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:5px 28px 5px 12px;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none}
-.brand-filter select:focus{border-color:var(--green-soft);color:var(--text)}
-.brand-filter::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--dim)}
- 
   .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
 .eff-group.pos{background:rgba(99,211,116,.06);border:1px solid rgba(99,211,116,.25)}
 .eff-group.neg{background:rgba(228,106,84,.06);border:1px solid rgba(228,106,84,.25)}
@@ -2548,6 +2540,9 @@ async function submitSession() {
     btn.textContent = 'Log Session';
   }
 }
+ let activeBrand='';
+function filterBrand(val){activeBrand=val;render();}
+ 
 buildChips(); render();
 </script>
 </body>
