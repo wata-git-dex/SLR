@@ -144,6 +144,10 @@ html = html.replace(
   /updated [A-Za-z]+ \d+/,
   "updated " + dateStr
 );
+html = html.replace(
+  /setUpdated\('[^']+'\)/,
+  "setUpdated('" + dateStr + "')"
+);
 
 writeFileSync("index.html", html, "utf8");
 console.log("Done. " + RAW_STRAINS.filter(s=>s.has_image).length + " photos, " + RAW_STRAINS.length + " strains total.");
