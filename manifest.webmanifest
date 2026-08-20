@@ -1,9 +1,9 @@
 {
-  "id": "/SLR/",
+  "id": "/",
   "name": "Lab Rats",
   "short_name": "Lab Rats",
-  "start_url": "/SLR/",
-  "scope": "/SLR/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0d120e",
   "theme_color": "#0d120e",
