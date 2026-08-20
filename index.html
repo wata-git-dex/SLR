@@ -65,6 +65,8 @@
 .icSheet{width:100%;max-width:320px;margin:0 16px;background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:22px 18px;box-sizing:border-box;text-align:center}
 .icTitle{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:6px}
 .icSub{font-family:'Space Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:16px;line-height:1.5}
+.icForm{display:none}
+.icOverlay.needs-code .icForm{display:block}
 .icInput{width:100%;box-sizing:border-box;padding:12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--text);font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.08em;text-align:center;text-transform:uppercase;outline:none}
 .icInput:focus{border-color:var(--green-soft)}
 .icBtn{width:100%;margin-top:12px;padding:12px;background:var(--green);border:none;border-radius:10px;color:#0d120e;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
@@ -534,11 +536,13 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 <!-- ============ INVITE CODE GATE ============ -->
 <div class="icOverlay" id="icOverlay">
   <div class="icSheet">
-    <div class="icTitle">🔒 Invite code required</div>
-    <div class="icSub" id="icSubText">Enter your invite code to continue.</div>
-    <input class="icInput" id="icInput" placeholder="CODE" maxlength="24" autocomplete="off" spellcheck="false">
-    <button class="icBtn" id="icSubmit">Continue</button>
-    <div class="icErr" id="icErr"></div>
+    <div class="icTitle" id="icTitle">🔒 Checking your access…</div>
+    <div class="icSub" id="icSubText">Verifying your saved invite code.</div>
+    <div class="icForm" id="icForm">
+      <input class="icInput" id="icInput" placeholder="CODE" maxlength="24" autocomplete="off" spellcheck="false">
+      <button class="icBtn" id="icSubmit">Continue</button>
+      <div class="icErr" id="icErr"></div>
+    </div>
   </div>
 </div>
 
@@ -2540,11 +2544,21 @@ function setStoredCode(c){ localStorage.setItem(IC_KEY, c); }
 function clearStoredCode(){ localStorage.removeItem(IC_KEY); localStorage.removeItem(MEMBER_HINT_KEY); }
 
 let _icResolve = null;
+function showCheckingGate(){
+  const ov = document.getElementById('icOverlay');
+  document.getElementById('icTitle').textContent = '🔒 Checking your access…';
+  document.getElementById('icSubText').textContent = 'Verifying your saved invite code.';
+  document.getElementById('icErr').classList.remove('show');
+  ov.classList.remove('needs-code');
+  ov.classList.add('show');
+}
 function showCodeGate(message){
   const ov = document.getElementById('icOverlay');
+  document.getElementById('icTitle').textContent = '🔒 Invite code required';
   document.getElementById('icSubText').textContent = message || 'Enter your invite code to continue.';
   document.getElementById('icErr').classList.remove('show');
   document.getElementById('icInput').value = '';
+  ov.classList.add('needs-code');
   ov.classList.add('show');
   setTimeout(()=>document.getElementById('icInput').focus(), 50);
   return new Promise(resolve => { _icResolve = resolve; });
@@ -2962,7 +2976,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
 });
 
 buildChips(); render();
-document.getElementById('icOverlay').classList.add('show');
+showCheckingGate();
 refresh(true);
 </script>
 </body>
