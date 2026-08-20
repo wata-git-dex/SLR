@@ -43,6 +43,20 @@
 .asSubmit:disabled{opacity:.5;cursor:default}
 .asHoney{position:absolute;left:-9999px;opacity:0;height:0;width:0}
 
+/* ---- invite code gate ---- */
+.icOverlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center}
+.icOverlay.show{display:flex}
+.icSheet{width:100%;max-width:320px;margin:0 16px;background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:22px 18px;box-sizing:border-box;text-align:center}
+.icTitle{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:6px}
+.icSub{font-family:'Space Mono',monospace;font-size:11px;color:var(--faint);margin-bottom:16px;line-height:1.5}
+.icInput{width:100%;box-sizing:border-box;padding:12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--text);font-family:'Space Mono',monospace;font-size:15px;letter-spacing:.08em;text-align:center;text-transform:uppercase;outline:none}
+.icInput:focus{border-color:var(--green-soft)}
+.icBtn{width:100%;margin-top:12px;padding:12px;background:var(--green);border:none;border-radius:10px;color:#0d120e;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+.icBtn:disabled{opacity:.5;cursor:default}
+.icErr{font-family:'Space Mono',monospace;font-size:11px;color:var(--red);margin-top:8px;display:none}
+.icErr.show{display:block}
+.icCancel{margin-top:10px;background:none;border:none;color:var(--faint);font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;text-decoration:underline}
+
   * { touch-action: manipulation; }
 :root{
   --ink:#0d120e; --ink2:#131a14; --panel:#171f18; --panel2:#1d271e;
@@ -390,7 +404,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 20</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 19</div>
   </div>
 </div>
 <header>
@@ -471,6 +485,18 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
     <button class="asSubmit" id="asSubmit">Add to the lab</button>
     <div class="asHint" id="asStatus" style="text-align:center"></div>
+  </div>
+</div>
+
+<!-- ============ INVITE CODE GATE ============ -->
+<div class="icOverlay" id="icOverlay">
+  <div class="icSheet">
+    <div class="icTitle">🔒 Invite code required</div>
+    <div class="icSub" id="icSubText">Enter your invite code to continue.</div>
+    <input class="icInput" id="icInput" placeholder="CODE" maxlength="24" autocomplete="off" spellcheck="false">
+    <button class="icBtn" id="icSubmit">Continue</button>
+    <div class="icErr" id="icErr"></div>
+    <button class="icCancel" id="icCancel">Cancel</button>
   </div>
 </div>
 
@@ -2162,7 +2188,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Aug 20');   // baked snapshot date (set at build time)
+setUpdated('Aug 19');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'); sr.innerHTML=''; tr.innerHTML='';
@@ -2441,11 +2467,74 @@ async function notionQuery(sql, dsUrl){
 
 function parseArr(x){ if(Array.isArray(x))return x; if(!x)return []; try{return JSON.parse(x);}catch(e){return [];} }
 
+/* ================= INVITE CODE GATE ================= */
+const IC_KEY = 'slr_invite_code';
+function getStoredCode(){ return localStorage.getItem(IC_KEY) || ''; }
+function setStoredCode(c){ localStorage.setItem(IC_KEY, c); }
+function clearStoredCode(){ localStorage.removeItem(IC_KEY); }
+
+let _icResolve = null;
+function showCodeGate(message){
+  const ov = document.getElementById('icOverlay');
+  document.getElementById('icSubText').textContent = message || 'Enter your invite code to continue.';
+  document.getElementById('icErr').classList.remove('show');
+  document.getElementById('icInput').value = '';
+  ov.classList.add('show');
+  setTimeout(()=>document.getElementById('icInput').focus(), 50);
+  return new Promise(resolve => { _icResolve = resolve; });
+}
+function hideCodeGate(){ document.getElementById('icOverlay').classList.remove('show'); }
+
+document.getElementById('icCancel').addEventListener('click', ()=>{
+  hideCodeGate();
+  if(_icResolve) _icResolve(null);
+});
+document.getElementById('icSubmit').addEventListener('click', ()=>{
+  const v = document.getElementById('icInput').value.trim();
+  if(!v){
+    const e = document.getElementById('icErr');
+    e.textContent = 'Enter a code.'; e.classList.add('show');
+    return;
+  }
+  hideCodeGate();
+  if(_icResolve) _icResolve(v);
+});
+document.getElementById('icInput').addEventListener('keydown', e=>{
+  if(e.key === 'Enter') document.getElementById('icSubmit').click();
+});
+
+// Returns a valid-looking code, prompting only if none is stored yet.
+// Returns null if the user cancels the prompt.
+async function ensureCode(){
+  let code = getStoredCode();
+  if(code) return code;
+  code = await showCodeGate();
+  if(code) setStoredCode(code);
+  return code;
+}
+
+// Called when the Worker rejects a code (missing/wrong/revoked) — clears the
+// bad one and re-prompts with an explanation, rather than silently retrying.
+async function reauthAndRetry(){
+  clearStoredCode();
+  const code = await showCodeGate('Your invite code was not accepted or has been revoked.');
+  if(code) setStoredCode(code);
+  return code;
+}
+
 async function refresh(){
   const btn=$('#refreshBtn'); if(btn.classList.contains('spin'))return;
+  const code = await ensureCode();
+  if(!code) return; // user cancelled the gate
   btn.classList.add('spin'); toast('Pulling from Notion…');
 try{
-    const res = await fetch('https://slr-notion.cleanwataorg.workers.dev');
+    const res = await fetch('https://slr-notion.cleanwataorg.workers.dev?code=' + encodeURIComponent(code));
+    if(res.status === 401){
+      btn.classList.remove('spin');
+      const newCode = await reauthAndRetry();
+      if(newCode) return refresh();
+      return;
+    }
     if(!res.ok) throw new Error('Worker error '+res.status);
     const data = await res.json();
     if(data.error) throw new Error(data.error);
@@ -2588,6 +2677,9 @@ async function submitSession() {
   if (!raw) { toast('Enter a name first', 'err'); return; }
   if (!logState.batchUrl) { toast('Select a batch first', 'err'); return; }
 
+  const code = await ensureCode();
+  if (!code) return;
+
   const blazers = raw.split(',').map(n => n.trim()).filter(Boolean);
 
   const btn = document.getElementById('logSubmitBtn');
@@ -2595,6 +2687,7 @@ async function submitSession() {
   btn.textContent = 'Logging…';
 
   const payload = {
+    code,
     batchUrl:  logState.batchUrl,
     blazers,
     Calm:      logState.Calm,
@@ -2615,6 +2708,12 @@ async function submitSession() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload),
     });
+    if (res.status === 401) {
+      btn.disabled = false; btn.textContent = 'Log Session';
+      const newCode = await reauthAndRetry();
+      if (newCode) return submitSession();
+      return;
+    }
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || 'Write failed');
 
@@ -2718,6 +2817,9 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
   if(!AS.type){ st.textContent='Pick Sativa, Hybrid or Indica.'; return; }
   if(!thc){   st.textContent='Enter the THC %.'; return; }
 
+  const code = await ensureCode();
+  if(!code) return;
+
   AS.busy = true; btn.disabled = true; btn.textContent = 'Adding\u2026';
   st.textContent = '';
 
@@ -2726,10 +2828,16 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        kind:'strain', strainName:name, brand:brand,
+        kind:'strain', code, strainName:name, brand:brand,
         type:AS.type, thc:thc, blazer:who, website:hp
       })
     });
+    if(res.status === 401){
+      AS.busy = false; btn.disabled = false; btn.textContent = 'Add to the lab';
+      const newCode = await reauthAndRetry();
+      if(newCode) return document.getElementById('asSubmit').click();
+      return;
+    }
     const data = await res.json();
     if(!res.ok || data.error) throw new Error(data.error || 'Add failed');
 
