@@ -17,8 +17,9 @@
 .brand-filter{flex:0 0 auto;position:relative}.brand-filter select{width:92px;height:40px;background:var(--panel);border:1px solid var(--line);color:var(--dim);border-radius:11px;padding:0 22px 0 10px;font-family:'Space Mono',monospace;font-size:11px;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.brand-filter select:focus{border-color:var(--green-soft)}.brand-filter::after{content:'▾';position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--dim)}
 
 /* ---- add strain button + modal ---- */
-.addbtn{flex:0 0 auto;height:40px;padding:0 14px;border-radius:11px;background:var(--panel);border:1px solid var(--green-soft);display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;white-space:nowrap;transition:.15s}
+.addbtn{flex:0 0 auto;width:44px;height:44px;padding:0;border-radius:12px;background:var(--panel);border:1px solid var(--green-soft);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;white-space:nowrap;transition:.15s}
 .addbtn svg{width:15px;height:15px;stroke:var(--green);stroke-width:2.4;fill:none;flex:0 0 auto}
+.addbtn span{display:none}
 .addbtn:active{transform:scale(.94)}
 .addbtn:hover{background:var(--panel2)}
 .asOverlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.72);display:none;align-items:flex-end;justify-content:center}
@@ -56,7 +57,7 @@
 .icErr{font-family:'Space Mono',monospace;font-size:11px;color:var(--red);margin-top:8px;display:none}
 .icErr.show{display:block}
 .icCancel{margin-top:10px;background:none;border:none;color:var(--faint);font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;text-decoration:underline}
-.memberbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 7px;padding:6px 7px 6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.memberbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 7px;padding:6px 7px 6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
 .memberwho{border:0;background:none;padding:0;font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;cursor:pointer}
 .memberwho b{color:var(--green);font-weight:600}
 .scoretoggle{display:flex;gap:3px;padding:3px;background:var(--ink2);border-radius:9px}
@@ -64,6 +65,14 @@
 .scoretoggle button.on{background:var(--green);color:var(--ink)}
 .memberline{margin-bottom:14px;padding:10px 12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--dim);font-family:'Space Mono',monospace;font-size:11px}
 .memberline b{color:var(--green)}
+.filterOverlay{position:fixed;inset:0;z-index:280;background:rgba(0,0,0,.72);display:none;align-items:flex-end;justify-content:center}
+.filterOverlay.show{display:flex}
+.filterSheet{width:100%;max-width:520px;background:var(--ink2);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 16px calc(var(--safe-b) + 22px)}
+.filterHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.filterTitle{font-size:18px;font-weight:700}.filterClose{width:34px;height:34px;border-radius:9px;background:var(--panel);border:1px solid var(--line);color:var(--dim);cursor:pointer}
+.filterGroup{margin-top:15px}.filterLabel{font:10px 'Space Mono',monospace;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.filterSelect{width:100%;height:44px;background:var(--panel);border:1px solid var(--line2);border-radius:11px;color:var(--text);padding:0 12px;font:12px 'Space Mono',monospace}
+.filterChoices{display:flex;gap:7px;flex-wrap:wrap}
 
   * { touch-action: manipulation; }
 :root{
@@ -159,27 +168,26 @@ header{
 .brandicon img,.brandimg{display:block;width:100%;height:100%;object-fit:cover}
 .wordmark{font-weight:700;font-size:18px;letter-spacing:-.01em;line-height:1}
 .wordmark b{color:var(--green)}
-.hstat{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.hstat{margin-left:auto;display:flex;align-items:center;gap:8px}
 .count{font-size:10.5px;color:var(--faint);letter-spacing:.05em}
 .count u{color:var(--dim);text-decoration:none}
-.refresh{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);
-  border-radius:999px;padding:6px 11px 6px 9px;cursor:pointer;transition:.15s}
+.refresh{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:0;cursor:pointer;transition:.15s}
 .refresh:active{transform:scale(.95)}
 .refresh:hover{border-color:var(--line2)}
-.refresh svg{width:13px;height:13px;stroke:var(--green);stroke-width:2.2;fill:none}
+.refresh svg{width:15px;height:15px;stroke:var(--green);stroke-width:2.2;fill:none}
 .refresh.spin svg{animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.refresh .rt{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--dim);letter-spacing:.02em;text-align:left;line-height:1.25}
+.refresh .rt{display:none;font-family:'Space Mono',monospace;font-size:9.5px;color:var(--dim);letter-spacing:.02em;text-align:left;line-height:1.25}
 .refresh .rt b{color:var(--text);font-weight:400;display:block;font-size:10px}
 
-.controls{position:relative;display:flex;gap:7px;align-items:center;margin-bottom:7px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-.controls::-webkit-scrollbar{display:none}
+.controls{display:flex;gap:7px;align-items:center;margin-bottom:7px}
 .iconbtn{flex:0 0 auto;width:40px;height:40px;border-radius:11px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;transition:.15s}
 .iconbtn:active{transform:scale(.94)}
 .iconbtn:hover{border-color:var(--line2)}
 .iconbtn svg{width:17px;height:17px;stroke:var(--dim);stroke-width:2;fill:none}
 .iconbtn.active{border-color:var(--green-soft)} .iconbtn.active svg{stroke:var(--green)}
-.typechips{display:flex;gap:7px;width:100%;min-width:0;overflow-x:auto;margin-bottom:7px;justify-content:center;scrollbar-width:none;-ms-overflow-style:none}
+.typechips{display:flex;gap:7px;flex:1;min-width:0;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-ms-overflow-style:none}
 .typechips::-webkit-scrollbar{display:none}
 .tdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
 .tdot.sat{background:var(--sativa)} .tdot.hyb{background:var(--hybrid)} .tdot.ind{background:var(--indica)}
@@ -187,9 +195,8 @@ header{
 .sortsel{flex:0 0 auto;min-width:74px;height:40px;background:var(--panel);border:1px solid var(--line);
   color:var(--dim);border-radius:11px;padding:0 6px;font-family:'Space Mono',monospace;font-size:11.5px;outline:none;cursor:pointer}
 .sortsel:focus{border-color:var(--green-soft)}
-.searchbox{position:absolute;inset:0;display:none;align-items:center;gap:6px;background:var(--panel);
-  border:1px solid var(--green-soft);border-radius:12px;z-index:3}
-.controls.searching .searchbox{display:flex}
+.searchbox{flex:1;min-width:0;height:44px;display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.searchbox:focus-within{border-color:var(--green-soft)}
 .searchbox svg{width:15px;height:15px;stroke:var(--faint);margin-left:12px;flex:0 0 auto}
 .searchbox input{flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--text);
   font-family:'Space Mono',monospace;font-size:13px;padding:11px 4px}
@@ -214,6 +221,11 @@ header{
 .chip .n{opacity:.5;font-family:'Space Mono',monospace;margin-left:4px;font-size:10px}
 
 .chipdiv{flex:0 0 auto;width:1px;height:20px;align-self:center;background:var(--line2);margin:0 5px}
+.filterrow{display:flex;align-items:center;gap:7px}
+.filterbtn{flex:0 0 auto;height:34px;padding:0 11px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer;white-space:nowrap}
+.filterbtn.active{border-color:var(--green-soft);color:var(--green)}
+.filterbadge{display:none;margin-left:5px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--green);color:var(--ink);align-items:center;justify-content:center;font-size:9px}
+.filterbtn.active .filterbadge{display:inline-flex}
 
 main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .grid{display:grid;grid-template-columns:1fr;gap:11px}
@@ -221,7 +233,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 @media(min-width:700px){
   .brand-filter select{width:130px}
   .sortsel{min-width:96px}
-  .addbtn{margin-left:auto}
+  .addbtn{width:auto;padding:0 14px;margin-left:auto}.addbtn span{display:inline}
 }
 
 .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--ink2));
@@ -429,28 +441,6 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
       <div class="count"><u id="shown">0</u> / <span id="total">0</span></div>
     </div>
   </div>
-  <div class="controls" id="controls">
-    <button class="iconbtn" id="searchToggle" aria-label="Search">
-      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    </button>
-   <div class="brand-filter"><select id="brandFilter" onchange="filterBrand(this.value)"><option value="">All Brands</option></select></div>
-    <select id="sort" class="sortsel">
-      <option value="smart">Best</option>
-      <option value="score">Rated ↓</option>
-      <option value="thc">THC ↓</option>
-      <option value="recent">Recent</option>
-      <option value="az">A–Z</option>
-    </select>
-    <button class="addbtn" id="addStrainBtn" aria-label="Add new strain" title="Add new strain">
-      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Add new strain</span>
-    </button>
-    <div class="searchbox" id="searchbox">
-      <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" placeholder="strain, brand, terpene…" autocomplete="off" spellcheck="false">
-      <button class="iconbtn ghost" id="searchClose" aria-label="Close search">✕</button>
-    </div>
-  </div>
   <div class="memberbar" id="memberBar" style="display:none">
     <button class="memberwho" id="switchMember" title="Use a different invite code">Rating as <b id="memberName">—</b> · switch</button>
     <div class="scoretoggle" aria-label="Score view">
@@ -458,10 +448,33 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
       <button id="communityView" data-view="community">Community</button>
     </div>
   </div>
-  <div class="chiprow" id="shelfrow"></div>
-  <div class="typechips" id="typerow"></div>
+  <div class="controls" id="controls">
+    <div class="searchbox" id="searchbox">
+      <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" placeholder="Search strains…" autocomplete="off" spellcheck="false">
+    </div>
+    <button class="addbtn" id="addStrainBtn" aria-label="Add new strain" title="Add new strain">
+      <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Add new strain</span>
+    </button>
+  </div>
+  <div class="filterrow">
+    <div class="typechips" id="typerow"></div>
+    <button class="filterbtn" id="filterBtn">Filters<span class="filterbadge" id="filterBadge">0</span></button>
+  </div>
 </header>
 
+<!-- ============ FILTERS SHEET ============ -->
+<div class="filterOverlay" id="filterOverlay">
+  <div class="filterSheet">
+    <div class="filterHead"><div class="filterTitle">Filter & sort</div><button class="filterClose" id="filterClose" aria-label="Close filters">✕</button></div>
+    <div class="filterGroup"><div class="filterLabel">Collection</div><div class="filterChoices" id="shelfrow"></div></div>
+    <div class="filterGroup"><div class="filterLabel">Brand</div><select id="brandFilter" class="filterSelect" onchange="filterBrand(this.value)"><option value="">All brands</option></select></div>
+    <div class="filterGroup"><div class="filterLabel">Sort by</div><select id="sort" class="filterSelect">
+      <option value="smart">Best match</option><option value="score">Score: high to low</option><option value="thc">THC: high to low</option><option value="recent">Most recent</option><option value="az">A–Z</option>
+    </select></div>
+  </div>
+</div>
 
 <!-- ============ ADD STRAIN SHEET ============ -->
 <div class="asOverlay" id="asOverlay">
@@ -2211,7 +2224,7 @@ const VERDICT={
 };
 const SHELVES=[
   {id:'all',label:'All',test:()=>true},
-  {id:'fav',label:'★ Favorites',test:s=>['loved','good'].includes(s.verdict)},
+  {id:'fav',label:'Top rated',test:s=>['loved','good'].includes(s.verdict)},
   {id:'try',label:'Try next',test:s=>s.verdict==='untested'},
   {id:'careful',label:'Careful',test:s=>['mixed','avoid'].includes(s.verdict)},
   {id:'rated',label:'Rated',test:s=>s.score!=null},
@@ -2256,17 +2269,18 @@ function buildChips(){
 function syncChips(){
   document.querySelectorAll('#shelfrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===shelf));
   document.querySelectorAll('#typerow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===ftype));
+  const count=(shelf!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='smart'?1:0);
+  const filterBtn=document.getElementById('filterBtn');
+  if(filterBtn){filterBtn.classList.toggle('active',count>0);document.getElementById('filterBadge').textContent=count;}
 }
 $('#q').addEventListener('input',e=>{query=e.target.value.toLowerCase().trim();render();});
-$('#sort').addEventListener('change',e=>{sortBy=e.target.value;render();});
-
-// expandable search: icon -> field -> icon
-const controls=$('#controls');
-function openSearch(){controls.classList.add('searching');setTimeout(()=>$('#q').focus(),50);}
-function closeSearch(){controls.classList.remove('searching');$('#q').value='';query='';render();$('#q').blur();}
-$('#searchToggle').addEventListener('click',openSearch);
-$('#searchClose').addEventListener('click',closeSearch);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&controls.classList.contains('searching'))closeSearch();});
+$('#sort').addEventListener('change',e=>{sortBy=e.target.value;syncChips();render();});
+function openFilters(){document.getElementById('filterOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function closeFilters(){document.getElementById('filterOverlay').classList.remove('show');document.body.style.overflow='';}
+$('#filterBtn').addEventListener('click',openFilters);
+$('#filterClose').addEventListener('click',closeFilters);
+$('#filterOverlay').addEventListener('click',e=>{if(e.target.id==='filterOverlay')closeFilters();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFilters();});
 
 function scoreClass(v){if(v==null)return 's-na';if(v>=60)return 's-hi';if(v>=45)return 's-mid';return 's-lo';}
 function thcLabel(s){if(s.thc_min==null)return null;return s.thc_min===s.thc_max?`${s.thc_min}%`:`${s.thc_min}–${s.thc_max}%`;}
@@ -2557,6 +2571,25 @@ function applyMemberUi(){
   document.getElementById('memberBar').style.display='flex';
   document.getElementById('mineView').classList.toggle('on',SCORE_VIEW==='mine');
   document.getElementById('communityView').classList.toggle('on',SCORE_VIEW==='community');
+  applyMemberAppIcon();
+}
+function applyMemberAppIcon(){
+  const isAmber=CURRENT_MEMBER.trim().toLowerCase()==='amber';
+  const manifest=document.querySelector('link[rel="manifest"]');
+  if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':'manifest.webmanifest');
+
+  let memberIcon=document.getElementById('memberAppIcon');
+  if(isAmber){
+    if(!memberIcon){
+      memberIcon=document.createElement('link');
+      memberIcon.id='memberAppIcon';
+      memberIcon.rel='apple-touch-icon';
+      document.head.appendChild(memberIcon);
+    }
+    memberIcon.href='amber-app-icon-180.png';
+  }else if(memberIcon){
+    memberIcon.remove();
+  }
 }
 function setScoreView(view){
   SCORE_VIEW=view; localStorage.setItem('slr_score_view',view);
@@ -2632,7 +2665,7 @@ $('#enterBtn').addEventListener('click',()=>{
 });
 // logo = exit the lab: doors slide shut, back to the entrance
 document.querySelector('.brandbox').addEventListener('click',()=>{
-  closeSheet(); controls.classList.remove('searching');
+  closeSheet(); closeFilters();
   landing.style.display='flex';
   requestAnimationFrame(()=>requestAnimationFrame(()=>landing.classList.remove('opening')));
   window.scrollTo({top:0});
@@ -2788,7 +2821,7 @@ async function submitSession() {
   }
 }
  let activeBrand='';
-function filterBrand(val){activeBrand=val;render();}
+function filterBrand(val){activeBrand=val;syncChips();render();}
 
 /* ================= ADD STRAIN ================= */
 const AS = { type:'', busy:false };

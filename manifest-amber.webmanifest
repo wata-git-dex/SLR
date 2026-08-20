@@ -1,0 +1,24 @@
+{
+  "id": "/amber",
+  "name": "Lab Rats",
+  "short_name": "Lab Rats",
+  "start_url": "/?member=amber",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d120e",
+  "theme_color": "#0d120e",
+  "icons": [
+    {
+      "src": "amber-app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "amber-app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
