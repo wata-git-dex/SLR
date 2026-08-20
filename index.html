@@ -44,7 +44,7 @@
 .asHoney{position:absolute;left:-9999px;opacity:0;height:0;width:0}
 
 /* ---- invite code gate ---- */
-.icOverlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center}
+.icOverlay{position:fixed;inset:0;z-index:400;background:var(--ink);display:none;align-items:center;justify-content:center}
 .icOverlay.show{display:flex}
 .icSheet{width:100%;max-width:320px;margin:0 16px;background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:22px 18px;box-sizing:border-box;text-align:center}
 .icTitle{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:6px}
@@ -56,6 +56,14 @@
 .icErr{font-family:'Space Mono',monospace;font-size:11px;color:var(--red);margin-top:8px;display:none}
 .icErr.show{display:block}
 .icCancel{margin-top:10px;background:none;border:none;color:var(--faint);font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;text-decoration:underline}
+.memberbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 7px;padding:6px 7px 6px 10px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.memberwho{border:0;background:none;padding:0;font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);white-space:nowrap;cursor:pointer}
+.memberwho b{color:var(--green);font-weight:600}
+.scoretoggle{display:flex;gap:3px;padding:3px;background:var(--ink2);border-radius:9px}
+.scoretoggle button{border:0;background:transparent;color:var(--faint);font:600 10px 'Space Mono',monospace;padding:6px 9px;border-radius:7px;cursor:pointer}
+.scoretoggle button.on{background:var(--green);color:var(--ink)}
+.memberline{margin-bottom:14px;padding:10px 12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--dim);font-family:'Space Mono',monospace;font-size:11px}
+.memberline b{color:var(--green)}
 
   * { touch-action: manipulation; }
 :root{
@@ -443,6 +451,13 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
       <button class="iconbtn ghost" id="searchClose" aria-label="Close search">✕</button>
     </div>
   </div>
+  <div class="memberbar" id="memberBar" style="display:none">
+    <button class="memberwho" id="switchMember" title="Use a different invite code">Rating as <b id="memberName">—</b> · switch</button>
+    <div class="scoretoggle" aria-label="Score view">
+      <button id="mineView" data-view="mine">My score</button>
+      <button id="communityView" data-view="community">Community</button>
+    </div>
+  </div>
   <div class="chiprow" id="shelfrow"></div>
   <div class="typechips" id="typerow"></div>
 </header>
@@ -478,8 +493,8 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <input class="asInput" id="asTHC" type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 29">
     <div class="asHint">Whole number is fine — it becomes the number in the batch name.</div>
 
-    <div class="asLbl">Your name</div>
-    <input class="asInput" id="asWho" placeholder="Who's adding this?" maxlength="40" autocomplete="off" spellcheck="false">
+    <div class="asLbl">Member</div>
+    <div class="memberline">Adding as <b id="asMemberName">your member</b></div>
 
     <input class="asHoney" id="asWebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -496,7 +511,6 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <input class="icInput" id="icInput" placeholder="CODE" maxlength="24" autocomplete="off" spellcheck="false">
     <button class="icBtn" id="icSubmit">Continue</button>
     <div class="icErr" id="icErr"></div>
-    <button class="icCancel" id="icCancel">Cancel</button>
   </div>
 </div>
 
@@ -504,7 +518,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" style="display:none">no strains match — try clearing a filter</div>
   <div class="footnote">
-    Ratings are computed from your session dots · 🟢 positive, 🔴 negative, neutral = 50.<br>
+    Personal scores use your sessions; Community balances each member equally.<br>
     Live from your <b>Stoned Lab Rats</b> Notion · tap refresh to re-pull.
   </div>
 </main>
@@ -2127,6 +2141,33 @@ function sessionPct(s){
 }
 function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1); return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; }
 
+let CURRENT_MEMBER = '';
+let SCORE_VIEW = localStorage.getItem('slr_score_view') || 'mine';
+function memberNames(s){
+  const names=parseArr(s.Blazers).map(n=>String(n).trim()).filter(Boolean);
+  return names.length ? names : ['Cyrus'];
+}
+function aggregateSessions(sessions){
+  const scored=sessions.filter(sessionScored), effects={}, scores=[];
+  scored.forEach(s=>{
+    scores.push(sessionPct(s));
+    POS.concat(NEG).forEach(a=>{const v=dotVal(s[a]); if(v>0) effects[a]=(effects[a]||0)+v;});
+  });
+  return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null,effects,num_sessions:sessions.length,num_scored:scored.length};
+}
+function communityAggregate(sessions){
+  const byMember={};
+  sessions.forEach(s=>memberNames(s).forEach(name=>(byMember[name]=byMember[name]||[]).push(s)));
+  const members=Object.keys(byMember), perMember=members.map(name=>aggregateSessions(byMember[name]));
+  const memberScores=perMember.map(x=>x.score).filter(x=>x!=null);
+  const base=aggregateSessions(sessions);
+  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length):null,num_members:memberScores.length};
+}
+function verdictFor(stats){
+  if(stats.score!=null) return stats.score>=70?'loved':stats.score>=55?'good':stats.score>=40?'mixed':'avoid';
+  return stats.num_sessions>0?'tried':'untested';
+}
+
 // deterministic processing — same logic as the original build
 function process(strains,batches,sessions){
   const batchByUrl={}; batches.forEach(b=>batchByUrl[b.url]=b);
@@ -2142,23 +2183,18 @@ function process(strains,batches,sessions){
     const tcount={}; bs.forEach(b=>(b.Terps||[]).forEach(t=>tcount[t]=(tcount[t]||0)+1));
     const dates=bs.map(b=>b.Date).filter(Boolean);
     const strainSessions=[]; bs.forEach(b=>(sessByBatch[b.url]||[]).forEach(s=>strainSessions.push(s)));
-    const scored=strainSessions.filter(sessionScored);
-    const eff={}; const scores=[];
-    scored.forEach(s=>{ scores.push(sessionPct(s));
-      POS.concat(NEG).forEach(a=>{const v=dotVal(s[a]); if(v>0)eff[a]=(eff[a]||0)+v;}); });
-    const score=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
-    let verdict;
-    if(score!=null) verdict = score>=70?'loved':score>=55?'good':score>=40?'mixed':'avoid';
-    else if(strainSessions.length>0) verdict='tried';
-    else verdict='untested';
+    const mine=aggregateSessions(strainSessions.filter(s=>memberNames(s).some(n=>n.toLowerCase()===CURRENT_MEMBER.toLowerCase())));
+    const community=communityAggregate(strainSessions);
+    const shown=SCORE_VIEW==='community'?community:mine;
+    const verdict=verdictFor(shown);
  out.push({
   name:st.Name, url:st.url, photo:st.photo||null, has_image:st.has_image||false,
       type:mode(types), brands,
       thc_min: thc.length?Math.round(Math.min.apply(null,thc)*1000)/10:null,
       thc_max: thc.length?Math.round(Math.max.apply(null,thc)*1000)/10:null,
       terpenes:Object.keys(tcount).sort((a,b)=>tcount[b]-tcount[a]),
-      num_sessions:strainSessions.length, num_scored:scored.length,
-      effects:eff, score, verdict,
+      num_sessions:shown.num_sessions, num_scored:shown.num_scored, num_members:shown.num_members||0,
+      effects:shown.effects, score:shown.score, verdict, mine, community,
       first_buy:dates.length?dates.slice().sort()[0]:null,
       last_buy:dates.length?dates.slice().sort().slice(-1)[0]:null
     });
@@ -2405,7 +2441,7 @@ html+=`<div class="sect"><div class="statgrid two">
     html+=`<div class="bigscore">
       <div class="num" style="color:${col}">${s.score}<small>/100</small></div>
       <div class="meter"><div class="bar"><div class="fill" style="width:${s.score}%;background:${col}"></div></div>
-      <div class="lbl">your average across sessions</div></div></div>`;
+      <div class="lbl">${SCORE_VIEW==='community'?'balanced average across '+s.num_members+' member'+(s.num_members===1?'':'s'):'your average across sessions'}</div></div></div>`;
   }else{
     const msg = s.num_sessions>0?`Smoked ${s.num_sessions}× but no effect dots logged — no score yet.`:`No sessions logged for this one yet.`;
     html+=`<div class="bigscore"><div class="meter"><div class="lbl" style="line-height:1.6">${msg}</div></div></div>`;
@@ -2485,10 +2521,6 @@ function showCodeGate(message){
 }
 function hideCodeGate(){ document.getElementById('icOverlay').classList.remove('show'); }
 
-document.getElementById('icCancel').addEventListener('click', ()=>{
-  hideCodeGate();
-  if(_icResolve) _icResolve(null);
-});
 document.getElementById('icSubmit').addEventListener('click', ()=>{
   const v = document.getElementById('icInput').value.trim();
   if(!v){
@@ -2496,15 +2528,12 @@ document.getElementById('icSubmit').addEventListener('click', ()=>{
     e.textContent = 'Enter a code.'; e.classList.add('show');
     return;
   }
-  hideCodeGate();
   if(_icResolve) _icResolve(v);
 });
 document.getElementById('icInput').addEventListener('keydown', e=>{
   if(e.key === 'Enter') document.getElementById('icSubmit').click();
 });
 
-// Returns a valid-looking code, prompting only if none is stored yet.
-// Returns null if the user cancels the prompt.
 async function ensureCode(){
   let code = getStoredCode();
   if(code) return code;
@@ -2522,7 +2551,27 @@ async function reauthAndRetry(){
   return code;
 }
 
-async function refresh(){
+function applyMemberUi(){
+  document.getElementById('memberName').textContent=CURRENT_MEMBER;
+  document.getElementById('asMemberName').textContent=CURRENT_MEMBER;
+  document.getElementById('memberBar').style.display='flex';
+  document.getElementById('mineView').classList.toggle('on',SCORE_VIEW==='mine');
+  document.getElementById('communityView').classList.toggle('on',SCORE_VIEW==='community');
+}
+function setScoreView(view){
+  SCORE_VIEW=view; localStorage.setItem('slr_score_view',view);
+  STRAINS=process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
+  applyMemberUi(); buildChips(); render();
+  if(document.getElementById('scrim').classList.contains('show')) closeSheet();
+}
+document.getElementById('mineView').addEventListener('click',()=>setScoreView('mine'));
+document.getElementById('communityView').addEventListener('click',()=>setScoreView('community'));
+document.getElementById('switchMember').addEventListener('click',()=>{
+  clearStoredCode(); CURRENT_MEMBER=''; document.getElementById('memberBar').style.display='none';
+  showCodeGate('Enter the invite code for the person using this device.').then(code=>{if(code){setStoredCode(code);refresh(true);}});
+});
+
+async function refresh(initial=false){
   const btn=$('#refreshBtn'); if(btn.classList.contains('spin'))return;
   const code = await ensureCode();
   if(!code) return; // user cancelled the gate
@@ -2532,23 +2581,32 @@ try{
     if(res.status === 401){
       btn.classList.remove('spin');
       const newCode = await reauthAndRetry();
-      if(newCode) return refresh();
+      if(newCode) return refresh(initial);
       return;
     }
     if(!res.ok) throw new Error('Worker error '+res.status);
     const data = await res.json();
     if(data.error) throw new Error(data.error);
+    CURRENT_MEMBER = data.viewer || '';
+    if(!CURRENT_MEMBER) throw new Error('This code is missing a member name.');
     RAW_STRAINS = data.strains;
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
+    applyMemberUi(); hideCodeGate();
     $('#lcount').textContent = STRAINS.length;
     const now=new Date();
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
     buildChips(); render();
-    toast('Updated — '+STRAINS.length+' strains','ok');
+    toast((initial?'Welcome, '+CURRENT_MEMBER:'Updated — '+STRAINS.length+' strains'),'ok');
   }catch(err){
-    toast(err.message,'err');
+    if(initial){
+      clearStoredCode();
+      const retry=showCodeGate('Could not open the lab. Enter your invite code again.');
+      document.getElementById('icErr').textContent=err.message;
+      document.getElementById('icErr').classList.add('show');
+      retry.then(code=>{if(code){setStoredCode(code);refresh(true);}});
+    }else toast(err.message,'err');
   }finally{
     btn.classList.remove('spin');
   }
@@ -2616,7 +2674,7 @@ function buildLogForm(s) {
     h += '</div>';
   }
 
-  h += '<input class="log-blazer" id="blazerInput" placeholder="Name (comma-separate for multiple)" autocomplete="off" spellcheck="false">';
+  h += '<div class="memberline">Logging this session as <b>' + CURRENT_MEMBER + '</b></div>';
 
 h += '<div class="eff-group pos">';
 h += '<div class="eff-section-lbl">🟢 Positive effects — tap to rate</div>';
@@ -2673,14 +2731,10 @@ function cycleEff(key, isPos) {
 }
 
 async function submitSession() {
-  const raw = document.getElementById('blazerInput')?.value.trim();
-  if (!raw) { toast('Enter a name first', 'err'); return; }
   if (!logState.batchUrl) { toast('Select a batch first', 'err'); return; }
 
   const code = await ensureCode();
   if (!code) return;
-
-  const blazers = raw.split(',').map(n => n.trim()).filter(Boolean);
 
   const btn = document.getElementById('logSubmitBtn');
   btn.disabled = true;
@@ -2689,7 +2743,6 @@ async function submitSession() {
   const payload = {
     code,
     batchUrl:  logState.batchUrl,
-    blazers,
     Calm:      logState.Calm,
     Creative:  logState.Creative,
     Focused:   logState.Focused,
@@ -2807,7 +2860,6 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
   const bNew  = document.getElementById('asBrandNew').value.trim();
   const brand = bSel === '__other__' ? bNew : bSel;
   const thc   = document.getElementById('asTHC').value;
-  const who   = document.getElementById('asWho').value.trim();
   const hp    = document.getElementById('asWebsite').value;
   const st    = document.getElementById('asStatus');
   const btn   = document.getElementById('asSubmit');
@@ -2829,7 +2881,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         kind:'strain', code, strainName:name, brand:brand,
-        type:AS.type, thc:thc, blazer:who, website:hp
+        type:AS.type, thc:thc, website:hp
       })
     });
     if(res.status === 401){
@@ -2863,6 +2915,8 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
 });
 
 buildChips(); render();
+document.getElementById('icOverlay').classList.add('show');
+refresh(true);
 </script>
 </body>
 </html>
