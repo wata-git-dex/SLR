@@ -58,6 +58,11 @@
 .asSubmit{width:100%;margin-top:18px;padding:13px;background:var(--green);border:none;border-radius:11px;color:#0d120e;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer}
 .asSubmit:disabled{opacity:.5;cursor:default}
 .asHoney{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+.asTerpToggle{width:100%;padding:11px 12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:13px;text-align:left;cursor:pointer}
+.asTerpToggle.on{border-color:var(--green-soft);color:var(--green);background:rgba(99,211,116,.08)}
+.terpPicker{display:none;flex-wrap:wrap;gap:7px;margin-top:8px}.terpPicker.show{display:flex}
+.terpChoice{padding:7px 10px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:11px 'Space Mono',monospace;cursor:pointer}
+.terpChoice.on{border-color:var(--green);color:var(--green);background:rgba(99,211,116,.1)}
 
 /* ---- invite code gate ---- */
 .icOverlay{position:fixed;inset:0;z-index:400;background:var(--ink);display:none;align-items:center;justify-content:center}
@@ -393,6 +398,12 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .hint{font-size:11px;color:var(--faint);font-family:'Space Mono',monospace;line-height:1.6}
 .footnote{text-align:center;color:var(--faint);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.03em;padding:8px 20px 0;line-height:1.7}
 .footnote b{color:var(--green-soft);font-weight:400}
+.infoLink{display:inline-block;margin-top:5px;border:0;background:none;color:var(--green);font:10px 'Space Mono',monospace;text-decoration:underline;cursor:pointer}
+.infoOverlay{position:fixed;inset:0;z-index:310;background:rgba(0,0,0,.76);display:none;align-items:flex-end;justify-content:center}.infoOverlay.show{display:flex}
+.infoSheet{width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:var(--ink2);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:18px 18px calc(24px + var(--safe-b));box-sizing:border-box}
+.infoHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.infoHead h2{margin:0;font-size:18px}.infoClose{background:none;border:0;color:var(--dim);font-size:20px;cursor:pointer}
+.infoBlock{padding:12px;margin-top:9px;background:var(--panel);border:1px solid var(--line);border-radius:12px}.infoBlock h3{margin:0 0 6px;font-size:13px;color:var(--green)}.infoBlock.side h3{color:var(--red)}.infoBlock p{margin:0;color:var(--dim);font:11px/1.65 'Space Mono',monospace}
+.infoVersion{text-align:center;margin-top:16px;color:var(--faint);font:10px 'Space Mono',monospace}
 
 .toast{position:fixed;left:50%;bottom:calc(var(--safe-b) + 22px);transform:translateX(-50%) translateY(20px);
   z-index:90;background:var(--panel2);border:1px solid var(--line2);color:var(--text);
@@ -426,6 +437,8 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .log-toggle{width:100%;text-align:left;background:none;border:none;color:var(--green);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;padding:0;text-transform:uppercase;display:flex;align-items:center;gap:6px}
 .log-toggle:active{opacity:.7}
 .log-hint{font-size:10px;color:var(--faint);margin:2px 0 10px;font-family:'Space Mono',monospace;letter-spacing:.02em}
+.overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(230,178,76,.06);border:1px solid rgba(230,178,76,.28)}
+.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{padding:10px 2px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:700 15px 'Space Mono',monospace;cursor:pointer}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -523,6 +536,10 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <input class="asInput" id="asTHC" type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 29">
     <div class="asHint">Whole number is fine — it becomes the number in the batch name.</div>
 
+    <div class="asLbl">Know the terps?</div>
+    <button class="asTerpToggle" id="asTerpToggle" type="button">Optional — tap if yes</button>
+    <div class="terpPicker" id="asTerpPicker"></div>
+
     <div class="asLbl">Member</div>
     <div class="memberline">Adding as <b id="asMemberName">your member</b></div>
 
@@ -550,10 +567,22 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" style="display:none">no strains match — try clearing a filter</div>
   <div class="footnote">
-    Personal scores use your sessions; Community balances each member equally.<br>
-    Live from your <b>Stoned Lab Rats</b> Notion · tap refresh to re-pull.
+    Personal ratings use your sessions; Community balances each member equally.<br>
+    Live from your <b>Stoned Lab Rats</b> Notion · tap refresh to re-pull.<br>
+    <button class="infoLink" id="ratingsInfoBtn">How Ratings Work</button> · <span id="appVersion"></span> · Saltyview Productions
   </div>
 </main>
+
+<div class="infoOverlay" id="infoOverlay">
+  <div class="infoSheet">
+    <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
+    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent. This—not the effects—creates your quality rating.</p></div>
+    <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.<br><br><b>Focused</b> = locked into what you were doing. <b>Energized</b> = energy or urge to move. <b>Relaxed</b> = calm without being planted. <b>Couch-Locked</b> = physically melted in place. <b>Sleepy</b> = ready for sleep.</p></div>
+    <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity. <b>Washed</b> = foggy, cooked, depleted or basically useless. <b>KO’d</b> = unexpectedly put you out. Sleepy is not KO’d.</p></div>
+    <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
+    <div class="infoVersion">SLR <span id="infoVersion"></span> · Saltyview Productions</div>
+  </div>
+</div>
 
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet"><div class="grip"></div><div id="sheetContent"></div></div>
@@ -561,6 +590,8 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
+const APP_VERSION = 'v1.0';
+let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
  {
@@ -1755,10 +1786,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/311d93f919bc80009db5d0383fc3ab5d"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1770,10 +1801,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/311d93f919bc80009db5d0383fc3ab5d"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1785,10 +1816,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/311d93f919bc80368ae4e183459fa99d"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1800,10 +1831,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/311d93f919bc800687aae061c42941d7"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "🟢🟢",
   "Focused": "🟢🟢",
-  "Motivated": "🟢🟢",
+  "MotivatedLegacy": "🟢🟢",
   "Social": "🟢",
   "Anxious": "-",
   "Headache": "🔴🔴",
@@ -1815,10 +1846,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/317d93f919bc800a811bc858aa03f311"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1830,10 +1861,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/319d93f919bc809d8410fba639da40a4"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1845,10 +1876,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/31dd93f919bc803c9b71f754c4d2d216"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1860,10 +1891,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/31fd93f919bc8019bdccecab67f3f4b9"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1875,10 +1906,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/31fd93f919bc80928b58e53c04a5800c"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1890,10 +1921,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/31fd93f919bc80b4b27fe9c0f8b83ac1"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1905,10 +1936,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/321d93f919bc809ea25fd2b6e6210423"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1920,10 +1951,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/333d93f919bc8016911dcc880f39109e"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1935,10 +1966,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/334d93f919bc80db8656c67b7b92e7f6"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1950,10 +1981,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/33ad93f919bc80f29bd0db59b19ba0b9"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1965,10 +1996,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/33ed93f919bc808ab3f4e68848e1efc5"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1980,10 +2011,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/33fd93f919bc80a1908dcfc672d5707c"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -1995,10 +2026,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/347d93f919bc80f6b2cdeee8300f7a69"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2010,10 +2041,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/372d93f919bc80b68e7acfaa84cb7dca"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2025,10 +2056,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/372d93f919bc80a38fd3f5695b342677"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2040,10 +2071,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/379d93f919bc8082aee2da5a5a69b3bf"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "🟢",
   "Focused": "🟢🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2055,10 +2086,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/379d93f919bc8082aee2da5a5a69b3bf"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "-",
   "Focused": "🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2070,25 +2101,25 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/37bd93f919bc8072b1d3f2139c382bc7"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "-",
   "Focused": "-",
-  "Motivated": "-",
+  "MotivatedLegacy": "-",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
   "Paranoid": "-",
-  "Sleepy": "🔴",
+  "Sleepy": "🟢",
   "Washed": "-"
  },
  {
   "Batch": [
    "https://app.notion.com/37bd93f919bc8072b1d3f2139c382bc7"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "-",
   "Focused": "-",
-  "Motivated": "-",
+  "MotivatedLegacy": "-",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2100,10 +2131,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/319d93f919bc809d8410fba639da40a4"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "🟢",
   "Focused": "🟢🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2115,10 +2146,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/37dd93f919bc8021a858c573d1f7969d"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "🟢",
   "Focused": "🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2130,25 +2161,25 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/37dd93f919bc8075a059d8d7ffd7b1c7"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "-",
   "Focused": "-",
-  "Motivated": "-",
+  "MotivatedLegacy": "-",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
   "Paranoid": "-",
-  "Sleepy": "🔴",
+  "Sleepy": "🟢",
   "Washed": "-"
  },
  {
   "Batch": [
    "https://app.notion.com/385d93f919bc80aaaff4ea40db0dfc96"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "🟢",
   "Focused": "🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2160,25 +2191,25 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/386d93f919bc80dbb6dae51eb978f3d4"
   ],
-  "Calm": "🟢🟢",
+  "Relaxed": "🟢🟢",
   "Creative": "-",
   "Focused": "-",
-  "Motivated": "-",
+  "MotivatedLegacy": "-",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
   "Paranoid": "-",
-  "Sleepy": "🔴",
+  "Sleepy": "🟢",
   "Washed": "-"
  },
  {
   "Batch": [
    "https://app.notion.com/395d93f919bc8026aca2da8401b7fd3f"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "🟢",
   "Focused": "🟢",
-  "Motivated": "🟢",
+  "MotivatedLegacy": "🟢",
   "Social": "-",
   "Anxious": "-",
   "Headache": "-",
@@ -2190,10 +2221,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/399d93f919bc803b823bf8a3a5cd95cf"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2205,10 +2236,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/3a1d93f919bc80159d9ffe95c7e2c14d"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2221,10 +2252,10 @@ let RAW_SESSIONS = [
    "https://app.notion.com/3a3d93f919bc80f6be74f71f09c8366b",
    "https://app.notion.com/3a3d93f919bc80269e75ed445763cd17"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2236,10 +2267,10 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/3a3d93f919bc80f6be74f71f09c8366b"
   ],
-  "Calm": null,
+  "Relaxed": null,
   "Creative": null,
   "Focused": null,
-  "Motivated": null,
+  "MotivatedLegacy": null,
   "Social": null,
   "Anxious": null,
   "Headache": null,
@@ -2251,25 +2282,25 @@ let RAW_SESSIONS = [
   "Batch": [
    "https://app.notion.com/386d93f919bc80dbb6dae51eb978f3d4"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "-",
   "Focused": "🟢",
-  "Motivated": "-",
+  "MotivatedLegacy": "-",
   "Social": "-",
   "Anxious": "🔴",
   "Headache": "🔴",
   "Paranoid": "-",
-  "Sleepy": "🔴",
+  "Sleepy": "🟢",
   "Washed": "🔴"
  },
  {
   "Batch": [
    "https://app.notion.com/3b4d93f919bc80708ce7f17bb32d6d65"
   ],
-  "Calm": "🟢",
+  "Relaxed": "🟢",
   "Creative": "🟢",
   "Focused": "🟢🟢",
-  "Motivated": "🟢🟢",
+  "MotivatedLegacy": "🟢🟢",
   "Social": "🟢",
   "Anxious": "-",
   "Headache": "-",
@@ -2279,36 +2310,37 @@ let RAW_SESSIONS = [
  }
 ];
 
-const GH_TOKEN = 'git'+'hub_pat_11CJFU5MQ0sAsrI'+'iU3DLd9_hHmvpFHt1lmI0vfi5rRvhgAjd8Rd2ZHbluNkhGmFyYEE5JKTQPVdYtp0yGd';const GH_REPO = "wata-git-dex/SLR";
-const GH_WORKFLOW = "sync-notion.yml";
 const DS = {
   strains:  "collection://90289161-102c-4070-9fcf-1805edcd28c1",
   batches:  "collection://eab15a0d-95a3-4695-b106-62a1e52e312b",
   sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234"
 };
 
-const POS=['Calm','Creative','Focused','Motivated','Social'];
-const NEG=['Anxious','Headache','Paranoid','Sleepy','Washed'];
+const EFFECTS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Sleepy','Hungry'];
+const SIDE_EFFECTS=['Anxious','Paranoid','Washed','KnockedOut','Dizzy','Headache'];
 const EFFECT_ICON = {
-  Calm:      '🧘',
+  Euphoric:  '✨',
   Creative:  '🎨',
   Focused:   '🎯',
-  Motivated: '💪',
   Social:    '🎉',
+  Giggly:    '😂',
+  Energized: '⚡',
+  Relaxed:   '🧘',
+  CouchLocked:'🛋️',
   Sleepy:    '😴',
+  Hungry:    '🍕',
   Headache:  '🤕',
   Anxious:   '😰',
   Washed:    '😶‍🌫️',
   Paranoid:  '👀',
+  KnockedOut:'💤',
+  Dizzy:     '💫',
 };
 const BRAND_ABBR={Oakfruitland:'OFL',Connected:'CON','Jet Set':'JS',UpNorth:'UN',Zombi:'ZOM','Fig Farms':'FF',Claybourne:'CLB',Traditional:'TRAD',Delighted:'DEL',Revelry:'REV',CAM:'CAM',Broccoli:'BRC',CDB:'CDB',KHYRS:'KHY',LOLO:'LOLO','Humbolt Farms':'HUM','Alien Labs':'AL','Pure Beauty':'PB'};
 
 function dotVal(v){ if(!v||v==='-')return 0; return (v.split('🟢').length-1)+(v.split('🔴').length-1); }
-function sessionScored(s){ return POS.concat(NEG).some(a=>dotVal(s[a])>0); }
-function sessionPct(s){
-  let pos=0,neg=0; POS.forEach(a=>pos+=dotVal(s[a])); NEG.forEach(a=>neg+=dotVal(s[a]));
-  return Math.max(0,Math.min(100,Math.round(50+(pos-neg)*5)));
-}
+function sessionRated(s){const n=Number(s.OverallRating);return Number.isInteger(n)&&n>=1&&n<=5;}
+function sessionHasEffects(s){return EFFECTS.concat(SIDE_EFFECTS).some(a=>s[a]!=null);}
 function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1); return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; }
 
 let CURRENT_MEMBER = '';
@@ -2318,12 +2350,12 @@ function memberNames(s){
   return names.length ? names : ['Cyrus'];
 }
 function aggregateSessions(sessions){
-  const scored=sessions.filter(sessionScored), effects={}, scores=[];
-  scored.forEach(s=>{
-    scores.push(sessionPct(s));
-    POS.concat(NEG).forEach(a=>{const v=dotVal(s[a]); if(v>0) effects[a]=(effects[a]||0)+v;});
+  const rated=sessions.filter(sessionRated), effectSessions=sessions.filter(sessionHasEffects), effects={}, scores=[];
+  rated.forEach(s=>scores.push(Number(s.OverallRating)));
+  effectSessions.forEach(s=>{
+    EFFECTS.concat(SIDE_EFFECTS).forEach(a=>{const v=dotVal(s[a]); if(v>0) effects[a]=(effects[a]||0)+v;});
   });
-  return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null,effects,num_sessions:sessions.length,num_scored:scored.length};
+  return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*10)/10:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
 }
 function communityAggregate(sessions){
   const byMember={};
@@ -2331,10 +2363,10 @@ function communityAggregate(sessions){
   const members=Object.keys(byMember), perMember=members.map(name=>aggregateSessions(byMember[name]));
   const memberScores=perMember.map(x=>x.score).filter(x=>x!=null);
   const base=aggregateSessions(sessions);
-  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length):null,num_members:memberScores.length};
+  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
 }
 function verdictFor(stats){
-  if(stats.score!=null) return stats.score>=70?'loved':stats.score>=55?'good':stats.score>=40?'mixed':'avoid';
+  if(stats.score!=null) return stats.score>=4?'loved':stats.score>=3?'good':stats.score>=2?'mixed':'avoid';
   return stats.num_sessions>0?'tried':'untested';
 }
 
@@ -2363,7 +2395,7 @@ function process(strains,batches,sessions){
       thc_min: thc.length?Math.round(Math.min.apply(null,thc)*1000)/10:null,
       thc_max: thc.length?Math.round(Math.max.apply(null,thc)*1000)/10:null,
       terpenes:Object.keys(tcount).sort((a,b)=>tcount[b]-tcount[a]),
-      num_sessions:shown.num_sessions, num_scored:shown.num_scored, num_members:shown.num_members||0,
+      num_sessions:shown.num_sessions, num_scored:shown.num_scored, num_members:shown.num_members||0, effect_samples:shown.effect_samples,
       effects:shown.effects, score:shown.score, verdict, mine, community,
       first_buy:dates.length?dates.slice().sort()[0]:null,
       last_buy:dates.length?dates.slice().sort().slice(-1)[0]:null
@@ -2439,9 +2471,9 @@ $('#filterClose').addEventListener('click',closeFilters);
 $('#filterOverlay').addEventListener('click',e=>{if(e.target.id==='filterOverlay')closeFilters();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFilters();});
 
-function scoreClass(v){if(v==null)return 's-na';if(v>=60)return 's-hi';if(v>=45)return 's-mid';return 's-lo';}
+function scoreClass(v){if(v==null)return 's-na';if(v>=4)return 's-hi';if(v>=3)return 's-mid';return 's-lo';}
 function thcLabel(s){if(s.thc_min==null)return null;return s.thc_min===s.thc_max?`${s.thc_min}%`:`${s.thc_min}–${s.thc_max}%`;}
-function topEffects(s,limit){const e=s.effects||{};const arr=Object.keys(e).map(k=>({k,v:e[k],pos:POS.includes(k)}));arr.sort((a,b)=>b.v-a.v);return limit?arr.slice(0,limit):arr;}
+function topEffects(s,limit){const e=s.effects||{},max=Math.max(1,(s.effect_samples||0)*2);const arr=Object.keys(e).map(k=>({k,v:e[k],strength:Math.round(e[k]/max*100),pos:EFFECTS.includes(k)}));arr.sort((a,b)=>b.strength-a.strength);return limit?arr.slice(0,limit):arr;}
 function typeColor(t){return t==='Sativa'?'var(--sativa)':t==='Hybrid'?'var(--hybrid)':t==='Indica'?'var(--indica)':'var(--line2)';}
 
 // Terpene colors matched to their Notion multi-select colors
@@ -2523,7 +2555,8 @@ function cardEl(s){
   const c=document.createElement('div');
   c.className='card t-'+(s.type||'x');
   const thc=thcLabel(s), sc=s.score;
-  const scoreHtml = sc==null?`<div class="score s-na"><span class="q">·</span></div>`:`<div class="score ${scoreClass(sc)}">${sc}<small>SCORE</small></div>`;
+  const scoreLabel=sc==null?'':(Number.isInteger(sc)?sc.toFixed(0):sc.toFixed(1));
+  const scoreHtml = sc==null?`<div class="score s-na"><span class="q">·</span></div>`:`<div class="score ${scoreClass(sc)}">${scoreLabel}<small>/5</small></div>`;
   let strip=''; const te=topEffects(s,4);
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
   let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,4).map(t=>{const c=terpColor(t);return `<span class="terppill" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${t}</span>`;}).join('')}</div>`; else terps=`<div class="terps"><span class="noterp">no terpenes logged</span></div>`;
@@ -2609,24 +2642,23 @@ html+=`<div class="sect"><div class="statgrid two">
   if(s.score!=null){
     const cls=scoreClass(s.score);
     const col=cls==='s-hi'?'var(--green)':cls==='s-mid'?'var(--amber)':'var(--red)';
+    const scoreLabel=Number.isInteger(s.score)?s.score.toFixed(0):s.score.toFixed(1);
     html+=`<div class="bigscore">
-      <div class="num" style="color:${col}">${s.score}<small>/100</small></div>
-      <div class="meter"><div class="bar"><div class="fill" style="width:${s.score}%;background:${col}"></div></div>
-      <div class="lbl">${SCORE_VIEW==='community'?'balanced average across '+s.num_members+' member'+(s.num_members===1?'':'s'):'your average across sessions'}</div></div></div>`;
+      <div class="num" style="color:${col}">${scoreLabel}<small>/5</small></div>
+      <div class="meter"><div class="bar"><div class="fill" style="width:${s.score*20}%;background:${col}"></div></div>
+      <div class="lbl">${SCORE_VIEW==='community'?'balanced overall rating across '+s.num_members+' Rat'+(s.num_members===1?'':'s'):'your average Overall rating'}</div></div></div>`;
   }else{
-    const msg = s.num_sessions>0?`Smoked ${s.num_sessions}× but no effect dots logged — no score yet.`:`No sessions logged for this one yet.`;
+    const msg = s.num_sessions>0?`Smoked ${s.num_sessions}× but no Overall rating logged yet. Effects still appear below.`:`No sessions logged for this one yet.`;
     html+=`<div class="bigscore"><div class="meter"><div class="lbl" style="line-height:1.6">${msg}</div></div></div>`;
   }
   html+=`</div>`;
 
-  // Effect profile
+  // Lab Results: normalized frequency + intensity bars, without numeric clutter.
   const te=topEffects(s);
   if(te.length){
-    const max=Math.max.apply(null,te.map(e=>e.v).concat([1]));
-    html+=`<div class="sect"><h3>Effect profile</h3>`;
-    te.forEach(e=>{const w=Math.round(e.v/max*100);
-      html+=`<div class="effbar"><div class="name"><span class="efi">${EFFECT_ICON[e.k]||''}</span>${e.k}</div><div class="track"><div class="seg ${e.pos?'p':'n'}" style="width:${w}%"></div></div><div class="cnt">${e.v}</div></div>`;});
-    html+=`<div class="hint" style="margin-top:6px">Higher bar = stronger / more consistent across sessions.</div></div>`;
+    const groups=[{title:'Effects',rows:te.filter(e=>e.pos),cls:'p'},{title:'Side Effects',rows:te.filter(e=>!e.pos),cls:'n'}];
+    groups.forEach(g=>{if(!g.rows.length)return;html+=`<div class="sect"><h3>${g.title}</h3>`;g.rows.forEach(e=>{const label=e.k==='CouchLocked'?'Couch-Locked':e.k==='KnockedOut'?"KO'd":e.k;html+=`<div class="effbar"><div class="name"><span class="efi">${EFFECT_ICON[e.k]||''}</span>${label}</div><div class="track"><div class="seg ${g.cls}" style="width:${e.strength}%"></div></div></div>`;});html+=`</div>`;});
+    html+=`<div class="hint" style="margin-top:-12px;margin-bottom:18px">Longer bar = more consistently or strongly reported.</div>`;
   }
 
  html += '<div class="sect"><button class="log-toggle" id="logToggleBtn" onclick="toggleLogSection()">🔥 Blaze +</button><div id="logSessionContainer" style="display:none"></div></div>';
@@ -2791,6 +2823,7 @@ try{
     RAW_STRAINS = data.strains;
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
+    RAW_TERPENES = data.terpenes || [];
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
     applyMemberUi(); hideCodeGate();
     $('#lcount').textContent = STRAINS.length;
@@ -2838,18 +2871,24 @@ document.querySelector('.brandbox').addEventListener('click',()=>{
 });
 
 const EFFS_POS = [
-  {key:'Calm',      emoji:'🧘', label:'Calm'},
-  {key:'Creative',  emoji:'🎨', label:'Creative'},
-  {key:'Focused',   emoji:'🎯', label:'Focused'},
-  {key:'Motivated', emoji:'💪', label:'Motivated'},
-  {key:'Social',    emoji:'🎉', label:'Social'},
+  {key:'Euphoric', emoji:'✨', label:'Euphoric'},
+  {key:'Focused', emoji:'🎯', label:'Focused'},
+  {key:'Creative', emoji:'🎨', label:'Creative'},
+  {key:'Social', emoji:'🎉', label:'Social'},
+  {key:'Giggly', emoji:'😂', label:'Giggly'},
+  {key:'Energized', emoji:'⚡', label:'Energized'},
+  {key:'Relaxed', emoji:'🧘', label:'Relaxed'},
+  {key:'CouchLocked', emoji:'🛋️', label:'Couch-Locked'},
+  {key:'Sleepy', emoji:'😴', label:'Sleepy'},
+  {key:'Hungry', emoji:'🍕', label:'Hungry'},
 ];
 const EFFS_NEG = [
-  {key:'Sleepy',   emoji:'😴', label:'Sleepy'},
-  {key:'Headache', emoji:'🤕', label:'Headache'},
   {key:'Anxious',  emoji:'😰', label:'Anxious'},
-  {key:'Washed',   emoji:'😶‍🌫️', label:'Washed'},
   {key:'Paranoid', emoji:'👀', label:'Paranoid'},
+  {key:'Washed',   emoji:'😶‍🌫️', label:'Washed'},
+  {key:'KnockedOut', emoji:'💤', label:"KO'd"},
+  {key:'Dizzy', emoji:'💫', label:'Dizzy'},
+  {key:'Headache', emoji:'🤕', label:'Headache'},
 ];
 
 let logState = {};
@@ -2860,7 +2899,7 @@ function buildLogForm(s) {
   RAW_BATCHES.forEach(b => batchMap[b.url] = b);
   const batches = (rawStrain?.Batches || []).map(u => batchMap[u]).filter(Boolean);
 
-  logState = { batchUrl: batches.length === 1 ? batches[0].url : null, strain: s };
+  logState = { batchUrl: batches.length === 1 ? batches[0].url : null, strain: s, OverallRating: null };
   EFFS_POS.concat(EFFS_NEG).forEach(e => { logState[e.key] = '-'; });
 
   let h = '<div class="log-form">';
@@ -2875,9 +2914,14 @@ function buildLogForm(s) {
 
   h += '<div class="memberline">Logging this session as <b>' + CURRENT_MEMBER + '</b></div>';
 
+  h += '<div class="overall-box"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
+  h += '<div class="log-hint">1 Poor · 2 Below Average · 3 Solid · 4 Very Good · 5 Excellent</div><div class="overall-grid">';
+  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" id="overall-' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
+  h += '</div></div>';
+
 h += '<div class="eff-group pos">';
-h += '<div class="eff-section-lbl">🟢 Positive effects — tap to rate</div>';
-h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🟢 = kinda &nbsp;·&nbsp; 🟢🟢 = feel it</div>';
+h += '<div class="eff-section-lbl">🟢 Effects — tap to rate</div>';
+h += '<div class="log-hint">– = none &nbsp;·&nbsp; 🟢 = noticeable &nbsp;·&nbsp; 🟢🟢 = strong</div>';
 h += '<div class="eff-grid">';
 EFFS_POS.forEach(e => {
   h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',true)">' +
@@ -2887,8 +2931,8 @@ EFFS_POS.forEach(e => {
 h += '</div></div>';
 
   h += '<div class="eff-group neg">';
-h += '<div class="eff-section-lbl">🔴 Negative effects — tap to rate</div>';
-  h += '<div class="log-hint">– = no effect &nbsp;·&nbsp; 🔴 = kinda &nbsp;·&nbsp; 🔴🔴 = feel it</div>';
+h += '<div class="eff-section-lbl">🔴 Side Effects — tap to rate</div>';
+  h += '<div class="log-hint">– = none &nbsp;·&nbsp; 🔴 = noticeable &nbsp;·&nbsp; 🔴🔴 = strong</div>';
   h += '<div class="eff-grid">';
   EFFS_NEG.forEach(e => {
     h += '<button class="eff-btn" id="eff-' + e.key + '" onclick="cycleEff(\'' + e.key + '\',false)">' +
@@ -2902,6 +2946,11 @@ h += '<div class="eff-section-lbl">🔴 Negative effects — tap to rate</div>';
 
   const container = document.getElementById('logSessionContainer');
   if (container) container.innerHTML = h;
+}
+
+function setOverall(n){
+  logState.OverallRating = logState.OverallRating===n ? null : n;
+  document.querySelectorAll('.overall-btn').forEach((b,i)=>b.classList.toggle('on',logState.OverallRating===i+1));
 }
 
 function selectLogBatch(el) {
@@ -2942,16 +2991,23 @@ async function submitSession() {
   const payload = {
     code,
     batchUrl:  logState.batchUrl,
-    Calm:      logState.Calm,
+    OverallRating: logState.OverallRating,
+    Euphoric:  logState.Euphoric,
+    Relaxed:   logState.Relaxed,
     Creative:  logState.Creative,
     Focused:   logState.Focused,
-    Motivated: logState.Motivated,
     Social:    logState.Social,
+    Giggly:    logState.Giggly,
+    Energized: logState.Energized,
+    CouchLocked: logState.CouchLocked,
     Sleepy:    logState.Sleepy,
-    Headache:  logState.Headache,
+    Hungry:    logState.Hungry,
     Anxious:   logState.Anxious,
-    Washed:    logState.Washed,
     Paranoid:  logState.Paranoid,
+    Washed:    logState.Washed,
+    KnockedOut: logState.KnockedOut,
+    Dizzy:     logState.Dizzy,
+    Headache:  logState.Headache,
   };
 
   try {
@@ -2990,7 +3046,7 @@ async function submitSession() {
 function filterBrand(val){activeBrand=val;syncChips();render();}
 
 /* ================= ADD STRAIN ================= */
-const AS = { type:'', busy:false };
+const AS = { type:'', busy:false, terpUrls:[], showTerps:false };
 
 function asOpen(){
   const ov = document.getElementById('asOverlay');
@@ -3000,9 +3056,21 @@ function asOpen(){
   sel.innerHTML = '<option value="">\u2014 pick a brand \u2014</option>'
     + brands.map(b=>'<option value="'+b+'">'+b+'</option>').join('')
     + '<option value="__other__">\u2795 Other / not listed</option>';
+  renderTerpPicker();
   ov.classList.add('show');
   document.body.style.overflow='hidden';
 }
+
+function renderTerpPicker(){
+  const picker=document.getElementById('asTerpPicker');
+  const toggle=document.getElementById('asTerpToggle');
+  picker.classList.toggle('show',AS.showTerps);
+  toggle.classList.toggle('on',AS.showTerps);
+  toggle.textContent=AS.showTerps?'Yes — select any you know':'Optional — tap if yes';
+  picker.innerHTML=RAW_TERPENES.slice().sort((a,b)=>a.Name.localeCompare(b.Name)).map(t=>'<button type="button" class="terpChoice '+(AS.terpUrls.includes(t.url)?'on':'')+'" data-url="'+t.url+'">'+t.Name+'</button>').join('');
+  picker.querySelectorAll('.terpChoice').forEach(btn=>btn.addEventListener('click',()=>{const url=btn.dataset.url;AS.terpUrls=AS.terpUrls.includes(url)?AS.terpUrls.filter(x=>x!==url):AS.terpUrls.concat(url);renderTerpPicker();}));
+}
+document.getElementById('asTerpToggle').addEventListener('click',()=>{AS.showTerps=!AS.showTerps;if(!AS.showTerps)AS.terpUrls=[];renderTerpPicker();});
 function asClose(){
   document.getElementById('asOverlay').classList.remove('show');
   document.body.style.overflow='';
@@ -3080,7 +3148,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         kind:'strain', code, strainName:name, brand:brand,
-        type:AS.type, thc:thc, website:hp
+        type:AS.type, thc:thc, terpUrls:AS.terpUrls, website:hp
       })
     });
     if(res.status === 401){
@@ -3104,7 +3172,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
     document.getElementById('asTHC').value='';
     document.getElementById('asBrand').value='';
     document.querySelectorAll('.asType').forEach(b=>b.classList.remove('on'));
-    AS.type=''; st.textContent='';
+    AS.type=''; AS.terpUrls=[]; AS.showTerps=false; renderTerpPicker(); st.textContent='';
   }catch(err){
     st.textContent = err.message;
     toast(err.message,'err');
@@ -3112,6 +3180,13 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
     AS.busy=false; btn.disabled=false; btn.textContent='Add to the lab';
   }
 });
+
+document.getElementById('appVersion').textContent=APP_VERSION;
+document.getElementById('infoVersion').textContent=APP_VERSION;
+document.getElementById('ratingsInfoBtn').addEventListener('click',()=>{document.getElementById('infoOverlay').classList.add('show');document.body.style.overflow='hidden';});
+function closeRatingsInfo(){document.getElementById('infoOverlay').classList.remove('show');document.body.style.overflow='';}
+document.getElementById('infoClose').addEventListener('click',closeRatingsInfo);
+document.getElementById('infoOverlay').addEventListener('click',e=>{if(e.target.id==='infoOverlay')closeRatingsInfo();});
 
 buildChips(); render();
 showCheckingGate();

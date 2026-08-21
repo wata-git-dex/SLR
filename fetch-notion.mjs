@@ -9,6 +9,7 @@ const VERSION = "2022-06-28";
 
 const DB_STRAINS = "b2f9f3414d3e46928cfd3cac81576559";
 const DB_BATCHES = "adccf52ca8404582bab240cca2a7d12b";
+const DB_TERPENES = "9e384b0156e74452ba5150832c6a3626";
 
 if (!TOKEN) { console.error("Missing NOTION_TOKEN"); process.exit(1); }
 
@@ -62,6 +63,11 @@ console.log("  " + strainPages.length + " strains");
 console.log("Fetching Batches...");
 const batchPages = await queryAll(DB_BATCHES);
 console.log("  " + batchPages.length + " batches");
+
+console.log("Fetching Terpenes...");
+const terpenePages = await queryAll(DB_TERPENES);
+const terpeneByUrl = new Map(terpenePages.map(p => ["https://app.notion.com/" + p.id.replace(/-/g,""), txt(p.properties["Name"])]));
+console.log("  " + terpenePages.length + " terpenes");
 
 // --- Download and convert photos ---
 console.log("Downloading photos...");
@@ -118,7 +124,9 @@ const RAW_BATCHES = batchPages
     Brand:  sel(p.properties["Brand"]),
     Type:   sel(p.properties["Type"]),
     THC:    num(p.properties["THC %"]),
-    Terps:  ms(p.properties["Terpenes (ms)"]),
+    Terps:  rel(p.properties["Terpenes"]).map(u=>terpeneByUrl.get(u)).filter(Boolean).length
+      ? rel(p.properties["Terpenes"]).map(u=>terpeneByUrl.get(u)).filter(Boolean)
+      : ms(p.properties["Terpenes (ms)"]),
     Strain: (rel(p.properties["Strains"])[0]) ?? null,
     Date:   date(p.properties["Purchase Date"]),
   }));
