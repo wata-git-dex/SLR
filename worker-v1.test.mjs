@@ -39,12 +39,16 @@ assert.deepEqual(getData.batches[0].Terps,['Limonene']);
 assert.deepEqual(getData.terpenes,[{url:'https://app.notion.com/33333333333333333333333333333333',Name:'Limonene'}]);
 
 calls.length=0;
-const sessionRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'TEST-CODE',batchUrl:'https://app.notion.com/22222222222222222222222222222222',OverallRating:5,Relaxed:'🟢🟢',Sleepy:'🟢🟢',Anxious:'🔴🔴'})}),env);
+const sessionRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'TEST-CODE',batchUrl:'https://app.notion.com/22222222222222222222222222222222',OverallRating:4.5,Relaxed:'🟢🟢',Sleepy:'🟢🟢',Anxious:'🔴🔴'})}),env);
 assert.equal(sessionRes.status,200);
 const sessionWrite=JSON.parse(calls.find(c=>c.url.endsWith('/v1/pages')).opts.body);
-assert.equal(sessionWrite.properties['Overall Rating'].number,5);
+assert.equal(sessionWrite.properties['Overall Rating'].number,4.5);
 assert.equal(sessionWrite.properties.Sleepy.select.name,'🟢🟢');
 assert.equal(sessionWrite.properties.Anxious.select.name,'🔴🔴');
+
+const invalidOverallRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'TEST-CODE',batchUrl:'https://app.notion.com/22222222222222222222222222222222',OverallRating:4.2})}),env);
+assert.equal(invalidOverallRes.status,500);
+assert.match((await invalidOverallRes.json()).error,/half-point steps/);
 
 calls.length=0;
 const strainRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:'strain',code:'TEST-CODE',strainName:'Test Strain',brand:'Maven',type:'Hybrid',thc:'25',terpUrls:['https://app.notion.com/33333333333333333333333333333333']})}),env);

@@ -191,8 +191,8 @@ async function createSession(data, token, memberName) {
   const effect = value => ["-", "🟢", "🟢🟢"].includes(value) ? value : "-";
   const sideEffect = value => ["-", "🔴", "🔴🔴"].includes(value) ? value : "-";
   const overall = data.OverallRating == null || data.OverallRating === "" ? null : Number(data.OverallRating);
-  if (overall != null && (!Number.isInteger(overall) || overall < 1 || overall > 5)) {
-    throw new Error("Overall Rating must be a whole number from 1 to 5");
+  if (overall != null && (!Number.isFinite(overall) || !Number.isInteger(overall * 2) || overall < 1 || overall > 5)) {
+    throw new Error("Overall Rating must be from 1 to 5 in half-point steps");
   }
 
   const properties = {

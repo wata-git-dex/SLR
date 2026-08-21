@@ -452,7 +452,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .log-toggle:active{opacity:.7}
 .log-hint{font-size:10px;color:var(--faint);margin:2px 0 10px;font-family:'Space Mono',monospace;letter-spacing:.02em}
 .overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(230,178,76,.06);border:1px solid rgba(230,178,76,.28)}
-.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{padding:10px 2px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:700 15px 'Space Mono',monospace;cursor:pointer}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
+.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{padding:10px 2px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:700 14px 'Space Mono',monospace;cursor:pointer}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -616,7 +616,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 <div class="infoOverlay" id="infoOverlay">
   <div class="infoSheet">
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
-    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent. This—not the effects—creates your quality rating.</p></div>
+    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent in half-point steps. This—not the effects—creates your quality rating.</p></div>
     <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.<br><br><b>Focused</b> = locked into what you were doing. <b>Energized</b> = energy or urge to move. <b>Relaxed</b> = calm without being planted. <b>Couch-Locked</b> = physically melted in place. <b>Sleepy</b> = ready for sleep.</p></div>
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity. <b>Washed</b> = foggy, cooked, depleted or basically useless. <b>KO’d</b> = unexpectedly put you out. Sleepy is not KO’d.</p></div>
     <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
@@ -630,7 +630,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.1';
+const APP_VERSION = 'v1.1.1';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -2990,8 +2990,8 @@ function buildLogForm(s) {
   h += '<div class="memberline">Logging this session as <b>' + CURRENT_MEMBER + '</b></div>';
 
   h += '<div class="overall-box"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
-  h += '<div class="log-hint">1 Poor · 2 Below Average · 3 Solid · 4 Very Good · 5 Excellent</div><div class="overall-grid">';
-  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" id="overall-' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
+  h += '<div class="log-hint">1 Poor · 3 Solid · 5 Excellent · half-points welcome</div><div class="overall-grid">';
+  [1,1.5,2,2.5,3,3.5,4,4.5,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
   h += '</div></div>';
 
 h += '<div class="eff-group pos">';
@@ -3025,7 +3025,7 @@ h += '<div class="eff-section-lbl">🔴 Side Effects — tap to rate</div>';
 
 function setOverall(n){
   logState.OverallRating = logState.OverallRating===n ? null : n;
-  document.querySelectorAll('.overall-btn').forEach((b,i)=>b.classList.toggle('on',logState.OverallRating===i+1));
+  document.querySelectorAll('.overall-btn').forEach(b=>b.classList.toggle('on',logState.OverallRating===Number(b.dataset.rating)));
 }
 
 function selectLogBatch(el) {
