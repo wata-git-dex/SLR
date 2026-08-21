@@ -564,6 +564,14 @@ const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
  {
+  "url": "https://app.notion.com/3c3d93f919bc80b0a89ac23f69ad4c8a",
+  "Name": "Kosher Kush",
+  "Batches": [
+   "https://app.notion.com/3c3d93f919bc80b3ad92dd213622e1db"
+  ],
+  "has_image": true
+ },
+ {
   "url": "https://app.notion.com/3c2d93f919bc8147896ed441fd7abf8e",
   "Name": "Tree Flip",
   "Batches": [
@@ -962,12 +970,26 @@ let RAW_STRAINS = [
 ];
 let RAW_BATCHES = [
  {
+  "url": "https://app.notion.com/3c3d93f919bc80b3ad92dd213622e1db",
+  "Batch": "Kosher Kush | LOLO | 33",
+  "Brand": "LOLO",
+  "Type": "Indica",
+  "THC": 0.32630000000000003,
+  "Terps": [],
+  "Strain": "https://app.notion.com/3c3d93f919bc80b0a89ac23f69ad4c8a",
+  "Date": "2026-08-20"
+ },
+ {
   "url": "https://app.notion.com/3c2d93f919bc81f9b238ef044c297bfc",
   "Batch": "Tree Flip | CAM | 26",
   "Brand": "CAM",
   "Type": "Sativa",
   "THC": 0.2594,
-  "Terps": [],
+  "Terps": [
+   "Myrcene",
+   "Limonene",
+   "Caryophyllene"
+  ],
   "Strain": "https://app.notion.com/3c2d93f919bc8147896ed441fd7abf8e",
   "Date": "2026-08-20"
  },
@@ -977,7 +999,13 @@ let RAW_BATCHES = [
   "Brand": "LOLO",
   "Type": "Sativa",
   "THC": 0.2971,
-  "Terps": [],
+  "Terps": [
+   "Terpinolene",
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene",
+   "Ocimene"
+  ],
   "Strain": "https://app.notion.com/3c1d93f919bc812e8432cb931b5b8f82",
   "Date": "2026-08-19"
  },
@@ -987,7 +1015,12 @@ let RAW_BATCHES = [
   "Brand": "KHYRS",
   "Type": "Sativa",
   "THC": 0.28,
-  "Terps": [],
+  "Terps": [
+   "Terpinolene",
+   "Caryophyllene",
+   "Myrcene",
+   "Limonene"
+  ],
   "Strain": "https://app.notion.com/3bbd93f919bc8037806ee9e2f9a95b28",
   "Date": "2026-08-12"
  },
@@ -997,7 +1030,12 @@ let RAW_BATCHES = [
   "Brand": "Sluggers",
   "Type": "Sativa",
   "THC": 0.235,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene",
+   "Humulene"
+  ],
   "Strain": "https://app.notion.com/3b8d93f919bc8014bac3e66f93367b82",
   "Date": "2026-08-10"
  },
@@ -1007,7 +1045,13 @@ let RAW_BATCHES = [
   "Brand": "KHYRS",
   "Type": "Hybrid",
   "THC": 0.26,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Myrcene",
+   "Caryophyllene",
+   "Pinene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/3b7d93f919bc808abdb1d7a58431cde2",
   "Date": "2026-08-07"
  },
@@ -1017,7 +1061,12 @@ let RAW_BATCHES = [
   "Brand": "Maven",
   "Type": "Sativa",
   "THC": 0.2952,
-  "Terps": [],
+  "Terps": [
+   "Terpinolene",
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene"
+  ],
   "Strain": "https://app.notion.com/3b4d93f919bc805e8558df29af29984b",
   "Date": "2026-08-06"
  },
@@ -1027,7 +1076,11 @@ let RAW_BATCHES = [
   "Brand": "Connected",
   "Type": "Hybrid",
   "THC": 0.3054,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene"
+  ],
   "Strain": "https://app.notion.com/3abd93f919bc802da623c4334f139fee",
   "Date": "2026-07-28"
  },
@@ -1037,7 +1090,11 @@ let RAW_BATCHES = [
   "Brand": "Oakfruitland",
   "Type": "Indica",
   "THC": 0.3383,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene"
+  ],
   "Strain": "https://app.notion.com/3a3d93f919bc80d2abfcedd648b050a9",
   "Date": "2026-07-20"
  },
@@ -1047,7 +1104,11 @@ let RAW_BATCHES = [
   "Brand": "Traditional",
   "Type": "Sativa",
   "THC": 0.31170000000000003,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Myrcene",
+   "Limonene"
+  ],
   "Strain": "https://app.notion.com/3a3d93f919bc8030ab6dd3c64863412b",
   "Date": "2026-07-20"
  },
@@ -1057,7 +1118,11 @@ let RAW_BATCHES = [
   "Brand": "CAM",
   "Type": "Hybrid",
   "THC": 0.33299999999999996,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/3a1d93f919bc80eea5c6e7b43c24b76e",
   "Date": "2026-07-17"
  },
@@ -1067,7 +1132,12 @@ let RAW_BATCHES = [
   "Brand": "LOLO",
   "Type": "Sativa",
   "THC": 0.3003,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Terpinolene",
+   "Pinene"
+  ],
   "Strain": "https://app.notion.com/3a1d93f919bc8094a0f2c1bef44a5b66",
   "Date": "2026-07-17"
  },
@@ -1077,7 +1147,13 @@ let RAW_BATCHES = [
   "Brand": "CAM",
   "Type": "Hybrid",
   "THC": 0.3013,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene",
+   "Linalool",
+   "Humulene"
+  ],
   "Strain": "https://app.notion.com/399d93f919bc809d905cdd6ca9f668a6",
   "Date": "2026-07-10"
  },
@@ -1158,7 +1234,12 @@ let RAW_BATCHES = [
   "Brand": "Connected",
   "Type": "Hybrid",
   "THC": 0.2878,
-  "Terps": [],
+  "Terps": [
+   "Myrcene",
+   "Caryophyllene",
+   "Limonene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/38bd93f919bc80d48145d8a849b76137",
   "Date": "2026-06-25"
  },
@@ -1183,7 +1264,12 @@ let RAW_BATCHES = [
   "Brand": "CAM",
   "Type": "Sativa",
   "THC": 0.3593,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Myrcene",
+   "Humulene"
+  ],
   "Strain": "https://app.notion.com/385d93f919bc802da36cfcde4f3423d3",
   "Date": "2026-06-20"
  },
@@ -1221,7 +1307,11 @@ let RAW_BATCHES = [
   "Brand": "KHYRS",
   "Type": "Hybrid",
   "THC": null,
-  "Terps": [],
+  "Terps": [
+   "Caryophyllene",
+   "Limonene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/37bd93f919bc80bcbd25fc04ce86e1ec",
   "Date": "2026-06-10"
  },
@@ -1288,7 +1378,13 @@ let RAW_BATCHES = [
   "Brand": "CDB",
   "Type": "Sativa",
   "THC": null,
-  "Terps": [],
+  "Terps": [
+   "Myrcene",
+   "Limonene",
+   "Caryophyllene",
+   "Pinene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/359d93f919bc80729d70e2279dc9ee20",
   "Date": "2026-05-07"
  },
@@ -1298,7 +1394,12 @@ let RAW_BATCHES = [
   "Brand": "Broccoli",
   "Type": "Sativa",
   "THC": null,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Myrcene",
+   "Linalool"
+  ],
   "Strain": "https://app.notion.com/359d93f919bc802c8692f4466cc499b0",
   "Date": "2026-05-07"
  },
@@ -1308,7 +1409,11 @@ let RAW_BATCHES = [
   "Brand": "Broccoli",
   "Type": "Sativa",
   "THC": null,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Pinene"
+  ],
   "Strain": "https://app.notion.com/359d93f919bc80c08bb4e1127a006f96",
   "Date": "2026-05-07"
  },
@@ -1333,7 +1438,12 @@ let RAW_BATCHES = [
   "Brand": "Connected",
   "Type": "Indica",
   "THC": 0.3206,
-  "Terps": [],
+  "Terps": [
+   "Terpinolene",
+   "Caryophyllene",
+   "Limonene",
+   "Humulene"
+  ],
   "Strain": "https://app.notion.com/348d93f919bc809db6a8ce5e0aff34fe",
   "Date": "2026-04-19"
  },
@@ -1373,7 +1483,13 @@ let RAW_BATCHES = [
   "Brand": "Connected",
   "Type": "Hybrid",
   "THC": 0.2616,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Linalool",
+   "Myrcene",
+   "Pinene"
+  ],
   "Strain": "https://app.notion.com/33ed93f919bc80a8b7d8c55b607e4613",
   "Date": "2026-04-10"
  },
@@ -1383,7 +1499,11 @@ let RAW_BATCHES = [
   "Brand": "Revelry",
   "Type": "Indica",
   "THC": 0.272,
-  "Terps": [],
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Myrcene"
+  ],
   "Strain": "https://app.notion.com/33bd93f919bc806ca42ff331baa33cb0",
   "Date": "2026-04-06"
  },
