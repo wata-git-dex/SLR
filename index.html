@@ -2349,10 +2349,15 @@ let RAW_SESSIONS = [
  }
 ];
 
+// Legacy ratings are intentionally never baked into the public static snapshot.
+// The invite-gated Worker supplies these internal strain/person fallbacks after refresh.
+let RAW_LEGACY_RATINGS = [];
+
 const DS = {
   strains:  "collection://90289161-102c-4070-9fcf-1805edcd28c1",
   batches:  "collection://eab15a0d-95a3-4695-b106-62a1e52e312b",
-  sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234"
+  sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234",
+  legacyRatings: "collection://fe8f9aea-1a95-4aff-8579-cb1a4d53c89a"
 };
 
 const EFFECTS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Sleepy','Hungry'];
@@ -2396,13 +2401,21 @@ function aggregateSessions(sessions){
   });
   return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*10)/10:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
 }
-function communityAggregate(sessions){
+function validLegacyRating(row){const n=Number(row?.LegacyRating);return Number.isInteger(n)&&n>=1&&n<=5?n:null;}
+function withLegacyFallback(stats,row){
+  const legacy=validLegacyRating(row);
+  return {...stats,real_score:stats.score,legacy_score:legacy,score:stats.score!=null?stats.score:legacy};
+}
+function communityAggregate(sessions,legacyRows=[]){
   const byMember={};
   sessions.forEach(s=>memberNames(s).forEach(name=>(byMember[name]=byMember[name]||[]).push(s)));
-  const members=Object.keys(byMember), perMember=members.map(name=>aggregateSessions(byMember[name]));
+  const legacyByMember={};
+  legacyRows.forEach(row=>{if(row.Blazer&&validLegacyRating(row)!=null)legacyByMember[String(row.Blazer).toLowerCase()]=row;});
+  const members=[...new Set(Object.keys(byMember).concat(legacyRows.map(r=>r.Blazer).filter(Boolean)))];
+  const perMember=members.map(name=>withLegacyFallback(aggregateSessions(byMember[name]||[]),legacyByMember[name.toLowerCase()]));
   const memberScores=perMember.map(x=>x.score).filter(x=>x!=null);
   const base=aggregateSessions(sessions);
-  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
+  return {...base,real_score:base.score,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
 }
 function verdictFor(stats){
   if(stats.score!=null) return stats.score>=4?'loved':stats.score>=3?'good':stats.score>=2?'mixed':'avoid';
@@ -2424,8 +2437,10 @@ function process(strains,batches,sessions){
     const tcount={}; bs.forEach(b=>(b.Terps||[]).forEach(t=>tcount[t]=(tcount[t]||0)+1));
     const dates=bs.map(b=>b.Date).filter(Boolean);
     const strainSessions=[]; bs.forEach(b=>(sessByBatch[b.url]||[]).forEach(s=>strainSessions.push(s)));
-    const mine=aggregateSessions(strainSessions.filter(s=>memberNames(s).some(n=>n.toLowerCase()===CURRENT_MEMBER.toLowerCase())));
-    const community=communityAggregate(strainSessions);
+    const strainLegacy=RAW_LEGACY_RATINGS.filter(r=>r.Strain===st.url);
+    const mineLegacy=strainLegacy.find(r=>String(r.Blazer||'').toLowerCase()===CURRENT_MEMBER.toLowerCase());
+    const mine=withLegacyFallback(aggregateSessions(strainSessions.filter(s=>memberNames(s).some(n=>n.toLowerCase()===CURRENT_MEMBER.toLowerCase()))),mineLegacy);
+    const community=communityAggregate(strainSessions,strainLegacy);
     const shown=SCORE_VIEW==='community'?community:mine;
     const verdict=verdictFor(shown);
  out.push({
@@ -2685,7 +2700,7 @@ html+=`<div class="sect"><div class="statgrid two">
     html+=`<div class="bigscore">
       <div class="num" style="color:${col}">${scoreLabel}<small>/5</small></div>
       <div class="meter"><div class="bar"><div class="fill" style="width:${s.score*20}%;background:${col}"></div></div>
-      <div class="lbl">${SCORE_VIEW==='community'?'balanced overall rating across '+s.num_members+' Rat'+(s.num_members===1?'':'s'):'your average Overall rating'}</div></div></div>`;
+      <div class="lbl">${SCORE_VIEW==='community'?'balanced rating across '+s.num_members+' Rat'+(s.num_members===1?'':'s'):'your rating'}</div></div></div>`;
   }else{
     const msg = s.num_sessions>0?`Smoked ${s.num_sessions}× but no Overall rating logged yet. Effects still appear below.`:`No sessions logged for this one yet.`;
     html+=`<div class="bigscore"><div class="meter"><div class="lbl" style="line-height:1.6">${msg}</div></div></div>`;
@@ -2820,10 +2835,12 @@ function renderProfile(){
   const stats=aggregateSessions(mineSessions);
   const tried=STRAINS.filter(s=>s.mine&&s.mine.num_sessions>0);
   const favorites=tried.filter(s=>s.mine.score!=null).sort((a,b)=>b.mine.score-a.mine.score).slice(0,3);
+  const displayedRatings=STRAINS.map(s=>s.mine?.score).filter(v=>v!=null);
+  const profileRating=displayedRatings.length?displayedRatings.reduce((a,b)=>a+b,0)/displayedRatings.length:null;
   document.getElementById('profileName').textContent=name;
   document.getElementById('profileStrains').textContent=tried.length;
   document.getElementById('profileSessions').textContent=stats.num_sessions;
-  document.getElementById('profileRating').textContent=stats.score==null?'—':stats.score.toFixed(1);
+  document.getElementById('profileRating').textContent=profileRating==null?'—':profileRating.toFixed(1);
   const summary=document.getElementById('profileSummary');
   summary.textContent=favorites.length?'Top picks: '+favorites.map(s=>s.name).join(' · '):stats.num_sessions?'Keep logging Overall ratings to build your top picks.':'Your first Blaze session will start your personal history.';
   const effects=document.getElementById('profileEffects');
@@ -2880,6 +2897,7 @@ try{
     RAW_STRAINS = data.strains;
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
+    RAW_LEGACY_RATINGS = Array.isArray(data.legacyRatings) ? data.legacyRatings : [];
     RAW_TERPENES = data.terpenes || [];
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
     applyMemberUi(); hideCodeGate();
