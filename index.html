@@ -616,7 +616,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 <div class="infoOverlay" id="infoOverlay">
   <div class="infoSheet">
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
-    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent in half-point steps. This—not the effects—creates your quality rating.</p></div>
+    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent using whole numbers. Averages may display a decimal. This—not the effects—creates your quality rating.</p></div>
     <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.<br><br><b>Focused</b> = locked into what you were doing. <b>Energized</b> = energy or urge to move. <b>Relaxed</b> = calm without being planted. <b>Couch-Locked</b> = physically melted in place. <b>Sleepy</b> = ready for sleep.</p></div>
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity. <b>Washed</b> = foggy, cooked, depleted or basically useless. <b>KO’d</b> = unexpectedly put you out. Sleepy is not KO’d.</p></div>
     <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
@@ -630,7 +630,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.1.1';
+const APP_VERSION = 'v1.1.2';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -2349,15 +2349,10 @@ let RAW_SESSIONS = [
  }
 ];
 
-// Legacy ratings are intentionally never baked into the public static snapshot.
-// The invite-gated Worker supplies these internal strain/person fallbacks after refresh.
-let RAW_LEGACY_RATINGS = [];
-
 const DS = {
   strains:  "collection://90289161-102c-4070-9fcf-1805edcd28c1",
   batches:  "collection://eab15a0d-95a3-4695-b106-62a1e52e312b",
-  sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234",
-  legacyRatings: "collection://fe8f9aea-1a95-4aff-8579-cb1a4d53c89a"
+  sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234"
 };
 
 const EFFECTS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Sleepy','Hungry'];
@@ -2401,21 +2396,13 @@ function aggregateSessions(sessions){
   });
   return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*10)/10:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
 }
-function validLegacyRating(row){const n=Number(row?.LegacyRating);return Number.isInteger(n)&&n>=1&&n<=5?n:null;}
-function withLegacyFallback(stats,row){
-  const legacy=validLegacyRating(row);
-  return {...stats,real_score:stats.score,legacy_score:legacy,score:stats.score!=null?stats.score:legacy};
-}
-function communityAggregate(sessions,legacyRows=[]){
+function communityAggregate(sessions){
   const byMember={};
   sessions.forEach(s=>memberNames(s).forEach(name=>(byMember[name]=byMember[name]||[]).push(s)));
-  const legacyByMember={};
-  legacyRows.forEach(row=>{if(row.Blazer&&validLegacyRating(row)!=null)legacyByMember[String(row.Blazer).toLowerCase()]=row;});
-  const members=[...new Set(Object.keys(byMember).concat(legacyRows.map(r=>r.Blazer).filter(Boolean)))];
-  const perMember=members.map(name=>withLegacyFallback(aggregateSessions(byMember[name]||[]),legacyByMember[name.toLowerCase()]));
+  const members=Object.keys(byMember), perMember=members.map(name=>aggregateSessions(byMember[name]));
   const memberScores=perMember.map(x=>x.score).filter(x=>x!=null);
   const base=aggregateSessions(sessions);
-  return {...base,real_score:base.score,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
+  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
 }
 function verdictFor(stats){
   if(stats.score!=null) return stats.score>=4?'loved':stats.score>=3?'good':stats.score>=2?'mixed':'avoid';
@@ -2437,10 +2424,8 @@ function process(strains,batches,sessions){
     const tcount={}; bs.forEach(b=>(b.Terps||[]).forEach(t=>tcount[t]=(tcount[t]||0)+1));
     const dates=bs.map(b=>b.Date).filter(Boolean);
     const strainSessions=[]; bs.forEach(b=>(sessByBatch[b.url]||[]).forEach(s=>strainSessions.push(s)));
-    const strainLegacy=RAW_LEGACY_RATINGS.filter(r=>r.Strain===st.url);
-    const mineLegacy=strainLegacy.find(r=>String(r.Blazer||'').toLowerCase()===CURRENT_MEMBER.toLowerCase());
-    const mine=withLegacyFallback(aggregateSessions(strainSessions.filter(s=>memberNames(s).some(n=>n.toLowerCase()===CURRENT_MEMBER.toLowerCase()))),mineLegacy);
-    const community=communityAggregate(strainSessions,strainLegacy);
+    const mine=aggregateSessions(strainSessions.filter(s=>memberNames(s).some(n=>n.toLowerCase()===CURRENT_MEMBER.toLowerCase())));
+    const community=communityAggregate(strainSessions);
     const shown=SCORE_VIEW==='community'?community:mine;
     const verdict=verdictFor(shown);
  out.push({
@@ -2897,7 +2882,6 @@ try{
     RAW_STRAINS = data.strains;
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
-    RAW_LEGACY_RATINGS = Array.isArray(data.legacyRatings) ? data.legacyRatings : [];
     RAW_TERPENES = data.terpenes || [];
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
     applyMemberUi(); hideCodeGate();
@@ -2990,8 +2974,8 @@ function buildLogForm(s) {
   h += '<div class="memberline">Logging this session as <b>' + CURRENT_MEMBER + '</b></div>';
 
   h += '<div class="overall-box"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
-  h += '<div class="log-hint">1 Poor · 3 Solid · 5 Excellent · half-points welcome</div><div class="overall-grid">';
-  [1,1.5,2,2.5,3,3.5,4,4.5,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
+  h += '<div class="log-hint">1 Poor · 2 Below Average · 3 Solid · 4 Very Good · 5 Excellent</div><div class="overall-grid">';
+  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
   h += '</div></div>';
 
 h += '<div class="eff-group pos">';

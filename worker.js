@@ -7,7 +7,6 @@ const DS = {
   sessions: "1fa2f04b-41fe-4de5-bc28-9f3c432d1234",
   invites:  "ea3be0a8-c8f9-4857-bc1f-3c0ae6399cfb",
   terpenes: "84f1093f-2e26-4aae-8aa1-315896716d2d",
-  legacyRatings: "fe8f9aea-1a95-4aff-8579-cb1a4d53c89a",
 };
 
 const NOTION_VERSION = "2025-09-03";
@@ -104,12 +103,11 @@ export default {
         return codeRejected(cors);
       }
 
-      const [strainPages, batchPages, sessionPages, terpenePages, legacyRatingPages] = await Promise.all([
+      const [strainPages, batchPages, sessionPages, terpenePages] = await Promise.all([
         queryAll(DS.strains, env.NOTION_TOKEN),
         queryAll(DS.batches, env.NOTION_TOKEN),
         queryAll(DS.sessions, env.NOTION_TOKEN),
         queryAll(DS.terpenes, env.NOTION_TOKEN),
-        queryAll(DS.legacyRatings, env.NOTION_TOKEN),
       ]);
 
       const terpeneNames = new Map(terpenePages.map(p => [idToUrl(p.id), title(p, "Name")]));
@@ -156,16 +154,6 @@ export default {
           Dizzy:     select(p, "Dizzy"),
           Headache:  select(p, "Headache"),
         })),
-        legacyRatings: legacyRatingPages
-          .filter(p => p.properties["Enabled"]?.checkbox === true)
-          .map(p => ({
-            Strain: relation(p, "Strain")[0] || null,
-            Blazer: select(p, "Blazer"),
-            PreV1Score: number(p, "Pre-v1.0 Score"),
-            LegacyRating: number(p, "Legacy Rating"),
-            SourceSessions: number(p, "Source Sessions"),
-          }))
-          .filter(r => r.Strain && r.Blazer && Number.isInteger(r.LegacyRating) && r.LegacyRating >= 1 && r.LegacyRating <= 5),
         terpenes: terpenePages.map(p => ({ url: idToUrl(p.id), Name: title(p, "Name") })).filter(t => t.Name),
       };
 
@@ -191,8 +179,8 @@ async function createSession(data, token, memberName) {
   const effect = value => ["-", "🟢", "🟢🟢"].includes(value) ? value : "-";
   const sideEffect = value => ["-", "🔴", "🔴🔴"].includes(value) ? value : "-";
   const overall = data.OverallRating == null || data.OverallRating === "" ? null : Number(data.OverallRating);
-  if (overall != null && (!Number.isFinite(overall) || !Number.isInteger(overall * 2) || overall < 1 || overall > 5)) {
-    throw new Error("Overall Rating must be from 1 to 5 in half-point steps");
+  if (overall != null && (!Number.isInteger(overall) || overall < 1 || overall > 5)) {
+    throw new Error("Overall Rating must be a whole number from 1 to 5");
   }
 
   const properties = {
