@@ -441,7 +441,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 20</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 21</div>
   </div>
 </div>
 <header>
@@ -563,6 +563,14 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
+ {
+  "url": "https://app.notion.com/3c2d93f919bc8147896ed441fd7abf8e",
+  "Name": "Tree Flip",
+  "Batches": [
+   "https://app.notion.com/3c2d93f919bc81f9b238ef044c297bfc"
+  ],
+  "has_image": true
+ },
  {
   "url": "https://app.notion.com/3c1d93f919bc812e8432cb931b5b8f82",
   "Name": "Lemon Meringue",
@@ -953,6 +961,16 @@ let RAW_STRAINS = [
  }
 ];
 let RAW_BATCHES = [
+ {
+  "url": "https://app.notion.com/3c2d93f919bc81f9b238ef044c297bfc",
+  "Batch": "Tree Flip | CAM | 26",
+  "Brand": "CAM",
+  "Type": "Sativa",
+  "THC": 0.2594,
+  "Terps": [],
+  "Strain": "https://app.notion.com/3c2d93f919bc8147896ed441fd7abf8e",
+  "Date": "2026-08-20"
+ },
  {
   "url": "https://app.notion.com/3c1d93f919bc8157a2e3f5953612ab6e",
   "Batch": "Lemon Meringue | LOLO | 30",
@@ -2256,7 +2274,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Aug 20');   // baked snapshot date (set at build time)
+setUpdated('Aug 21');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'); sr.innerHTML=''; tr.innerHTML='';
