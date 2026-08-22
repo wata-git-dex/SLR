@@ -17,11 +17,11 @@
   try{member=(localStorage.getItem('slr_member_hint')||'').toLowerCase();}catch(e){}
   const isAmber=member==='amber';
   const isCyrus=member==='cyrus';
-  if(icon&&(isAmber||isCyrus)) icon.href=isAmber?'amber-app-icon-180.png':'cyrus-app-icon-180.png';
+  if(icon&&(isAmber||isCyrus)) icon.href=isAmber?'amber-app-icon-180.png':'cyrus-app-icon-v2-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
   manifest.rel='manifest';
-  manifest.href=isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus.webmanifest':'manifest.webmanifest';
+  manifest.href=isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':'manifest.webmanifest';
   document.head.appendChild(manifest);
 })();
 </script><link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2837,9 +2837,9 @@ function applyMemberAppIcon(){
   const isAmber=member==='amber';
   const isCyrus=member==='cyrus';
   const manifest=document.getElementById('appManifest');
-  if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus.webmanifest':'manifest.webmanifest');
+  if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':'manifest.webmanifest');
   const icon=document.querySelector('link[rel="apple-touch-icon"]');
-  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
+  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
 }
 function setScoreView(view){
   SCORE_VIEW=view; localStorage.setItem('slr_score_view',view);
