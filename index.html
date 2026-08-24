@@ -322,7 +322,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .brandpill{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);background:var(--panel2);
   border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;letter-spacing:.02em}
 .thctext{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.02em}
-.score{flex:0 0 auto;width:42px;height:42px;border-radius:11px;display:grid;place-items:center;
+.score{flex:0 0 auto;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;
   font-family:'Space Mono',monospace;font-weight:700;font-size:15px;line-height:1;border:1px solid var(--line2);position:relative}
 .score small{position:absolute;bottom:4px;font-size:6.5px;letter-spacing:.1em;color:var(--faint);font-weight:400}
 .score.s-hi{background:rgba(var(--positive-rgb),.14);color:var(--positive);border-color:rgba(var(--positive-rgb),.35)}
@@ -644,7 +644,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
       <div class="profileStats">
         <div class="profileStat"><b id="profileStrains">0</b><span>strains tried</span></div>
         <div class="profileStat"><b id="profileSessions">0</b><span>sessions</span></div>
-        <div class="profileStat"><b id="profileRating">—</b><span>avg overall</span></div>
+        <div class="profileStat"><b id="profileRating">—</b><span>avg overall /100</span></div>
       </div>
       <div class="profileEffects" id="profileEffects"></div>
     </div>
@@ -662,7 +662,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 <div class="infoOverlay" id="infoOverlay">
   <div class="infoSheet">
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
-    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. Optional, from 1 Poor to 5 Excellent using whole numbers. Averages may display a decimal. This—not the effects—creates your quality rating.</p></div>
+    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. You rate each Blaze from 1 Poor to 5 Excellent using whole numbers. Strain averages display as a score out of 100. Effects and Side Effects explain the experience—they do not secretly change your score.</p></div>
     <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.<br><br><b>Focused</b> = locked into what you were doing. <b>Energized</b> = energy or urge to move. <b>Relaxed</b> = calm without being planted. <b>Couch-Locked</b> = physically melted in place. <b>Sleepy</b> = ready for sleep.</p></div>
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity. <b>Washed</b> = foggy, cooked, depleted or basically useless. <b>KO’d</b> = unexpectedly put you out. Sleepy is not KO’d.</p></div>
     <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
@@ -676,7 +676,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.2.1';
+const APP_VERSION = 'v1.2.2';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -2575,6 +2575,7 @@ $('#filterOverlay').addEventListener('click',e=>{if(e.target.id==='filterOverlay
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFilters();});
 
 function scoreClass(v){if(v==null)return 's-na';if(v>=4)return 's-hi';if(v>=3)return 's-mid';return 's-lo';}
+function scoreOutOf100(v){return v==null?null:Math.round(Number(v)*20);}
 function thcLabel(s){if(s.thc_min==null)return null;return s.thc_min===s.thc_max?`${s.thc_min}%`:`${s.thc_min}–${s.thc_max}%`;}
 function topEffects(s,limit){const e=s.effects||{},max=Math.max(1,(s.effect_samples||0)*2);const arr=Object.keys(e).map(k=>({k,v:e[k],strength:Math.round(e[k]/max*100),pos:EFFECTS.includes(k)}));arr.sort((a,b)=>b.strength-a.strength);return limit?arr.slice(0,limit):arr;}
 function typeColor(t){return t==='Sativa'?'var(--sativa)':t==='Hybrid'?'var(--hybrid)':t==='Indica'?'var(--indica)':'var(--line2)';}
@@ -2658,8 +2659,8 @@ function cardEl(s){
   const c=document.createElement('div');
   c.className='card t-'+(s.type||'x');
   const thc=thcLabel(s), sc=s.score;
-  const scoreLabel=sc==null?'':(Number.isInteger(sc)?sc.toFixed(0):sc.toFixed(1));
-  const scoreHtml = sc==null?`<div class="score s-na"><span class="q">·</span></div>`:`<div class="score ${scoreClass(sc)}">${scoreLabel}<small>/5</small></div>`;
+  const scoreLabel=scoreOutOf100(sc);
+  const scoreHtml = sc==null?`<div class="score s-na"><span class="q">·</span></div>`:`<div class="score ${scoreClass(sc)}">${scoreLabel}<small>/100</small></div>`;
   let strip=''; const te=topEffects(s,4);
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
   let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,4).map(t=>{const c=terpColor(t);return `<span class="terppill" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${t}</span>`;}).join('')}</div>`; else terps=`<div class="terps"><span class="noterp">no terpenes logged</span></div>`;
@@ -2745,9 +2746,9 @@ html+=`<div class="sect"><div class="statgrid two">
   if(s.score!=null){
     const cls=scoreClass(s.score);
     const col=cls==='s-hi'?'var(--positive)':cls==='s-mid'?'var(--amber)':'var(--red)';
-    const scoreLabel=Number.isInteger(s.score)?s.score.toFixed(0):s.score.toFixed(1);
+    const scoreLabel=scoreOutOf100(s.score);
     html+=`<div class="bigscore">
-      <div class="num" style="color:${col}">${scoreLabel}<small>/5</small></div>
+      <div class="num" style="color:${col}">${scoreLabel}<small>/100</small></div>
       <div class="meter"><div class="bar"><div class="fill" style="width:${s.score*20}%;background:${col}"></div></div>
       <div class="lbl">${SCORE_VIEW==='community'?'balanced rating across '+s.num_members+' Rat'+(s.num_members===1?'':'s'):'your rating'}</div></div></div>`;
   }else{
@@ -2894,7 +2895,7 @@ function renderProfile(){
   document.getElementById('profileName').textContent=name;
   document.getElementById('profileStrains').textContent=tried.length;
   document.getElementById('profileSessions').textContent=stats.num_sessions;
-  document.getElementById('profileRating').textContent=profileRating==null?'—':profileRating.toFixed(1);
+  document.getElementById('profileRating').textContent=profileRating==null?'—':scoreOutOf100(profileRating);
   const summary=document.getElementById('profileSummary');
   summary.textContent=favorites.length?'Top picks: '+favorites.map(s=>s.name).join(' · '):stats.num_sessions?'Keep logging Overall ratings to build your top picks.':'Your first Blaze session will start your personal history.';
   const effects=document.getElementById('profileEffects');
