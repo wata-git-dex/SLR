@@ -504,7 +504,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 25</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Aug 26</div>
   </div>
 </div>
 <header>
@@ -720,6 +720,22 @@ const APP_VERSION = 'v1.3.0';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
+ {
+  "url": "https://app.notion.com/3c8d93f919bc814c9d59fed9e3c1af60",
+  "Name": "Cookies Breath",
+  "Batches": [
+   "https://app.notion.com/3c8d93f919bc81f3a5c4f24608ad402d"
+  ],
+  "has_image": false
+ },
+ {
+  "url": "https://app.notion.com/3c7d93f919bc81f8ad3ac44c1644ba6d",
+  "Name": "Skyline Haze",
+  "Batches": [
+   "https://app.notion.com/3c7d93f919bc81898786cc3ae3299e97"
+  ],
+  "has_image": false
+ },
  {
   "url": "https://app.notion.com/3c4d93f919bc8152b9bbed9d7731fad8",
   "Name": "Laughing Gas",
@@ -1134,6 +1150,26 @@ let RAW_STRAINS = [
  }
 ];
 let RAW_BATCHES = [
+ {
+  "url": "https://app.notion.com/3c8d93f919bc81f3a5c4f24608ad402d",
+  "Batch": "Cookies Breath | LOLO | 29",
+  "Brand": "LOLO",
+  "Type": "Hybrid",
+  "THC": 0.2934,
+  "Terps": [],
+  "Strain": "https://app.notion.com/3c8d93f919bc814c9d59fed9e3c1af60",
+  "Date": "2026-08-26"
+ },
+ {
+  "url": "https://app.notion.com/3c7d93f919bc81898786cc3ae3299e97",
+  "Batch": "Skyline Haze | AL | 29",
+  "Brand": "Alien Labs",
+  "Type": "Sativa",
+  "THC": 0.2868,
+  "Terps": [],
+  "Strain": "https://app.notion.com/3c7d93f919bc81f8ad3ac44c1644ba6d",
+  "Date": "2026-08-25"
+ },
  {
   "url": "https://app.notion.com/3c4d93f919bc810d8b2fc599427c775a",
   "Batch": "Laughing Gas | CAM | 27",
@@ -2569,7 +2605,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Aug 25');   // baked snapshot date (set at build time)
+setUpdated('Aug 26');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'); sr.innerHTML=''; tr.innerHTML='';
