@@ -10,6 +10,8 @@ const DS = {
 };
 
 const NOTION_VERSION = "2025-09-03";
+const FILE_NOTION_VERSION = "2026-03-11";
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
 // In-memory cache — re-checks Notion at most once every 60s regardless of traffic.
 // Each active code maps to the member named in its Given To field.
@@ -46,6 +48,7 @@ function codeRejected(cors) {
 
 export default {
   async fetch(request, env) {
+    const requestUrl = new URL(request.url);
     const origin = env.ALLOWED_ORIGIN || "*";
     const cors = {
       "Access-Control-Allow-Origin": origin,
@@ -59,6 +62,21 @@ export default {
     if (request.method === "POST") {
       try {
         if (!env.NOTION_TOKEN) throw new Error("NOTION_TOKEN secret is not set");
+
+        if (requestUrl.pathname === "/photo") {
+          const contentLength = Number(request.headers.get("content-length") || 0);
+          if (contentLength > MAX_PHOTO_BYTES + 64_000) {
+            return jsonError("Photo is too large. Choose a photo under 5 MB.", 413, cors);
+          }
+          const form = await request.formData();
+          const member = await memberForCode(form.get("code"), env.NOTION_TOKEN);
+          if (!member) return codeRejected(cors);
+          const uploaded = await uploadStrainPhoto(form, env.NOTION_TOKEN, member.name);
+          return new Response(JSON.stringify({ ok: true, viewer: member.name, ...uploaded }), {
+            headers: { ...cors, "Content-Type": "application/json" },
+          });
+        }
+
         const data = await request.json();
         const member = await memberForCode(data.code, env.NOTION_TOKEN);
         if (!member) {
@@ -120,6 +138,7 @@ export default {
           Name:      title(p, "Name"),
           Batches:   relation(p, "Batches"),
           has_image: (p.properties["Photo"]?.files?.length > 0),
+          photo:     firstFileUrl(p.properties["Photo"]),
         })),
         batches: batchPages.map(p => ({
           url:    idToUrl(p.id),
@@ -168,6 +187,92 @@ export default {
     }
   },
 };
+
+function jsonError(message, status, cors) {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json" },
+  });
+}
+
+function firstFileUrl(property) {
+  const file = property?.files?.[0];
+  if (!file) return null;
+  return file.type === "file" ? file.file?.url ?? null : file.external?.url ?? null;
+}
+
+// ---- Upload or replace a Strain photo in Notion ----
+async function uploadStrainPhoto(form, token, memberName) {
+  const strainId = urlToPageId(String(form.get("strainUrl") || ""));
+  const replace = String(form.get("replace") || "") === "true";
+  const photo = form.get("photo");
+
+  if (!(photo instanceof File) || photo.size === 0) throw new Error("Choose a photo first");
+  if (photo.size > MAX_PHOTO_BYTES) throw new Error("Photo is too large. Choose a photo under 5 MB.");
+  if (!["image/jpeg", "image/png", "image/webp"].includes(photo.type)) {
+    throw new Error("Photo must be a JPEG, PNG or WebP image");
+  }
+
+  const strainPages = await queryAll(DS.strains, token);
+  const strain = strainPages.find(page => String(page.id).replace(/-/g, "") === strainId.replace(/-/g, ""));
+  if (!strain) throw new Error("Strain not found");
+
+  const hasExistingPhoto = (strain.properties?.Photo?.files?.length || 0) > 0;
+  if (hasExistingPhoto && !replace) throw new Error("This strain already has a photo");
+  if (hasExistingPhoto && memberName.trim().toLowerCase() !== "cyrus") {
+    throw new Error("Only Cyrus can replace an existing strain photo");
+  }
+
+  const extension = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
+  const filename = `slr-${strainId.replace(/-/g, "")}.${extension}`;
+  const headers = {
+    "Authorization": "Bearer " + token,
+    "Notion-Version": FILE_NOTION_VERSION,
+  };
+
+  const createResponse = await fetch("https://api.notion.com/v1/file_uploads", {
+    method: "POST",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({ mode: "single_part", filename, content_type: photo.type }),
+  });
+  if (!createResponse.ok) {
+    throw new Error("Notion photo setup " + createResponse.status + ": " + (await createResponse.text()).slice(0, 300));
+  }
+  const fileUpload = await createResponse.json();
+
+  const outbound = new FormData();
+  outbound.append("file", photo, filename);
+  const sendResponse = await fetch(`https://api.notion.com/v1/file_uploads/${fileUpload.id}/send`, {
+    method: "POST",
+    headers,
+    body: outbound,
+  });
+  if (!sendResponse.ok) {
+    throw new Error("Notion photo upload " + sendResponse.status + ": " + (await sendResponse.text()).slice(0, 300));
+  }
+
+  const updateResponse = await fetch(`https://api.notion.com/v1/pages/${strainId}`, {
+    method: "PATCH",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      properties: {
+        "Photo": {
+          type: "files",
+          files: [{ type: "file_upload", file_upload: { id: fileUpload.id }, name: filename }],
+        },
+      },
+    }),
+  });
+  if (!updateResponse.ok) {
+    throw new Error("Notion photo attach " + updateResponse.status + ": " + (await updateResponse.text()).slice(0, 300));
+  }
+  const updated = await updateResponse.json();
+  return {
+    strainId,
+    replaced: hasExistingPhoto,
+    photo: firstFileUrl(updated.properties?.Photo),
+  };
+}
 
 // ---- Write a new session to Notion ----
 async function createSession(data, token, memberName) {
