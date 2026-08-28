@@ -123,6 +123,7 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
 .filterChoices{display:flex;gap:7px;flex-wrap:wrap}
 
   * { touch-action: manipulation; }
+  input:not([type="file"]):not([type="hidden"]),textarea{font-size:16px!important}
 :root{
   --ink:#0d120e; --ink2:#131a14; --panel:#171f18; --panel2:#1d271e;
   --line:#28342a; --line2:#33422f;
@@ -719,7 +720,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.3.2';
+const APP_VERSION = 'v1.3.3';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
