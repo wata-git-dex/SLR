@@ -17,12 +17,14 @@
   try{member=(localStorage.getItem('slr_member_hint')||'').toLowerCase();}catch(e){}
   const isAmber=member==='amber';
   const isCyrus=member==='cyrus';
+  const isFelipe=member==='felipe carvalho';
   if(isAmber) document.documentElement.classList.add('amber-theme');
-  if(icon&&(isAmber||isCyrus)) icon.href=isAmber?'amber-app-icon-180.png':'cyrus-app-icon-v2-180.png';
+  if(isFelipe) document.documentElement.classList.add('felipe-theme');
+  if(icon&&(isAmber||isCyrus||isFelipe)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':'felipe-app-icon-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
   manifest.rel='manifest';
-  manifest.href=isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':'manifest.webmanifest';
+  manifest.href=isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':isFelipe?'manifest-felipe.webmanifest':'manifest.webmanifest';
   document.head.appendChild(manifest);
 })();
 </script><link rel="preconnect" href="https://fonts.googleapis.com">
@@ -147,6 +149,15 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
   --accent-rgb:244,71,140; --accent-hi:#ff6ca5; --accent-lo:#d72f72; --accent-shadow-rgb:215,47,114;
   --body-glow:#321323; --body-glow-2:#211321; --header-rgb:16,11,15; --door-top:#21121c; --door-bottom:#10090e;
   --profile-end:33,19,30; --profile-stat:16,9,14;
+}
+:root.felipe-theme{
+  --ink:#080d0a; --ink2:#0d1510; --panel:#121d16; --panel2:#18271d;
+  --line:#233b2b; --line2:#31543b;
+  --text:#f1f5ec; --dim:#9eae9e; --faint:#667769;
+  --green:#2bc85a; --green-soft:#19743a; --amber:#f4c430; --blue:#2858b8;
+  --accent-rgb:43,200,90; --accent-hi:#42df72; --accent-lo:#1b9b45; --accent-shadow-rgb:27,155,69;
+  --body-glow:#0c3420; --body-glow-2:#0c1b38; --header-rgb:8,13,10; --door-top:#101b12; --door-bottom:#060b08;
+  --profile-end:12,37,22; --profile-stat:5,12,8;
 }
   .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
 .eff-group.pos{background:rgba(var(--positive-rgb),.06);border:1px solid rgba(var(--positive-rgb),.25)}
@@ -720,7 +731,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.3.3';
+const APP_VERSION = 'v1.4.0';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -3051,7 +3062,9 @@ function applyMemberUi(){
   applyMemberAppIcon();
 }
 function applyMemberTheme(){
-  document.documentElement.classList.toggle('amber-theme',CURRENT_MEMBER.trim().toLowerCase()==='amber');
+  const member=CURRENT_MEMBER.trim().toLowerCase();
+  document.documentElement.classList.toggle('amber-theme',member==='amber');
+  document.documentElement.classList.toggle('felipe-theme',member==='felipe carvalho');
 }
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
 function renderProfile(){
@@ -3076,13 +3089,14 @@ function applyMemberAppIcon(){
   const member=CURRENT_MEMBER.trim().toLowerCase();
   const isAmber=member==='amber';
   const isCyrus=member==='cyrus';
+  const isFelipe=member==='felipe carvalho';
   const manifest=document.getElementById('appManifest');
-  if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':'manifest.webmanifest');
+  if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':isFelipe?'manifest-felipe.webmanifest':'manifest.webmanifest');
   const icon=document.querySelector('link[rel="apple-touch-icon"]');
-  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
+  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':isFelipe?'felipe-app-icon-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
   document.querySelectorAll('.emblem img,.brandimg').forEach(img=>{
     if(!img.dataset.defaultSrc) img.dataset.defaultSrc=img.getAttribute('src');
-    img.src=isAmber?'amber-app-icon-512.png':img.dataset.defaultSrc;
+    img.src=isAmber?'amber-app-icon-512.png':isFelipe?'felipe-app-icon-512.png':img.dataset.defaultSrc;
   });
 }
 function setScoreView(view){
