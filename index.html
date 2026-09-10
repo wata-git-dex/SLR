@@ -153,23 +153,34 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
   --profile-end:33,19,30; --profile-stat:16,9,14;
 }
 :root.felipe-theme{
-  --ink:#080d0a; --ink2:#0d1510; --panel:#121d16; --panel2:#18271d;
-  --line:#233b2b; --line2:#31543b;
-  --text:#f1f5ec; --dim:#9eae9e; --faint:#667769;
-  --green:#2bc85a; --green-soft:#19743a; --amber:#f4c430; --blue:#2858b8;
-  --accent-rgb:43,200,90; --accent-hi:#42df72; --accent-lo:#1b9b45; --accent-shadow-rgb:27,155,69;
-  --body-glow:#0c3420; --body-glow-2:#0c1b38; --header-rgb:8,13,10; --door-top:#101b12; --door-bottom:#060b08;
-  --profile-end:12,37,22; --profile-stat:5,12,8;
+  --ink:#050b08; --ink2:#09140e; --panel:#0e1d14; --panel2:#14291c;
+  --line:#264a32; --line2:#3d704a;
+  --text:#f5f6ec; --dim:#abb8a6; --faint:#71806f;
+  --green:#19d463; --green-soft:#087c38; --amber:#ffd21a; --blue:#0866d9;
+  --accent-rgb:25,212,99; --accent-hi:#35ed79; --accent-lo:#079447; --accent-shadow-rgb:7,148,71;
+  --body-glow:#073e20; --body-glow-2:#071f43; --header-rgb:5,11,8; --door-top:#0a1c11; --door-bottom:#030805;
+  --profile-end:7,45,24; --profile-stat:3,15,8;
 }
 :root.piero-theme{
-  --ink:#090707; --ink2:#120a0b; --panel:#1b1011; --panel2:#281416;
-  --line:#3b2023; --line2:#572a30;
-  --text:#f7eeee; --dim:#b8a0a2; --faint:#7f6366;
-  --green:#ff3b4f; --green-soft:#a82433;
-  --accent-rgb:255,59,79; --accent-hi:#ff596a; --accent-lo:#c91f32; --accent-shadow-rgb:201,31,50;
-  --body-glow:#351015; --body-glow-2:#1f0b10; --header-rgb:9,7,7; --door-top:#1c0d10; --door-bottom:#080405;
-  --profile-end:35,13,16; --profile-stat:17,7,9;
+  --ink:#050505; --ink2:#090909; --panel:#101010; --panel2:#181818;
+  --line:#46120e; --line2:#7a1d16;
+  --text:#f8f3f2; --dim:#aaa09e; --faint:#746b69;
+  --green:#ff2718; --green-soft:#a5140b;
+  --accent-rgb:255,39,24; --accent-hi:#ff493b; --accent-lo:#d31509; --accent-shadow-rgb:211,21,9;
+  --body-glow:#420a05; --body-glow-2:#180302; --header-rgb:5,5,5; --door-top:#130504; --door-bottom:#030202;
+  --profile-end:38,7,4; --profile-stat:14,3,2;
 }
+:root.felipe-theme .brandbox{border-color:rgba(255,210,26,.72);box-shadow:0 0 18px rgba(255,210,26,.12),0 0 26px rgba(8,102,217,.08)}
+:root.felipe-theme .menuBtn{border-color:rgba(8,102,217,.8);color:var(--amber);box-shadow:0 0 15px rgba(8,102,217,.14)}
+:root.felipe-theme .menuBtn svg{stroke:var(--amber)}
+:root.felipe-theme .memberbar{border-color:rgba(8,102,217,.5);box-shadow:inset 3px 0 0 rgba(255,210,26,.8)}
+:root.felipe-theme .scoretoggle button.on{background:linear-gradient(135deg,#ffd91f,#f2b900);color:#07110b}
+:root.felipe-theme .refresh{border-color:rgba(8,102,217,.62)}
+:root.felipe-theme .refresh svg{stroke:var(--amber)}
+:root.felipe-theme .addbtn{border-color:rgba(255,210,26,.75);color:var(--amber)}
+:root.felipe-theme .addbtn svg{stroke:var(--amber)}
+:root.piero-theme .brandbox,:root.piero-theme .menuBtn{box-shadow:0 0 18px rgba(255,39,24,.16)}
+:root.piero-theme .memberbar{box-shadow:inset 3px 0 0 rgba(255,39,24,.7)}
   .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
 .eff-group.pos{background:rgba(var(--positive-rgb),.06);border:1px solid rgba(var(--positive-rgb),.25)}
 .eff-group.neg{background:rgba(228,106,84,.06);border:1px solid rgba(228,106,84,.25)}
@@ -603,6 +614,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="filterHead"><div class="filterTitle">Filter & sort</div><button class="filterClose" id="filterClose" aria-label="Close filters">✕</button></div>
     <div class="filterGroup"><div class="filterLabel">Collection</div><div class="filterChoices" id="shelfrow"></div></div>
     <div class="filterGroup"><div class="filterLabel">Strain type</div><div class="filterChoices" id="filterTyperow"></div></div>
+    <div class="filterGroup"><div class="filterLabel">Country purchased</div><div class="filterChoices" id="filterCountryrow"></div></div>
     <div class="filterGroup"><div class="filterLabel">Brand</div><select id="brandFilter" class="filterSelect" onchange="filterBrand(this.value)"><option value="">All brands</option></select></div>
     <div class="filterGroup"><div class="filterLabel">Sort by</div><select id="sort" class="filterSelect">
       <option value="smart">Best match</option><option value="score">Score: high to low</option><option value="thc">THC: high to low</option><option value="recent">Most recent</option><option value="az">A–Z</option>
@@ -763,7 +775,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.5.0';
+const APP_VERSION = 'v1.5.1';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -2793,9 +2805,13 @@ const SHELVES=[
   {id:'rated',label:'Rated',test:s=>s.score!=null},
 ];
 const TYPES=[{id:'Sativa',label:'Sativa',cls:'sat'},{id:'Hybrid',label:'Hybrid',cls:'hyb'},{id:'Indica',label:'Indica',cls:'ind'}];
+const COUNTRIES=[
+  {id:'🇩🇪',label:'🇩🇪 Germany'}, {id:'🇺🇸',label:'🇺🇸 USA'}, {id:'🇹🇭',label:'🇹🇭 Thailand'},
+  {id:'🇳🇱',label:'🇳🇱 Netherlands'}, {id:'🇪🇸',label:'🇪🇸 Spain'}
+];
 const SMART={loved:0,good:1,mixed:2,tried:3,untested:4,avoid:5};
 
-let shelf='all', ftype='all', sortBy='smart', query='';
+let shelf='all', ftype='all', fcountry='all', sortBy='smart', query='';
 let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
@@ -2803,7 +2819,7 @@ function setUpdated(txt){ $('#updated').textContent=txt; }
 setUpdated('Sep 10');   // baked snapshot date (set at build time)
 
 function buildChips(){
-  const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML='';
+  const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
   SHELVES.forEach(sh=>{
     const n=STRAINS.filter(sh.test).length;
     const b=document.createElement('button');
@@ -2820,6 +2836,12 @@ function buildChips(){
     parent.appendChild(b);
   }
   TYPES.forEach(t=>{addTypeChip(t,tr);addTypeChip(t,ftr);});
+  COUNTRIES.forEach(country=>{
+    const b=document.createElement('button');
+    b.className='chip countrychip'; b.dataset.kind='country'; b.dataset.id=country.id; b.textContent=country.label;
+    b.onclick=()=>{fcountry=(fcountry===country.id?'all':country.id);syncChips();render();};
+    fcr.appendChild(b);
+  });
   // Add brand dropdown
   const brands = [...new Set(RAW_BATCHES.map(b => b.Brand).filter(Boolean))].sort();
   const brandSel = document.getElementById('brandFilter');
@@ -2833,7 +2855,8 @@ function buildChips(){
 function syncChips(){
   document.querySelectorAll('#shelfrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===shelf));
   document.querySelectorAll('#typerow .chip,#filterTyperow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===ftype));
-  const count=(shelf!=='all'?1:0)+(ftype!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='smart'?1:0);
+  document.querySelectorAll('#filterCountryrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===fcountry));
+  const count=(shelf!=='all'?1:0)+(ftype!=='all'?1:0)+(fcountry!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='smart'?1:0);
   const filterBtn=document.getElementById('filterBtn');
   if(filterBtn){filterBtn.classList.toggle('active',count>0);document.getElementById('filterBadge').textContent=count;}
 }
@@ -2923,6 +2946,7 @@ function render(){
   let list=STRAINS.filter(s=>{
     if(!shTest(s))return false;
     if(ftype!=='all'&&s.type!==ftype)return false;
+    if(fcountry!=='all'&&!(s.countries||[]).includes(fcountry))return false;
    if(activeBrand && !(s.brands||[]).includes(activeBrand))return false;
     if(query){const hay=(s.name+' '+(s.brands||[]).join(' ')+' '+(s.terpenes||[]).join(' ')+' '+(s.type||'')).toLowerCase();if(!hay.includes(query))return false;}
     return true;

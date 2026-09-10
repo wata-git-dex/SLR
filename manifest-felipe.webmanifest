@@ -5,8 +5,8 @@
   "start_url": "/?member=felipe-carvalho",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#080d0a",
-  "theme_color": "#080d0a",
+  "background_color": "#050b08",
+  "theme_color": "#050b08",
   "icons": [
     {
       "src": "felipe-app-icon-192.png",

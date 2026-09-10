@@ -5,8 +5,8 @@
   "start_url": "/?member=piero",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#090707",
-  "theme_color": "#090707",
+  "background_color": "#050505",
+  "theme_color": "#050505",
   "icons": [
     {
       "src": "piero-app-icon-192.png",
