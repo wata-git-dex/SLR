@@ -22,6 +22,12 @@
   if(isAmber) document.documentElement.classList.add('amber-theme');
   if(isFelipe) document.documentElement.classList.add('felipe-theme');
   if(isPiero) document.documentElement.classList.add('piero-theme');
+  if(isCyrus){
+    let palette='green';
+    try{palette=localStorage.getItem('slr_cyrus_palette')||'green';}catch(e){}
+    if(palette==='blue')document.documentElement.classList.add('cyrus-blue-theme');
+    if(palette==='purple')document.documentElement.classList.add('cyrus-purple-theme');
+  }
   try{if(localStorage.getItem('slr_color_mode')==='light')document.documentElement.classList.add('light-mode');}catch(e){}
   if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
   const manifest=document.createElement('link');
@@ -171,6 +177,26 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
   --body-glow:#420a05; --body-glow-2:#180302; --header-rgb:5,5,5; --door-top:#130504; --door-bottom:#030202;
   --profile-end:38,7,4; --profile-stat:14,3,2;
 }
+:root.cyrus-blue-theme{
+  --ink:#010306; --ink2:#03070c; --panel:#060d15; --panel2:#0a1420;
+  --line:#0b3e5a; --line2:#087dac;
+  --text:#eff9ff; --dim:#91aec4; --faint:#5f7890;
+  --green:#24c8ff; --green-soft:#14779f;
+  --positive:#24c8ff; --positive-soft:#14779f; --positive-rgb:36,200,255;
+  --accent-rgb:36,200,255; --accent-hi:#5fddff; --accent-lo:#079bd6; --accent-shadow-rgb:7,155,214;
+  --body-glow:#001625; --body-glow-2:#02020a; --header-rgb:1,3,6; --door-top:#03101a; --door-bottom:#010204;
+  --profile-end:2,12,20; --profile-stat:1,4,7;
+}
+:root.cyrus-purple-theme{
+  --ink:#020104; --ink2:#050307; --panel:#0a0710; --panel2:#100b19;
+  --line:#351b51; --line2:#7138a8;
+  --text:#f8f2ff; --dim:#b9a5cf; --faint:#806e98;
+  --green:#a970ff; --green-soft:#6740a5;
+  --positive:#63b9ff; --positive-soft:#376b9a; --positive-rgb:99,185,255;
+  --accent-rgb:169,112,255; --accent-hi:#c492ff; --accent-lo:#7047d9; --accent-shadow-rgb:112,71,217;
+  --body-glow:#170326; --body-glow-2:#020b19; --header-rgb:2,1,4; --door-top:#0d0515; --door-bottom:#010102;
+  --profile-end:12,5,19; --profile-stat:3,1,5;
+}
 :root.light-mode{
   color-scheme:light;
   --ink:#f4f8f5; --ink2:#eaf2ec; --panel:#ffffff; --panel2:#dfeae2;
@@ -181,6 +207,22 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
   --accent-rgb:22,129,58; --accent-hi:#279849; --accent-lo:#126d30; --accent-shadow-rgb:22,129,58;
   --body-glow:#d7ecdc; --body-glow-2:#dce5f2; --header-rgb:244,248,245; --door-top:#edf6ef; --door-bottom:#dfe9e1;
   --profile-end:235,244,237; --profile-stat:255,255,255;
+}
+:root.cyrus-blue-theme.light-mode{
+  --ink:#f5fbff; --ink2:#e8f4fb; --panel:#ffffff; --panel2:#dceef8;
+  --line:#acd3e7; --line2:#66afd2; --text:#082536; --dim:#41677b; --faint:#6d8592;
+  --green:#007daf; --green-soft:#267c9e; --positive:#007daf; --positive-soft:#4b8da7; --positive-rgb:0,125,175;
+  --accent-rgb:0,125,175; --accent-hi:#159bca; --accent-lo:#00658e; --accent-shadow-rgb:0,125,175;
+  --body-glow:#d6f0fb; --body-glow-2:#e2e9fb; --header-rgb:245,251,255; --door-top:#edf9ff; --door-bottom:#dceef7;
+  --profile-end:229,244,251; --profile-stat:255,255,255;
+}
+:root.cyrus-purple-theme.light-mode{
+  --ink:#fbf7ff; --ink2:#f0e8f8; --panel:#ffffff; --panel2:#e7dcf1;
+  --line:#ccb8de; --line2:#a47bc7; --text:#281438; --dim:#684e78; --faint:#897393;
+  --green:#7134a6; --green-soft:#754f94; --positive:#176fa7; --positive-soft:#4e82a4; --positive-rgb:23,111,167;
+  --accent-rgb:113,52,166; --accent-hi:#8f4fc7; --accent-lo:#5d278c; --accent-shadow-rgb:113,52,166;
+  --body-glow:#ecd9fa; --body-glow-2:#dceafb; --header-rgb:251,247,255; --door-top:#f7edff; --door-bottom:#e9dcf3;
+  --profile-end:242,232,250; --profile-stat:255,255,255;
 }
 :root.amber-theme.light-mode{
   --ink:#fff7fb; --ink2:#f9eaf2; --panel:#ffffff; --panel2:#f2dce7;
@@ -217,6 +259,11 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
 :root.felipe-theme .addbtn svg{stroke:var(--amber)}
 :root.piero-theme .brandbox,:root.piero-theme .menuBtn{box-shadow:0 0 18px rgba(255,39,24,.16)}
 :root.piero-theme .memberbar{box-shadow:inset 3px 0 0 rgba(255,39,24,.7)}
+:root.cyrus-blue-theme .emblem img,:root.cyrus-blue-theme .brandimg{filter:hue-rotate(92deg) saturate(2.4) brightness(1.08)}
+:root.cyrus-blue-theme .brandbox,:root.cyrus-blue-theme .menuBtn,:root.cyrus-blue-theme .memberbar{box-shadow:0 0 20px rgba(36,200,255,.10)}
+:root.cyrus-purple-theme .emblem img,:root.cyrus-purple-theme .brandimg{filter:hue-rotate(176deg) saturate(2.2) brightness(1.12)}
+:root.cyrus-purple-theme .brandbox,:root.cyrus-purple-theme .memberbar{border-color:#8c47d8;box-shadow:0 0 21px rgba(169,112,255,.11)}
+:root.cyrus-purple-theme .menuBtn,:root.cyrus-purple-theme .refresh{border-color:#277fd0}
   .eff-group{border-radius:12px;padding:10px 10px 6px;margin-bottom:10px}
 .eff-group.pos{background:rgba(var(--positive-rgb),.06);border:1px solid rgba(var(--positive-rgb),.25)}
 .eff-group.neg{background:rgba(228,106,84,.06);border:1px solid rgba(228,106,84,.25)}
@@ -535,6 +582,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .profileEffects{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.profileEffect{font:9px 'Space Mono',monospace;color:var(--positive);border:1px solid rgba(var(--positive-rgb),.25);background:rgba(var(--positive-rgb),.07);padding:5px 8px;border-radius:999px}.profileEmpty{font:10px/1.55 'Space Mono',monospace;color:var(--dim);margin-top:10px}
 .menuList{display:grid;gap:8px}.menuItem{width:100%;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--text);cursor:pointer;box-sizing:border-box}.menuItem:active{transform:scale(.98)}.menuIcon{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--green);font-size:15px}.menuCopy b{display:block;font-size:12px}.menuCopy span{display:block;color:var(--dim);font:9px/1.45 'Space Mono',monospace;margin-top:2px}.menuArrow{margin-left:auto;color:var(--faint);font-size:16px}.menuFoot{text-align:center;margin-top:15px;color:var(--faint);font:9px 'Space Mono',monospace}
 .themeSwitch{margin-left:auto;width:42px;height:24px;padding:3px;border-radius:999px;background:var(--panel2);border:1px solid var(--line2);flex:0 0 auto;transition:.18s}.themeSwitch i{display:block;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:.18s}.themeItem[aria-checked="true"] .themeSwitch{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}.themeItem[aria-checked="true"] .themeSwitch i{transform:translateX(16px);background:var(--green);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
+.cyrusPalette{display:none;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px}.cyrusPalette.show{display:block}.cyrusPaletteLabel{font:9px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}.cyrusPaletteChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cyrusPaletteBtn{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:9px 5px;border:1px solid var(--line2);border-radius:9px;background:var(--panel2);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer}.cyrusPaletteBtn.on{border-color:var(--green);color:var(--text);box-shadow:0 0 12px rgba(var(--accent-rgb),.13)}.cyrusPaletteBtn:active{transform:scale(.97)}.paletteDot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 8px currentColor}.paletteDot.green{color:#63d374;background:#63d374}.paletteDot.blue{color:#24c8ff;background:#24c8ff}.paletteDot.purple{color:#a970ff;background:#a970ff}
 
 .labNotice{position:fixed;z-index:285;top:calc(var(--safe-t) + 76px);left:50%;width:min(430px,calc(100vw - 24px));padding:16px;opacity:0;pointer-events:none;transform:translate(-50%,-10px) scale(.985);transition:opacity .22s ease,transform .22s ease;background:linear-gradient(145deg,var(--ink2),var(--ink));border:1px solid var(--green-soft);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.62),0 0 30px rgba(var(--accent-rgb),.18)}
 .labNotice.show{opacity:1;pointer-events:auto;transform:translate(-50%,0) scale(1)}
@@ -776,11 +824,11 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <aside class="labNotice" id="labNotice" role="dialog" aria-modal="false" aria-labelledby="labNoticeTitle">
   <div class="labNoticeHead">
-    <div><div class="labNoticeLabel">⚗ Lab notice · new in v1.7</div><div class="labNoticeTitle" id="labNoticeTitle">The lab got a clean upgrade.</div></div>
+    <div><div class="labNoticeLabel" id="labNoticeLabel">⚗ Lab notice · new in v1.7</div><div class="labNoticeTitle" id="labNoticeTitle">The lab got a clean upgrade.</div></div>
     <button class="labNoticeClose" id="labNoticeClose" aria-label="Close lab notice">✕</button>
   </div>
-  <div class="labNoticeCopy">A quick specimen report before you get back to blazing:</div>
-  <ul class="labNoticeList">
+  <div class="labNoticeCopy" id="labNoticeCopy">A quick specimen report before you get back to blazing:</div>
+  <ul class="labNoticeList" id="labNoticeList">
     <li><span class="labNoticeIcon">⌕</span><span><b>Cleaner home controls</b>Search and New Strain are easier to spot; Refresh now lives beside your profile.</span></li>
     <li><span class="labNoticeIcon">⚑</span><span><b>Country tracking</b>Add where a strain was purchased, then filter the shared lab by country.</span></li>
     <li><span class="labNoticeIcon">◐</span><span><b>Your preferred lighting</b>Every member can switch between dark and light mode from the menu.</span></li>
@@ -806,6 +854,14 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="menuEyebrow">Learn &amp; manage</div>
     <div class="menuList">
       <button class="menuItem themeItem" id="themeToggle" role="switch" aria-checked="false"><span class="menuIcon" id="themeIcon">☀</span><span class="menuCopy"><b>Light mode</b><span>Switch between light and dark on this phone</span></span><span class="themeSwitch" aria-hidden="true"><i></i></span></button>
+      <div class="cyrusPalette" id="cyrusPalette">
+        <div class="cyrusPaletteLabel">Cyrus interface color</div>
+        <div class="cyrusPaletteChoices" role="group" aria-label="Cyrus interface color">
+          <button class="cyrusPaletteBtn" data-cyrus-palette="green"><i class="paletteDot green"></i>Green</button>
+          <button class="cyrusPaletteBtn" data-cyrus-palette="blue"><i class="paletteDot blue"></i>Blue</button>
+          <button class="cyrusPaletteBtn" data-cyrus-palette="purple"><i class="paletteDot purple"></i>Purple</button>
+        </div>
+      </div>
       <button class="menuItem" id="menuLabNotice"><span class="menuIcon">⚗</span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">›</span></button>
       <button class="menuItem" id="menuRatings"><span class="menuIcon">◎</span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
       <a class="menuItem" href="guides/SLR-v1.1-Friend-Guide.png" target="_blank" rel="noopener"><span class="menuIcon">▣</span><span class="menuCopy"><b>60-second visual guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></a>
@@ -836,9 +892,11 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.7.0';
-const LAB_NOTICE_ID = 'slr-v1.7.0';
+const APP_VERSION = 'v1.8.0';
+const LAB_NOTICE_DEFAULT_ID = 'slr-v1.7.0';
+const LAB_NOTICE_CYRUS_ID = 'slr-v1.8.0-cyrus';
 const LAB_NOTICE_SEEN_KEY = 'slr_lab_notice_seen';
+const CYRUS_PALETTE_KEY = 'slr_cyrus_palette';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -3274,9 +3332,33 @@ function applyMemberUi(){
 }
 function applyMemberTheme(){
   const member=CURRENT_MEMBER.trim().toLowerCase();
+  const palette=cyrusPalette();
   document.documentElement.classList.toggle('amber-theme',member==='amber');
   document.documentElement.classList.toggle('felipe-theme',member==='felipe carvalho');
   document.documentElement.classList.toggle('piero-theme',member==='piero');
+  document.documentElement.classList.toggle('cyrus-blue-theme',member==='cyrus'&&palette==='blue');
+  document.documentElement.classList.toggle('cyrus-purple-theme',member==='cyrus'&&palette==='purple');
+}
+function cyrusPalette(){
+  try{const value=localStorage.getItem(CYRUS_PALETTE_KEY)||'green';return ['green','blue','purple'].includes(value)?value:'green';}catch(e){return 'green';}
+}
+function syncCyrusPalette(){
+  const control=document.getElementById('cyrusPalette');
+  const isCyrus=CURRENT_MEMBER.trim().toLowerCase()==='cyrus';
+  if(control)control.classList.toggle('show',isCyrus);
+  const active=cyrusPalette();
+  document.querySelectorAll('[data-cyrus-palette]').forEach(button=>{
+    const on=isCyrus&&button.dataset.cyrusPalette===active;
+    button.classList.toggle('on',on);
+    button.setAttribute('aria-pressed',on?'true':'false');
+  });
+}
+function setCyrusPalette(palette){
+  if(CURRENT_MEMBER.trim().toLowerCase()!=='cyrus'||!['green','blue','purple'].includes(palette))return;
+  try{localStorage.setItem(CYRUS_PALETTE_KEY,palette);}catch(e){}
+  applyMemberTheme();
+  syncCyrusPalette();
+  setColorMode(colorMode());
 }
 function colorMode(){try{return localStorage.getItem('slr_color_mode')==='light'?'light':'dark';}catch(e){return 'dark';}}
 function syncThemeToggle(){
@@ -3366,7 +3448,7 @@ try{
     RAW_SESSIONS = data.sessions;
     RAW_TERPENES = data.terpenes || [];
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
-    applyMemberUi(); hideCodeGate(); showLabNotice();
+    applyMemberUi(); hideCodeGate();
     $('#lcount').textContent = STRAINS.length;
     const now=new Date();
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
@@ -3402,7 +3484,10 @@ const landing=$('#landing');
 $('#enterBtn').addEventListener('click',()=>{
   document.body.classList.add('lab-open');
   landing.classList.add('opening');
-  setTimeout(()=>{landing.style.display='none';},700);
+  setTimeout(()=>{
+    landing.style.display='none';
+    showLabNotice();
+  },700);
 });
 // logo = exit the lab: doors slide shut, back to the entrance
 document.querySelector('.brandbox').addEventListener('click',()=>{
@@ -3894,19 +3979,40 @@ function closeRatingsInfo(){document.getElementById('infoOverlay').classList.rem
 document.getElementById('infoClose').addEventListener('click',closeRatingsInfo);
 document.getElementById('infoOverlay').addEventListener('click',e=>{if(e.target.id==='infoOverlay')closeRatingsInfo();});
 let labNoticeTimer=null;
+function currentLabNoticeId(){return CURRENT_MEMBER.trim().toLowerCase()==='cyrus'?LAB_NOTICE_CYRUS_ID:LAB_NOTICE_DEFAULT_ID;}
+function configureLabNotice(){
+  const cyrus=CURRENT_MEMBER.trim().toLowerCase()==='cyrus';
+  const label=document.getElementById('labNoticeLabel');
+  const title=document.getElementById('labNoticeTitle');
+  const copy=document.getElementById('labNoticeCopy');
+  const list=document.getElementById('labNoticeList');
+  if(cyrus){
+    label.textContent='⚗ Lab notice · new in v1.8';
+    title.textContent='Pick your lab color.';
+    copy.textContent='Your Cyrus interface now has three saved color settings:';
+    list.innerHTML='<li><span class="labNoticeIcon">●</span><span><b>Original Green</b>The current black-and-green SLR look stays available exactly as before.</span></li><li><span class="labNoticeIcon">◉</span><span><b>WATA Blue</b>A true-black lab with electric blue linework and glow.</span></li><li><span class="labNoticeIcon">✦</span><span><b>Wildberry Purple</b>A true-black lab with neon purple and smaller blue accents.</span></li><li><span class="labNoticeIcon">☰</span><span><b>Choose from the menu</b>Open My Lab & Help → Cyrus interface color. Your choice stays saved on this phone.</span></li>';
+  }else{
+    label.textContent='⚗ Lab notice · new in v1.7';
+    title.textContent='The lab got a clean upgrade.';
+    copy.textContent='A quick specimen report before you get back to blazing:';
+    list.innerHTML='<li><span class="labNoticeIcon">⌕</span><span><b>Cleaner home controls</b>Search and New Strain are easier to spot; Refresh now lives beside your profile.</span></li><li><span class="labNoticeIcon">⚑</span><span><b>Country tracking</b>Add where a strain was purchased, then filter the shared lab by country.</span></li><li><span class="labNoticeIcon">◐</span><span><b>Your preferred lighting</b>Every member can switch between dark and light mode from the menu.</span></li><li><span class="labNoticeIcon">✓</span><span><b>Lab Notices</b>Future updates will explain themselves here. You only see each notice once.</span></li>';
+  }
+}
 function showLabNotice(force=false){
+  configureLabNotice();
   let seen='';
   try{seen=localStorage.getItem(LAB_NOTICE_SEEN_KEY)||'';}catch(e){}
-  if(!force&&seen===LAB_NOTICE_ID)return;
+  if(!force&&seen===currentLabNoticeId())return;
+  if(!force&&(!document.body.classList.contains('lab-open')||document.getElementById('landing').style.display!=='none'))return;
   if(labNoticeTimer)clearTimeout(labNoticeTimer);
   labNoticeTimer=setTimeout(()=>{document.getElementById('labNotice').classList.add('show');labNoticeTimer=null;},650);
 }
 function closeLabNotice(){
   if(labNoticeTimer){clearTimeout(labNoticeTimer);labNoticeTimer=null;}
-  try{localStorage.setItem(LAB_NOTICE_SEEN_KEY,LAB_NOTICE_ID);}catch(e){}
+  try{localStorage.setItem(LAB_NOTICE_SEEN_KEY,currentLabNoticeId());}catch(e){}
   document.getElementById('labNotice').classList.remove('show');
 }
-function openMenu(){renderProfile();syncThemeToggle();document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function openMenu(){renderProfile();syncThemeToggle();syncCyrusPalette();document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
 function closeMenu(){document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';}
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
@@ -3914,6 +4020,7 @@ document.getElementById('menuOverlay').addEventListener('click',e=>{if(e.target.
 document.getElementById('labNoticeClose').addEventListener('click',closeLabNotice);
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',()=>{closeMenu();showLabNotice(true);});
+document.querySelectorAll('[data-cyrus-palette]').forEach(button=>button.addEventListener('click',()=>setCyrusPalette(button.dataset.cyrusPalette)));
 document.getElementById('menuRatings').addEventListener('click',()=>{closeMenu();document.getElementById('infoOverlay').classList.add('show');document.body.style.overflow='hidden';});
 document.getElementById('themeToggle').addEventListener('click',()=>setColorMode(document.documentElement.classList.contains('light-mode')?'dark':'light'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLabNotice();closeMenu();closeRatingsInfo();blazeClose();closePhotoEditor();}});
