@@ -145,6 +145,7 @@ export default {
           Batch:  title(p, "Batch"),
           Brand:  select(p, "Brand"),
           Type:   select(p, "Type"),
+          Country: select(p, "Country"),
           THC:    number(p, "THC %"),
           Terps:  relation(p, "Terpenes").map(url => terpeneNames.get(url)).filter(Boolean).length
             ? relation(p, "Terpenes").map(url => terpeneNames.get(url)).filter(Boolean)
@@ -500,6 +501,13 @@ async function createStrainAndBatch(data, token, clean, memberName) {
     "Strains": { relation: [{ id: strainId }] },
     "Purchase Date": { date: { start: today } },
   };
+
+  const country = String(data.country || "").trim();
+  const allowedCountries = new Set(["🇩🇪", "🇺🇸", "🇹🇭", "🇳🇱", "🇪🇸"]);
+  if (country) {
+    if (!allowedCountries.has(country)) throw new Error("Country must be one of the listed choices");
+    batchProps["Country"] = { select: { name: country } };
+  }
 
   const terpUrls = Array.isArray(data.terpUrls) ? data.terpUrls.slice(0, 12) : [];
   if (terpUrls.length) {

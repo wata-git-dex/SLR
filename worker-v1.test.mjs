@@ -19,7 +19,7 @@ globalThis.fetch=async (url,opts={})=>{
     {properties:{Status:{select:{name:'Active'}},Code:titleProp('AMBER-CODE'),'Given To':richProp('Amber')}},
   ]});
   if(u.includes(`/data_sources/${DS.strains}/query`)) return Response.json({results:[{id:pageId,properties:{Name:titleProp('Test Strain'),Photo:{files:existingPhoto?[{type:'file',name:'strain.jpg',file:{url:'https://files.example/strain.jpg'}}]:[]},Batches:{relation:[{id:batchId}]}}}]});
-  if(u.includes(`/data_sources/${DS.batches}/query`)) return Response.json({results:[{id:batchId,properties:{Batch:titleProp('Test Batch'),Brand:{select:{name:'Maven'}},Type:{select:{name:'Hybrid'}},'THC %':{number:.25},Terpenes:{relation:[{id:terpId}]},'Terpenes (ms)':{multi_select:[]},Strains:{relation:[{id:pageId}]},'Purchase Date':{date:{start:'2026-08-21'}}}}]});
+  if(u.includes(`/data_sources/${DS.batches}/query`)) return Response.json({results:[{id:batchId,properties:{Batch:titleProp('Test Batch'),Brand:{select:{name:'Maven'}},Type:{select:{name:'Hybrid'}},Country:{select:{name:'🇩🇪'}},'THC %':{number:.25},Terpenes:{relation:[{id:terpId}]},'Terpenes (ms)':{multi_select:[]},Strains:{relation:[{id:pageId}]},'Purchase Date':{date:{start:'2026-08-21'}}}}]});
   if(u.includes(`/data_sources/${DS.sessions}/query`)) return Response.json({results:[{properties:{'🌾 Batches':{relation:[{id:batchId}]},Blazers:{multi_select:[{name:'Cyrus'}]},'Overall Rating':{number:5},Euphoric:{select:{name:'🟢🟢'}},Focused:{select:{name:'-' }},Creative:{select:{name:'🟢'}},Social:{select:{name:'-'}},Giggly:{select:{name:'-'}},Energized:{select:{name:'🟢'}},Relaxed:{select:{name:'🟢🟢'}},'Couch-Locked':{select:{name:'🟢'}},Sleepy:{select:{name:'🟢🟢'}},Hungry:{select:{name:'-' }},Anxious:{select:{name:'-'}},Paranoid:{select:{name:'-'}},Washed:{select:{name:'-'}},"KO'd":{select:{name:'-'}},Dizzy:{select:{name:'-'}},Headache:{select:{name:'-'}}}}]});
   if(u.includes(`/data_sources/${DS.terpenes}/query`)) return Response.json({results:[{id:terpId,properties:{Name:titleProp('Limonene')}}]});
   if(u.endsWith('/v1/file_uploads')) return Response.json({id:'upload-1'});
@@ -38,6 +38,7 @@ assert.equal(getData.sessions[0].OverallRating,5);
 assert.equal(getData.sessions[0].Sleepy,'🟢🟢');
 assert.equal(getData.sessions[0].KnockedOut,'-');
 assert.deepEqual(getData.batches[0].Terps,['Limonene']);
+assert.equal(getData.batches[0].Country,'🇩🇪');
 assert.deepEqual(getData.terpenes,[{url:'https://app.notion.com/33333333333333333333333333333333',Name:'Limonene'}]);
 assert.equal(getData.strains[0].photo,null);
 
@@ -54,10 +55,11 @@ assert.equal(invalidOverallRes.status,500);
 assert.match((await invalidOverallRes.json()).error,/whole number/);
 
 calls.length=0;
-const strainRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:'strain',code:'TEST-CODE',strainName:'Test Strain',brand:'Maven',type:'Hybrid',thc:'25',terpUrls:['https://app.notion.com/33333333333333333333333333333333']})}),env);
+const strainRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:'strain',code:'TEST-CODE',strainName:'Test Strain',brand:'Maven',type:'Hybrid',thc:'25',country:'🇩🇪',terpUrls:['https://app.notion.com/33333333333333333333333333333333']})}),env);
 assert.equal(strainRes.status,200);
 const batchWrite=JSON.parse(calls.find(c=>c.url.endsWith('/v1/pages')).opts.body);
 assert.deepEqual(batchWrite.properties.Terpenes.relation,[{id:terpId}]);
+assert.equal(batchWrite.properties.Country.select.name,'🇩🇪');
 
 calls.length=0;
 const photoForm=new FormData();
