@@ -22,6 +22,7 @@
   if(isAmber) document.documentElement.classList.add('amber-theme');
   if(isFelipe) document.documentElement.classList.add('felipe-theme');
   if(isPiero) document.documentElement.classList.add('piero-theme');
+  try{if(localStorage.getItem('slr_color_mode')==='light')document.documentElement.classList.add('light-mode');}catch(e){}
   if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
@@ -170,6 +171,41 @@ body.lab-open .blazeFab{display:flex}body.detail-open .blazeFab,body.add-open .b
   --body-glow:#420a05; --body-glow-2:#180302; --header-rgb:5,5,5; --door-top:#130504; --door-bottom:#030202;
   --profile-end:38,7,4; --profile-stat:14,3,2;
 }
+:root.light-mode{
+  color-scheme:light;
+  --ink:#f4f8f5; --ink2:#eaf2ec; --panel:#ffffff; --panel2:#dfeae2;
+  --line:#bfd0c2; --line2:#91ae97;
+  --text:#142219; --dim:#4c6352; --faint:#748278;
+  --green:#16813a; --green-soft:#397a4a;
+  --positive:#16813a; --positive-soft:#568f64; --positive-rgb:22,129,58;
+  --accent-rgb:22,129,58; --accent-hi:#279849; --accent-lo:#126d30; --accent-shadow-rgb:22,129,58;
+  --body-glow:#d7ecdc; --body-glow-2:#dce5f2; --header-rgb:244,248,245; --door-top:#edf6ef; --door-bottom:#dfe9e1;
+  --profile-end:235,244,237; --profile-stat:255,255,255;
+}
+:root.amber-theme.light-mode{
+  --ink:#fff7fb; --ink2:#f9eaf2; --panel:#ffffff; --panel2:#f2dce7;
+  --line:#ddbacd; --line2:#c78eaa; --text:#321522; --dim:#765064; --faint:#99778a;
+  --green:#c72d6c; --green-soft:#9b3c65; --accent-rgb:199,45,108; --accent-hi:#df4b89; --accent-lo:#ad2057; --accent-shadow-rgb:199,45,108;
+  --body-glow:#f6d9e7; --body-glow-2:#eadff1; --header-rgb:255,247,251; --door-top:#fff0f7; --door-bottom:#f4dce8;
+  --profile-end:250,232,241; --profile-stat:255,255,255;
+}
+:root.felipe-theme.light-mode{
+  --ink:#f5fbf6; --ink2:#e7f3ea; --panel:#ffffff; --panel2:#dcecdf;
+  --line:#acd0b5; --line2:#72aa81; --text:#102819; --dim:#45634d; --faint:#708476;
+  --green:#087b36; --green-soft:#2d7545; --accent-rgb:8,123,54; --accent-hi:#149947; --accent-lo:#05632a; --accent-shadow-rgb:8,123,54;
+  --body-glow:#d3eedb; --body-glow-2:#d8e6fa; --header-rgb:245,251,246; --door-top:#eef9f1; --door-bottom:#dcecdf;
+  --profile-end:229,244,233; --profile-stat:255,255,255;
+}
+:root.piero-theme.light-mode{
+  --ink:#fff8f7; --ink2:#f6e9e7; --panel:#ffffff; --panel2:#ecdcd9;
+  --line:#d7b4ae; --line2:#bb8178; --text:#2b1512; --dim:#70514c; --faint:#91736e;
+  --green:#d51a0d; --green-soft:#9f3028; --accent-rgb:213,26,13; --accent-hi:#eb3022; --accent-lo:#b61107; --accent-shadow-rgb:213,26,13;
+  --body-glow:#f4d8d4; --body-glow-2:#eadfdd; --header-rgb:255,248,247; --door-top:#fff0ed; --door-bottom:#eddad7;
+  --profile-end:248,231,228; --profile-stat:255,255,255;
+}
+:root.light-mode .chip.on:not(.typechip){color:#fff}
+:root.light-mode .scrim{background:rgba(34,42,36,.46)}
+:root.light-mode .filterOverlay,:root.light-mode .menuOverlay,:root.light-mode .infoOverlay,:root.light-mode .asOverlay,:root.light-mode .blazeOverlay{background:rgba(29,36,31,.52)}
 :root.felipe-theme .brandbox{border-color:rgba(255,210,26,.72);box-shadow:0 0 18px rgba(255,210,26,.12),0 0 26px rgba(8,102,217,.08)}
 :root.felipe-theme .menuBtn{border-color:rgba(8,102,217,.8);color:var(--amber);box-shadow:0 0 15px rgba(8,102,217,.14)}
 :root.felipe-theme .menuBtn svg{stroke:var(--amber)}
@@ -498,6 +534,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .profileStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.profileStat{background:rgba(var(--profile-stat),.44);border:1px solid var(--line);border-radius:10px;padding:9px 5px;text-align:center}.profileStat b{display:block;color:var(--text);font:700 16px 'Space Mono',monospace}.profileStat span{display:block;color:var(--faint);font:8px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
 .profileEffects{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.profileEffect{font:9px 'Space Mono',monospace;color:var(--positive);border:1px solid rgba(var(--positive-rgb),.25);background:rgba(var(--positive-rgb),.07);padding:5px 8px;border-radius:999px}.profileEmpty{font:10px/1.55 'Space Mono',monospace;color:var(--dim);margin-top:10px}
 .menuList{display:grid;gap:8px}.menuItem{width:100%;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--text);cursor:pointer;box-sizing:border-box}.menuItem:active{transform:scale(.98)}.menuIcon{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--green);font-size:15px}.menuCopy b{display:block;font-size:12px}.menuCopy span{display:block;color:var(--dim);font:9px/1.45 'Space Mono',monospace;margin-top:2px}.menuArrow{margin-left:auto;color:var(--faint);font-size:16px}.menuFoot{text-align:center;margin-top:15px;color:var(--faint);font:9px 'Space Mono',monospace}
+.themeSwitch{margin-left:auto;width:42px;height:24px;padding:3px;border-radius:999px;background:var(--panel2);border:1px solid var(--line2);flex:0 0 auto;transition:.18s}.themeSwitch i{display:block;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:.18s}.themeItem[aria-checked="true"] .themeSwitch{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}.themeItem[aria-checked="true"] .themeSwitch i{transform:translateX(16px);background:var(--green);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 
 .toast{position:fixed;left:50%;bottom:calc(var(--safe-b) + 22px);transform:translateX(-50%) translateY(20px);
   z-index:90;background:var(--panel2);border:1px solid var(--line2);color:var(--text);
@@ -746,6 +783,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     </div>
     <div class="menuEyebrow">Learn &amp; manage</div>
     <div class="menuList">
+      <button class="menuItem themeItem" id="themeToggle" role="switch" aria-checked="false"><span class="menuIcon" id="themeIcon">☀</span><span class="menuCopy"><b>Light mode</b><span>Switch between light and dark on this phone</span></span><span class="themeSwitch" aria-hidden="true"><i></i></span></button>
       <button class="menuItem" id="menuRatings"><span class="menuIcon">◎</span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
       <a class="menuItem" href="guides/SLR-v1.1-Friend-Guide.png" target="_blank" rel="noopener"><span class="menuIcon">▣</span><span class="menuCopy"><b>60-second visual guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></a>
       <a class="menuItem" href="guides/SLR-v1.1-Beta-Guide.pdf" target="_blank" rel="noopener"><span class="menuIcon">≡</span><span class="menuCopy"><b>Full beta guide</b><span>Deeper instructions and the complete vocabulary</span></span><span class="menuArrow">›</span></a>
@@ -775,7 +813,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.5.1';
+const APP_VERSION = 'v1.6.0';
 let RAW_TERPENES = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
@@ -3197,6 +3235,21 @@ function applyMemberTheme(){
   document.documentElement.classList.toggle('felipe-theme',member==='felipe carvalho');
   document.documentElement.classList.toggle('piero-theme',member==='piero');
 }
+function colorMode(){try{return localStorage.getItem('slr_color_mode')==='light'?'light':'dark';}catch(e){return 'dark';}}
+function syncThemeToggle(){
+  const light=document.documentElement.classList.contains('light-mode');
+  const toggle=document.getElementById('themeToggle');
+  if(toggle)toggle.setAttribute('aria-checked',light?'true':'false');
+  const icon=document.getElementById('themeIcon');
+  if(icon)icon.textContent=light?'☀':'☾';
+}
+function setColorMode(mode){
+  const light=mode==='light';
+  document.documentElement.classList.toggle('light-mode',light);
+  try{localStorage.setItem('slr_color_mode',light?'light':'dark');}catch(e){}
+  syncThemeToggle();
+  requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();});
+}
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
 function renderProfile(){
   const name=CURRENT_MEMBER||'—';
@@ -3797,14 +3850,16 @@ document.getElementById('ratingsInfoBtn').addEventListener('click',()=>{document
 function closeRatingsInfo(){document.getElementById('infoOverlay').classList.remove('show');document.body.style.overflow='';}
 document.getElementById('infoClose').addEventListener('click',closeRatingsInfo);
 document.getElementById('infoOverlay').addEventListener('click',e=>{if(e.target.id==='infoOverlay')closeRatingsInfo();});
-function openMenu(){renderProfile();document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function openMenu(){renderProfile();syncThemeToggle();document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
 function closeMenu(){document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';}
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
 document.getElementById('menuOverlay').addEventListener('click',e=>{if(e.target.id==='menuOverlay')closeMenu();});
 document.getElementById('menuRatings').addEventListener('click',()=>{closeMenu();document.getElementById('infoOverlay').classList.add('show');document.body.style.overflow='hidden';});
+document.getElementById('themeToggle').addEventListener('click',()=>setColorMode(document.documentElement.classList.contains('light-mode')?'dark':'light'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeRatingsInfo();blazeClose();closePhotoEditor();}});
 
+setColorMode(colorMode());
 buildChips(); render();
 showCheckingGate();
 refresh(true);
