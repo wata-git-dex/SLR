@@ -580,7 +580,8 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 .profileHello{font-size:16px;font-weight:700}.profileHello b{color:var(--green)}.profileSub{font:10px/1.55 'Space Mono',monospace;color:var(--dim);margin-top:3px}
 .profileStats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.profileStat{background:rgba(var(--profile-stat),.44);border:1px solid var(--line);border-radius:10px;padding:9px 5px;text-align:center}.profileStat b{display:block;color:var(--text);font:700 16px 'Space Mono',monospace}.profileStat span{display:block;color:var(--faint);font:8px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
 .profileEffects{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.profileEffect{font:9px 'Space Mono',monospace;color:var(--positive);border:1px solid rgba(var(--positive-rgb),.25);background:rgba(var(--positive-rgb),.07);padding:5px 8px;border-radius:999px}.profileEmpty{font:10px/1.55 'Space Mono',monospace;color:var(--dim);margin-top:10px}
-.menuList{display:grid;gap:8px}.menuItem{width:100%;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--text);cursor:pointer;box-sizing:border-box}.menuItem:active{transform:scale(.98)}.menuIcon{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--green);font-size:15px}.menuCopy b{display:block;font-size:12px}.menuCopy span{display:block;color:var(--dim);font:9px/1.45 'Space Mono',monospace;margin-top:2px}.menuArrow{margin-left:auto;color:var(--faint);font-size:16px}.menuFoot{text-align:center;margin-top:15px;color:var(--faint);font:9px 'Space Mono',monospace}
+.menuList{display:grid;gap:8px}.menuItem{width:100%;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--text);cursor:pointer;box-sizing:border-box}.menuItem:active{transform:scale(.98)}.menuIcon{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--green);font-size:15px}.menuIcon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.menuCopy b{display:block;font-size:12px}.menuCopy span{display:block;color:var(--dim);font:9px/1.45 'Space Mono',monospace;margin-top:2px}.menuArrow{margin-left:auto;color:var(--faint);font-size:16px;transition:transform .18s}.menuFoot{text-align:center;margin-top:15px;color:var(--faint);font:9px 'Space Mono',monospace}
+.appearancePanel{display:none;gap:8px;padding:0 6px 4px}.appearancePanel.open{display:grid}.appearanceToggle[aria-expanded="true"] .menuArrow{transform:rotate(180deg)}
 .themeSwitch{margin-left:auto;width:42px;height:24px;padding:3px;border-radius:999px;background:var(--panel2);border:1px solid var(--line2);flex:0 0 auto;transition:.18s}.themeSwitch i{display:block;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:.18s}.themeItem[aria-checked="true"] .themeSwitch{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}.themeItem[aria-checked="true"] .themeSwitch i{transform:translateX(16px);background:var(--green);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 .cyrusPalette{display:none;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px}.cyrusPalette.show{display:block}.cyrusPaletteLabel{font:9px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}.cyrusPaletteChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.cyrusPaletteBtn{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:9px 5px;border:1px solid var(--line2);border-radius:9px;background:var(--panel2);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer}.cyrusPaletteBtn.on{border-color:var(--green);color:var(--text);box-shadow:0 0 12px rgba(var(--accent-rgb),.13)}.cyrusPaletteBtn:active{transform:scale(.97)}.paletteDot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 8px currentColor}.paletteDot.green{color:#63d374;background:#63d374}.paletteDot.blue{color:#24c8ff;background:#24c8ff}.paletteDot.purple{color:#a970ff;background:#a970ff}
 
@@ -853,19 +854,22 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     </div>
     <div class="menuEyebrow">Learn &amp; manage</div>
     <div class="menuList">
-      <button class="menuItem themeItem" id="themeToggle" role="switch" aria-checked="false"><span class="menuIcon" id="themeIcon">☀</span><span class="menuCopy"><b>Light mode</b><span>Switch between light and dark on this phone</span></span><span class="themeSwitch" aria-hidden="true"><i></i></span></button>
-      <div class="cyrusPalette" id="cyrusPalette">
-        <div class="cyrusPaletteLabel">Cyrus interface color</div>
-        <div class="cyrusPaletteChoices" role="group" aria-label="Cyrus interface color">
-          <button class="cyrusPaletteBtn" data-cyrus-palette="green"><i class="paletteDot green"></i>Green</button>
-          <button class="cyrusPaletteBtn" data-cyrus-palette="blue"><i class="paletteDot blue"></i>Blue</button>
-          <button class="cyrusPaletteBtn" data-cyrus-palette="purple"><i class="paletteDot purple"></i>Purple</button>
+      <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16Z"/></svg></span><span class="menuCopy"><b>Appearance</b><span>Light, dark and interface colors</span></span><span class="menuArrow">⌄</span></button>
+      <div class="appearancePanel" id="appearancePanel">
+        <button class="menuItem themeItem" id="themeToggle" role="switch" aria-checked="false"><span class="menuIcon" id="themeIcon">☀</span><span class="menuCopy"><b>Light mode</b><span>Switch between light and dark on this phone</span></span><span class="themeSwitch" aria-hidden="true"><i></i></span></button>
+        <div class="cyrusPalette" id="cyrusPalette">
+          <div class="cyrusPaletteLabel">Cyrus interface color</div>
+          <div class="cyrusPaletteChoices" role="group" aria-label="Cyrus interface color">
+            <button class="cyrusPaletteBtn" data-cyrus-palette="green"><i class="paletteDot green"></i>Green</button>
+            <button class="cyrusPaletteBtn" data-cyrus-palette="blue"><i class="paletteDot blue"></i>Blue</button>
+            <button class="cyrusPaletteBtn" data-cyrus-palette="purple"><i class="paletteDot purple"></i>Purple</button>
+          </div>
         </div>
       </div>
-      <button class="menuItem" id="menuLabNotice"><span class="menuIcon">⚗</span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">›</span></button>
-      <button class="menuItem" id="menuRatings"><span class="menuIcon">◎</span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
-      <a class="menuItem" href="guides/SLR-v1.1-Friend-Guide.png" target="_blank" rel="noopener"><span class="menuIcon">▣</span><span class="menuCopy"><b>60-second visual guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></a>
-      <a class="menuItem" href="guides/SLR-v1.1-Beta-Guide.pdf" target="_blank" rel="noopener"><span class="menuIcon">≡</span><span class="menuCopy"><b>Full beta guide</b><span>Deeper instructions and the complete vocabulary</span></span><span class="menuArrow">›</span></a>
+      <button class="menuItem" id="menuLabNotice"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-2.1 5"/><path d="m20 7-3 3"/></svg></span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">›</span></button>
+      <button class="menuItem" id="menuRatings"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
+      <a class="menuItem" href="guides/SLR-v1.1-Friend-Guide.png" target="_blank" rel="noopener"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h5M8 16h7"/></svg></span><span class="menuCopy"><b>60-second visual guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></a>
+      <a class="menuItem" href="guides/SLR-v1.1-Beta-Guide.pdf" target="_blank" rel="noopener"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H11v17H7.5A3.5 3.5 0 0 0 4 22Z"/><path d="M20 5.5A3.5 3.5 0 0 0 16.5 2H13v17h3.5A3.5 3.5 0 0 1 20 22Z"/></svg></span><span class="menuCopy"><b>Full beta guide</b><span>Deeper instructions and the complete vocabulary</span></span><span class="menuArrow">›</span></a>
     </div>
     <div class="menuFoot">SLR <span id="menuVersion"></span> · Saltyview Productions</div>
   </div>
@@ -892,7 +896,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.8.0';
+const APP_VERSION = 'v1.8.1';
 const LAB_NOTICE_DEFAULT_ID = 'slr-v1.7.0';
 const LAB_NOTICE_CYRUS_ID = 'slr-v1.8.0-cyrus';
 const LAB_NOTICE_SEEN_KEY = 'slr_lab_notice_seen';
@@ -3987,12 +3991,12 @@ function configureLabNotice(){
   const copy=document.getElementById('labNoticeCopy');
   const list=document.getElementById('labNoticeList');
   if(cyrus){
-    label.textContent='⚗ Lab notice · new in v1.8';
+    label.textContent='↻ Lab notice · new in v1.8';
     title.textContent='Pick your lab color.';
     copy.textContent='Your Cyrus interface now has three saved color settings:';
     list.innerHTML='<li><span class="labNoticeIcon">●</span><span><b>Original Green</b>The current black-and-green SLR look stays available exactly as before.</span></li><li><span class="labNoticeIcon">◉</span><span><b>WATA Blue</b>A true-black lab with electric blue linework and glow.</span></li><li><span class="labNoticeIcon">✦</span><span><b>Wildberry Purple</b>A true-black lab with neon purple and smaller blue accents.</span></li><li><span class="labNoticeIcon">☰</span><span><b>Choose from the menu</b>Open My Lab & Help → Cyrus interface color. Your choice stays saved on this phone.</span></li>';
   }else{
-    label.textContent='⚗ Lab notice · new in v1.7';
+    label.textContent='↻ Lab notice · new in v1.7';
     title.textContent='The lab got a clean upgrade.';
     copy.textContent='A quick specimen report before you get back to blazing:';
     list.innerHTML='<li><span class="labNoticeIcon">⌕</span><span><b>Cleaner home controls</b>Search and New Strain are easier to spot; Refresh now lives beside your profile.</span></li><li><span class="labNoticeIcon">⚑</span><span><b>Country tracking</b>Add where a strain was purchased, then filter the shared lab by country.</span></li><li><span class="labNoticeIcon">◐</span><span><b>Your preferred lighting</b>Every member can switch between dark and light mode from the menu.</span></li><li><span class="labNoticeIcon">✓</span><span><b>Lab Notices</b>Future updates will explain themselves here. You only see each notice once.</span></li>';
@@ -4012,11 +4016,16 @@ function closeLabNotice(){
   try{localStorage.setItem(LAB_NOTICE_SEEN_KEY,currentLabNoticeId());}catch(e){}
   document.getElementById('labNotice').classList.remove('show');
 }
-function openMenu(){renderProfile();syncThemeToggle();syncCyrusPalette();document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
-function closeMenu(){document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';}
+function setAppearanceOpen(open){
+  document.getElementById('appearancePanel').classList.toggle('open',open);
+  document.getElementById('appearanceToggle').setAttribute('aria-expanded',open?'true':'false');
+}
+function openMenu(){renderProfile();syncThemeToggle();syncCyrusPalette();setAppearanceOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function closeMenu(){setAppearanceOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';}
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
 document.getElementById('menuOverlay').addEventListener('click',e=>{if(e.target.id==='menuOverlay')closeMenu();});
+document.getElementById('appearanceToggle').addEventListener('click',e=>setAppearanceOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 document.getElementById('labNoticeClose').addEventListener('click',closeLabNotice);
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',()=>{closeMenu();showLabNotice(true);});
