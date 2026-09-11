@@ -640,7 +640,7 @@ main{padding:14px 16px calc(var(--safe-b) + 40px);max-width:900px;margin:0 auto}
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 10</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 11</div>
   </div>
 </div>
 <header>
@@ -2955,7 +2955,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Sep 10');   // baked snapshot date (set at build time)
+setUpdated('Sep 11');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
