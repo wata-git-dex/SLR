@@ -378,6 +378,7 @@ body{
 .enterbtn:hover{filter:brightness(1.05)}
 .enterbtn:hover span{transform:translateX(4px)}
 .enterbtn:active{transform:scale(.97)}
+.landing-version{margin-top:12px;color:var(--faint);font:9px 'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase}
 .landing-count{margin-top:18px;color:var(--faint);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 
 header{
@@ -385,11 +386,11 @@ header{
   padding-top:calc(var(--safe-t) + 14px);padding-right:max(16px,calc(var(--safe-r) + 12px));padding-bottom:10px;padding-left:max(16px,calc(var(--safe-l) + 12px));
   display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;
   background:
-    linear-gradient(90deg,rgba(var(--accent-rgb),.035),transparent 28%,rgba(255,255,255,.025) 50%,transparent 72%,rgba(var(--accent-rgb),.03)),
-    repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 1px,transparent 1px 7px),
+    linear-gradient(112deg,rgba(var(--accent-rgb),.10),transparent 23%,rgba(255,255,255,.045) 48%,transparent 68%,rgba(var(--accent-rgb),.07)),
+    linear-gradient(180deg,rgba(255,255,255,.025),transparent 38%,rgba(0,0,0,.10)),
     linear-gradient(180deg,rgba(var(--header-rgb),.98),rgba(var(--header-rgb),.91));
-  backdrop-filter:blur(16px);border-bottom:1px solid rgba(var(--accent-rgb),.18);
-  box-shadow:inset 0 -1px 0 rgba(255,255,255,.025),0 8px 22px rgba(0,0,0,.18);
+  backdrop-filter:blur(16px);border-bottom:1px solid rgba(var(--accent-rgb),.34);
+  box-shadow:inset 0 -1px 0 rgba(255,255,255,.06),0 10px 28px rgba(0,0,0,.28);
   max-width:900px; margin:0 auto; left:0; right:0;
 }
 .brandrow{grid-column:1;grid-row:1;display:flex;align-items:center;gap:10px;margin-bottom:12px;min-width:0}
@@ -480,6 +481,9 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 @media(orientation:landscape) and (max-height:500px){
   header{grid-template-columns:minmax(190px,.72fr) minmax(320px,1.28fr) auto;grid-template-rows:auto auto;align-items:center;gap:7px 10px;padding-top:calc(var(--safe-t) + 6px);padding-bottom:7px}
   .brandrow{grid-column:1;grid-row:1;margin:0}.memberbar{grid-column:2;grid-row:1;margin:0;min-width:0}.hstat{grid-column:3;grid-row:1;margin:0}.filterrow{grid-column:1/-1;grid-row:2}.brandbox{padding:4px 9px 4px 4px;gap:6px}.brandicon{width:26px;height:26px}.wordmark{font-size:14px}.menuBtn{width:32px;height:32px}.memberbar{padding-top:4px;padding-bottom:4px}.memberwho{font-size:9px}.scoretoggle button{font-size:8px;padding:5px}.memberbar .refresh{min-width:55px}
+}
+@media(min-width:1050px){
+  header{max-width:1180px;grid-template-columns:auto minmax(420px,520px) auto;grid-template-rows:auto auto;gap:9px 16px;padding-top:12px}.brandrow{grid-column:1;grid-row:1;margin:0}.memberbar{grid-column:2;grid-row:1;margin:0}.hstat{grid-column:3;grid-row:1;margin:0}.filterrow{grid-column:1/-1;grid-row:2}.grid{grid-template-columns:repeat(3,1fr)}main{max-width:1180px}.actionDock{bottom:14px}
 }
 
 .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--ink2));
@@ -648,6 +652,16 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .themeSwitch{margin-left:auto;width:42px;height:24px;padding:3px;border-radius:999px;background:var(--panel2);border:1px solid var(--line2);flex:0 0 auto;transition:.18s}.themeSwitch i{display:block;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:.18s}.themeItem[aria-checked="true"] .themeSwitch{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}.themeItem[aria-checked="true"] .themeSwitch i{transform:translateX(16px);background:var(--green);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 .cyrusPalette{display:none;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px}.cyrusPalette.show{display:block}.memberPaletteSet{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.memberPaletteSet.show{display:grid}.cyrusPaletteBtn{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:9px 5px;border:1px solid var(--line2);border-radius:9px;background:var(--panel2);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer}.cyrusPaletteBtn.on{border-color:var(--green);color:var(--text);box-shadow:0 0 12px rgba(var(--accent-rgb),.13)}.cyrusPaletteBtn:active{transform:scale(.97)}.paletteDot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 8px currentColor}.paletteDot.green{color:#63d374;background:#63d374}.paletteDot.blue{color:#24c8ff;background:#24c8ff}.paletteDot.purple{color:#9466ff;background:#9466ff}.paletteDot.pink{color:#f4478c;background:#f4478c}.paletteDot.amber{color:#f28a24;background:#f28a24}.paletteDot.yellow{color:#ffd21a;background:#ffd21a}.paletteDot.red{color:#ff2718;background:#ff2718}
 .noticePanel{gap:8px;padding-top:12px}.noticeVersion{font:700 9px 'Space Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}.noticeSummary{font:10px/1.55 'Space Mono',monospace;color:var(--dim)}.noticeSummary b{color:var(--text)}
+.labHubOverlay{position:fixed;inset:0;z-index:410;display:none;background:var(--ink);overflow:hidden}.labHubOverlay.show{display:block}
+.labHub{height:100dvh;overflow-y:auto;padding-bottom:calc(28px + var(--safe-b));background:radial-gradient(circle at 12% 8%,rgba(var(--accent-rgb),.16),transparent 28%),radial-gradient(circle at 90% 32%,rgba(var(--accent-rgb),.09),transparent 24%),linear-gradient(rgba(var(--accent-rgb),.025) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--accent-rgb),.025) 1px,transparent 1px),var(--ink);background-size:auto,auto,22px 22px,22px 22px,auto}
+.labHubHead{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:calc(var(--safe-t) + 13px) max(16px,calc(var(--safe-r) + 12px)) 13px max(16px,calc(var(--safe-l) + 12px));background:linear-gradient(180deg,rgba(var(--header-rgb),.98),rgba(var(--header-rgb),.91));border-bottom:1px solid rgba(var(--accent-rgb),.36);backdrop-filter:blur(18px)}
+.labHubMark{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:rgba(var(--accent-rgb),.12);border:1px solid rgba(var(--accent-rgb),.42);box-shadow:0 0 22px rgba(var(--accent-rgb),.12)}.labHubMark svg{width:25px;height:25px;stroke:var(--green);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.labHubTitle{min-width:0}.labHubTitle h2{margin:0;font-size:20px}.labHubTitle p{margin:2px 0 0;color:var(--dim);font:9px 'Space Mono',monospace}.labHubClose{margin-left:auto;width:38px;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font-size:18px;cursor:pointer}
+.labHubBody{max-width:900px;margin:0 auto;padding:18px max(16px,calc(var(--safe-r) + 12px)) 0 max(16px,calc(var(--safe-l) + 12px))}.labHero{position:relative;overflow:hidden;padding:20px;border:1px solid rgba(var(--accent-rgb),.34);border-radius:20px;background:linear-gradient(145deg,rgba(var(--accent-rgb),.14),rgba(var(--profile-end),.96));box-shadow:0 16px 44px rgba(0,0,0,.24)}.labHero:after{content:'LAB / COMMUNITY';position:absolute;right:-22px;top:22px;color:var(--green);font:700 28px 'Space Mono',monospace;letter-spacing:.08em;opacity:.055;transform:rotate(-8deg)}.labKicker{color:var(--green);font:700 9px 'Space Mono',monospace;letter-spacing:.18em;text-transform:uppercase}.labHero h3{position:relative;margin:7px 0 5px;font-size:26px;letter-spacing:-.03em}.labHero p{position:relative;max-width:540px;margin:0;color:var(--dim);font:10.5px/1.55 'Space Mono',monospace}.labPulse{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}.labPulseStat{padding:11px 7px;text-align:center;border:1px solid var(--line);border-radius:12px;background:rgba(var(--profile-stat),.42)}.labPulseStat b{display:flex;align-items:center;justify-content:center;gap:6px;font:700 21px 'Space Mono',monospace;color:var(--text)}.labPulseIcon{width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.labPulseIcon.fill{fill:var(--green);stroke:none}.labPulseStat span{display:block;margin-top:2px;color:var(--faint);font:8px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em}
+.labTabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:16px 0 0;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.labTab{min-width:0;padding:9px 4px;border:0;border-radius:10px;background:transparent;color:var(--dim);font:700 9px 'Space Mono',monospace;cursor:pointer}.labTab.on{background:rgba(var(--accent-rgb),.15);color:var(--green);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.32)}.labPanel{display:none}.labPanel.on{display:block}
+.labSectionHead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:18px 2px 10px}.labSectionHead h3{margin:0;font-size:17px}.labSectionHead span{color:var(--faint);font:8.5px 'Space Mono',monospace}.ratGrid{display:grid;grid-template-columns:1fr;gap:11px}.ratCard{--rat-a:#63d374;--rat-b:#24c8ff;position:relative;overflow:hidden;padding:15px;border:1px solid color-mix(in srgb,var(--rat-a) 42%,var(--line));border-left-width:3px;border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--ink2));box-shadow:0 10px 28px rgba(0,0,0,.22)}.ratCard.you{box-shadow:0 0 0 1px color-mix(in srgb,var(--rat-a) 40%,transparent),0 12px 34px rgba(0,0,0,.26)}.ratTop{display:flex;align-items:center;gap:11px}.ratAvatar{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;overflow:hidden;background:var(--panel2);border:1px solid color-mix(in srgb,var(--rat-a) 50%,var(--line));box-shadow:0 0 18px color-mix(in srgb,var(--rat-a) 16%,transparent)}.ratAvatar img{display:block;width:100%;height:100%;object-fit:cover}.ratIdentity{min-width:0;flex:1}.ratIdentity b{display:block;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ratIdentity span{display:block;margin-top:2px;color:var(--dim);font:9px 'Space Mono',monospace}.ratXp{font:700 12px 'Space Mono',monospace;color:var(--rat-a);text-align:right}.ratXp small{display:block;color:var(--faint);font-size:7px;text-transform:uppercase}.ratMetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.ratMetric{padding:9px 4px;text-align:center;border:1px solid var(--line);border-radius:10px;background:var(--panel2)}.ratMetric b{display:block;font:700 15px 'Space Mono',monospace}.ratMetric span{display:block;color:var(--faint);font:7.5px 'Space Mono',monospace;text-transform:uppercase}.ratSignals{display:grid;gap:9px;margin-top:11px}.ratSignal label{display:block;margin:0 0 5px;color:var(--rat-a);font:700 7.5px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em}.ratPills{display:flex;flex-wrap:wrap;gap:5px}.ratPill{padding:6px 8px;border:1px solid color-mix(in srgb,var(--rat-a) 27%,var(--line));border-radius:999px;color:var(--text);background:var(--panel2);font:8.5px/1.2 'Space Mono',monospace}.ratPill.accent{color:var(--rat-a);background:color-mix(in srgb,var(--rat-a) 7%,var(--panel2))}.ratPill.empty{color:var(--faint);border-style:dashed}.labFormula{margin:13px 2px 0;color:var(--faint);font:8.5px/1.5 'Space Mono',monospace;text-align:center}.labEmpty{padding:22px;text-align:center;border:1px dashed var(--line2);border-radius:16px;color:var(--dim);font:10px/1.6 'Space Mono',monospace}
+.intelGrid{display:grid;grid-template-columns:1fr;gap:10px}.intelCard{padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--ink2))}.intelCard h4{margin:0 0 10px;font-size:13px}.intelRow{display:grid;grid-template-columns:minmax(90px,1fr) 2fr auto;gap:8px;align-items:center;margin-top:8px}.intelRow span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:9px 'Space Mono',monospace;color:var(--dim)}.intelBar{height:7px;border-radius:999px;background:var(--panel2);overflow:hidden}.intelBar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--green),var(--accent-hi))}.intelRow b{font:700 9px 'Space Mono',monospace;color:var(--text)}.specimenBoard{display:grid;gap:8px}.specimenRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,var(--panel),var(--ink2))}.specimenRow h4{margin:0;font-size:13px}.specimenRow p{margin:3px 0 0;color:var(--dim);font:8.5px 'Space Mono',monospace}.specimenScore{text-align:right;color:var(--green);font:700 14px 'Space Mono',monospace}.specimenScore small{display:block;color:var(--faint);font-size:7px;text-transform:uppercase}
+@media(min-width:700px){.ratGrid,.intelGrid{grid-template-columns:1fr 1fr}.labHero{padding:24px}.labHubTitle h2{font-size:22px}}
+@media(orientation:landscape) and (max-height:500px){.labHubHead{padding-top:calc(var(--safe-t) + 7px);padding-bottom:7px}.labHubMark{width:34px;height:34px;font-size:18px}.labHubBody{padding-top:12px}.labHero{padding:14px}.labPulse{grid-template-columns:repeat(3,minmax(100px,1fr));margin-top:10px}.ratGrid{grid-template-columns:1fr 1fr}}
 .referenceOverlay{position:fixed;inset:0;z-index:395;background:rgba(0,0,0,.78);display:none;align-items:flex-end;justify-content:center}.referenceOverlay.show{display:flex}.referenceSheet{width:100%;max-width:560px;height:min(88vh,820px);display:flex;flex-direction:column;background:var(--ink2);border:1px solid var(--line);border-radius:20px 20px 0 0;overflow:hidden}.referenceHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid var(--line)}.referenceHead h2{margin:0;font-size:17px}.referenceClose{width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font-size:18px;cursor:pointer}.referenceBody{flex:1;min-height:0;overflow:auto;background:var(--ink)}.referenceBody img{display:block;width:100%;height:auto}.referenceBody iframe{display:block;width:100%;height:100%;border:0;background:#fff}
 .asSheet,.blazeSheet,.filterSheet,.menuSheet,.infoSheet,.referenceSheet{width:calc(100% - var(--safe-l) - var(--safe-r))}
 
@@ -707,6 +721,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="landing-title"><b>Stoned</b> Lab Rats</div>
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
+    <div class="landing-version">SLR <span id="landingVersion"></span></div>
     <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 12</div>
   </div>
 </div>
@@ -890,7 +905,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <aside class="labNotice" id="labNotice" role="dialog" aria-modal="false" aria-labelledby="labNoticeTitle">
   <div class="labNoticeHead">
-    <div><div class="labNoticeLabel" id="labNoticeLabel">↻ Lab notice · version 1.9.2</div><div class="labNoticeTitle" id="labNoticeTitle">Specimens stay steady.</div></div>
+    <div><div class="labNoticeLabel" id="labNoticeLabel">↻ Lab notice · version 2.0.0</div><div class="labNoticeTitle" id="labNoticeTitle">The Lab Rats have arrived.</div></div>
     <button class="labNoticeClose" id="labNoticeClose" aria-label="Close lab notice">✕</button>
   </div>
   <div class="labNoticeCopy" id="labNoticeCopy">A quick specimen report before you get back to blazing:</div>
@@ -900,7 +915,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <li><span class="labNoticeIcon">◐</span><span><b>Your preferred lighting</b>Every member can switch between dark and light mode from the menu.</span></li>
     <li><span class="labNoticeIcon">✓</span><span><b>Lab Notices</b>Future updates will explain themselves here. You only see each notice once.</span></li>
   </ul>
-  <button class="labNoticeDone" id="labNoticeDone">Got it — open the lab</button>
+  <button class="labNoticeDone" id="labNoticeDone">Close notice</button>
 </aside>
 
 <div class="menuOverlay" id="menuOverlay">
@@ -917,6 +932,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
       </div>
       <div class="profileEffects" id="profileEffects"></div>
     </div>
+    <div class="menuEyebrow">Community</div>
+    <button class="menuItem" id="menuTheLab"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><path d="M6 9c0 7 2.5 11 6 11s6-4 6-11M9 13h.01M15 13h.01M10 17c1.3.8 2.7.8 4 0M5 15l-3-1M5 17l-3 1M19 15l3-1M19 17l3 1"/></svg></span><span class="menuCopy"><b>Enter The Lab</b><span>Meet the crew, compare activity and see what everyone reaches for</span></span><span class="menuArrow">›</span></button>
     <div class="menuEyebrow">Learn &amp; manage</div>
     <div class="menuList">
       <div class="menuDisclosure">
@@ -947,7 +964,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
       </div>
       <div class="menuDisclosure">
         <button class="menuItem noticeToggle" id="menuLabNotice" aria-expanded="false" aria-controls="noticePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-2.1 5"/><path d="m20 7-3 3"/></svg></span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">⌄</span></button>
-        <div class="noticePanel" id="noticePanel"><div class="noticeVersion" id="menuNoticeVersion">Version 1.9.2</div><div class="noticeSummary" id="menuNoticeSummary"></div></div>
+        <div class="noticePanel" id="noticePanel"><div class="noticeVersion" id="menuNoticeVersion">Version 2.0.0</div><div class="noticeSummary" id="menuNoticeSummary"></div></div>
       </div>
       <button class="menuItem" id="menuRatings"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg></span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
       <button class="menuItem" id="menuVisualGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h5M8 16h7"/></svg></span><span class="menuCopy"><b>60-second visual guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></button>
@@ -955,6 +972,32 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     </div>
     <div class="menuFoot">SLR <span id="menuVersion"></span> · Saltyview Productions</div>
   </div>
+</div>
+
+<div class="labHubOverlay" id="labHubOverlay">
+  <section class="labHub" role="dialog" aria-modal="true" aria-labelledby="labHubHeading">
+    <div class="labHubHead">
+      <div class="labHubMark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M7.5 15h9"/></svg></div>
+      <div class="labHubTitle"><h2 id="labHubHeading">The Lab</h2><p>Shared experiments · individual taste</p></div>
+      <button class="labHubClose" id="labHubClose" aria-label="Close The Lab">✕</button>
+    </div>
+    <div class="labHubBody">
+      <div class="labHero">
+        <div class="labKicker">Crew telemetry</div>
+        <h3>Meet the Lab Rats.</h3>
+        <p>One shared strain library, different brains. See what the crew has tried, what they rate highest and which effects keep showing up.</p>
+        <div class="labPulse" id="labPulse"></div>
+      </div>
+      <div class="labTabs" role="tablist" aria-label="The Lab views">
+        <button class="labTab on" data-lab-tab="crew" role="tab" aria-selected="true">Crew</button>
+        <button class="labTab" data-lab-tab="taste" role="tab" aria-selected="false">Taste Map</button>
+        <button class="labTab" data-lab-tab="specimens" role="tab" aria-selected="false">Specimens</button>
+      </div>
+      <div class="labPanel on" data-lab-panel="crew"><div class="labSectionHead"><h3>Lab Rat profiles</h3><span>Friendly stats—not a contest.</span></div><div class="ratGrid" id="ratGrid"></div><div class="labFormula">Lab XP = 10 per Session + 5 per distinct strain. It measures activity, not who has better taste.</div></div>
+      <div class="labPanel" data-lab-panel="taste"><div class="labSectionHead"><h3>Shared taste map</h3><span>What the crew keeps reporting.</span></div><div class="intelGrid" id="tasteGrid"></div></div>
+      <div class="labPanel" data-lab-panel="specimens"><div class="labSectionHead"><h3>Specimen shelf</h3><span>Most explored across The Lab.</span></div><div class="specimenBoard" id="specimenBoard"></div></div>
+    </div>
+  </section>
 </div>
 
 <div class="referenceOverlay" id="referenceOverlay">
@@ -985,16 +1028,16 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v1.9.2';
+const APP_VERSION = 'v2.0.0';
 const LAB_NOTICE = {
-  id:'slr-v1.9.2', version:'Version 1.9.2', audience:'all',
-  title:'Specimens stay steady.',
-  copy:'A detail-view refinement—your strains, Sessions and ratings did not change.',
+  id:'slr-v2.0.0', version:'Version 2.0.0', audience:'all',
+  title:'The Lab Rats have arrived.',
+  copy:'Your shared lab has a new community home. Existing strains, Sessions and ratings are unchanged.',
   items:[
-    ['↕','A steadier detail sheet','Move between strains without the sheet jumping. Drag its handle up to expand or down to close.'],
-    ['⚗','Cleaner specimen identity','Strain and Brand stay aligned; country now sits with the navigation. Existing photos stay protected.'],
-    ['↔','A real landscape toolbar','Logo, member controls and menu now hold one clean line in sideways view.'],
-    ['◐','More personal color','Each current Lab Rat now has an extra private interface palette in Appearance.']
+    ['◎','Meet the crew','Open The Lab from the menu to see every active Lab Rat and their personal taste profile.'],
+    ['▦','Shared activity','Compare Sessions, strains tried, favorite types, brands, top-rated strains and common Effects.'],
+    ['✦','Friendly Lab XP','Activity earns simple points, but taste stays personal and there is no winner.'],
+    ['⚗','Sharper lab surface','The header now reads as a distinct piece of lab equipment while you scroll.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -1007,6 +1050,7 @@ const MEMBER_PALETTES = {
   piero:{key:'slr_piero_palette',default:'red',options:['red','purple']}
 };
 let RAW_TERPENES = [];
+let RAW_MEMBERS = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
  {
@@ -3465,8 +3509,8 @@ async function reauthAndRetry(){
 
 function applyMemberUi(){
   applyMemberTheme();
-  document.getElementById('memberName').textContent=CURRENT_MEMBER;
-  document.getElementById('asMemberName').textContent=CURRENT_MEMBER;
+  document.getElementById('memberName').textContent=displayName(CURRENT_MEMBER);
+  document.getElementById('asMemberName').textContent=displayName(CURRENT_MEMBER);
   document.getElementById('memberBar').style.display='flex';
   document.getElementById('mineView').classList.toggle('on',SCORE_VIEW==='mine');
   document.getElementById('communityView').classList.toggle('on',SCORE_VIEW==='community');
@@ -3526,6 +3570,7 @@ function setColorMode(mode){
   requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();});
 }
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
+function displayName(name){return String(name||'').trim().split(/\s+/)[0]||'—';}
 function renderProfile(){
   const name=CURRENT_MEMBER||'—';
   const mineSessions=RAW_SESSIONS.filter(s=>memberNames(s).some(n=>n.toLowerCase()===name.toLowerCase()));
@@ -3534,7 +3579,7 @@ function renderProfile(){
   const favorites=tried.filter(s=>s.mine.score!=null).sort((a,b)=>b.mine.score-a.mine.score).slice(0,3);
   const displayedRatings=STRAINS.map(s=>s.mine?.score).filter(v=>v!=null);
   const profileRating=displayedRatings.length?displayedRatings.reduce((a,b)=>a+b,0)/displayedRatings.length:null;
-  document.getElementById('profileName').textContent=name;
+  document.getElementById('profileName').textContent=displayName(name);
   document.getElementById('profileStrains').textContent=tried.length;
   document.getElementById('profileSessions').textContent=stats.num_sessions;
   document.getElementById('profileRating').textContent=profileRating==null?'—':scoreOutOf100(profileRating);
@@ -3544,6 +3589,98 @@ function renderProfile(){
   const top=Object.entries(stats.effects||{}).filter(([k])=>EFFECTS.includes(k)).sort((a,b)=>b[1]-a[1]).slice(0,3);
   effects.replaceChildren(...top.map(([k])=>{const chip=document.createElement('span');chip.className='profileEffect';chip.textContent=EFFECT_ICON[k]+' '+effectLabel(k);return chip;}));
 }
+const RAT_IDENTITIES={
+  cyrus:['#24c8ff','#63d374'],
+  amber:['#ff4f9a','#f28a24'],
+  'felipe carvalho':['#ffd21a','#1677ff'],
+  piero:['#ff2718','#8d42ff']
+};
+function safeHtml(value){return String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));}
+function rosterNames(){
+  const found=new Map();
+  [...RAW_MEMBERS,CURRENT_MEMBER,...RAW_SESSIONS.flatMap(memberNames)].forEach(name=>{const clean=String(name||'').trim();if(clean&&!found.has(clean.toLowerCase()))found.set(clean.toLowerCase(),clean);});
+  return [...found.values()];
+}
+function sessionSpecimens(sessions){
+  const batches=new Map(RAW_BATCHES.map(batch=>[batch.url,batch]));
+  const strains=new Map(RAW_STRAINS.map(strain=>[strain.url,strain]));
+  const rows=[];
+  sessions.forEach(session=>parseArr(session.Batch).forEach(url=>{
+    const batch=batches.get(url),strain=batch&&strains.get(batch.Strain);
+    if(batch&&strain)rows.push({session,batch,strain});
+  }));
+  return rows;
+}
+function memberLabStats(name){
+  const lower=name.toLowerCase();
+  const sessions=RAW_SESSIONS.filter(session=>memberNames(session).some(member=>member.toLowerCase()===lower));
+  const rows=sessionSpecimens(sessions);
+  const distinct=new Set(rows.map(row=>row.strain.url));
+  const tally=values=>{const counts={};values.filter(Boolean).forEach(value=>counts[value]=(counts[value]||0)+1);return counts;};
+  const strainCounts=tally(rows.map(row=>row.strain.Name));
+  const mostLogged=Object.keys(strainCounts).sort((a,b)=>strainCounts[b]-strainCounts[a]||a.localeCompare(b)).slice(0,3);
+  const byStrain={};
+  rows.forEach(row=>(byStrain[row.strain.Name]=byStrain[row.strain.Name]||[]).push(row.session));
+  const topRated=Object.entries(byStrain).map(([strain,items])=>({strain,stats:aggregateSessions(items)})).filter(item=>item.stats.score!=null).sort((a,b)=>b.stats.score-a.stats.score||b.stats.num_sessions-a.stats.num_sessions).slice(0,3);
+  const stats=aggregateSessions(sessions);
+  const topEffects=Object.entries(stats.effects||{}).filter(([effect])=>EFFECTS.includes(effect)).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([effect])=>effect);
+  return {name,sessions:sessions.length,strains:distinct.size,points:sessions.length*10+distinct.size*5,average:stats.score==null?null:scoreOutOf100(stats.score),favoriteType:mode(rows.map(row=>row.batch.Type).filter(Boolean)),favoriteBrand:mode(rows.map(row=>row.batch.Brand).filter(Boolean)),mostLogged,topRated,topEffects};
+}
+function ratColors(name){
+  const known=RAT_IDENTITIES[name.toLowerCase()];if(known)return known;
+  let hash=0;for(const char of name)hash=(hash*31+char.charCodeAt(0))%360;
+  return [`hsl(${hash} 86% 60%)`,`hsl(${(hash+74)%360} 82% 58%)`];
+}
+function memberIconFor(name){
+  const member=name.toLowerCase();
+  return member==='amber'?'amber-app-icon-180.png':member==='felipe carvalho'?'felipe-app-icon-180.png':member==='piero'?'piero-app-icon-180.png':'cyrus-app-icon-v2-180.png';
+}
+function labSvg(kind,cls='labPulseIcon'){
+  if(kind==='rat')return `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><path d="M6 9c0 7 2.5 11 6 11s6-4 6-11M9 13h.01M15 13h.01M10 17c1.3.8 2.7.8 4 0M5 15l-3-1M5 17l-3 1M19 15l3-1M19 17l3 1"/></svg>`;
+  if(kind==='flame')return `<svg class="${cls} fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 5.2A8.25 8.25 0 1 1 6 7a8.3 8.3 0 0 0 3 2.6 9 9 0 0 1 3.4-6.9 8.2 8.2 0 0 0 3 2.5ZM12 18a3.75 3.75 0 0 0 .5-7.5 6 6 0 0 0-1.9 3.6 6 6 0 0 1-2.2-1A3.75 3.75 0 0 0 12 18Z"/></svg>`;
+  return `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V7M12 13c-4 0-7-2.5-7-7 4.5 0 7 2.5 7 7ZM12 16c4 0 7-2.5 7-7-4.5 0-7 2.5-7 7Z"/></svg>`;
+}
+function renderTheLab(){
+  const viewer=CURRENT_MEMBER.trim().toLowerCase();
+  const crew=rosterNames().map(memberLabStats).sort((a,b)=>(a.name.toLowerCase()===viewer?-1:b.name.toLowerCase()===viewer?1:a.name.localeCompare(b.name)));
+  const uniqueStrains=new Set(sessionSpecimens(RAW_SESSIONS).map(row=>row.strain.url)).size;
+  document.getElementById('labPulse').innerHTML=[['rat',crew.length,'Lab Rats'],['flame',RAW_SESSIONS.length,'Sessions'],['leaf',uniqueStrains,'Strains tried']].map(item=>`<div class="labPulseStat"><b>${labSvg(item[0])}${item[1]}</b><span>${item[2]}</span></div>`).join('');
+  const grid=document.getElementById('ratGrid');
+  if(!crew.length){grid.innerHTML='<div class="labEmpty">No Lab Rats are visible yet. Refresh once the roster is connected.</div>';return;}
+  const pills=(values,accent=false)=>values.length?values.map(value=>`<span class="ratPill${accent?' accent':''}">${value}</span>`).join(''):'<span class="ratPill empty">Still testing</span>';
+  grid.innerHTML=crew.map(rat=>{
+    const colors=ratColors(rat.name),isYou=rat.name.toLowerCase()===CURRENT_MEMBER.trim().toLowerCase();
+    const rated=rat.topRated.map(item=>`${safeHtml(item.strain)} · ${scoreOutOf100(item.stats.score)}/100`);
+    const logged=rat.mostLogged.map(safeHtml);
+    const tastes=[rat.favoriteType,rat.favoriteBrand].filter(Boolean).map(safeHtml);
+    const effects=rat.topEffects.map(effect=>safeHtml(effectLabel(effect)));
+    return `<article class="ratCard${isYou?' you':''}" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><div class="ratTop"><div class="ratAvatar"><img src="${memberIconFor(rat.name)}" alt=""></div><div class="ratIdentity"><b>${safeHtml(displayName(rat.name))}${isYou?' · You':''}</b><span>${rat.sessions?'Active Lab Rat':'New Lab Rat · first experiment pending'}</span></div><div class="ratXp"><small>Lab XP</small>${rat.points}</div></div><div class="ratMetrics"><div class="ratMetric"><b>${rat.sessions}</b><span>Sessions</span></div><div class="ratMetric"><b>${rat.strains}</b><span>Strains</span></div><div class="ratMetric"><b>${rat.average==null?'—':rat.average}</b><span>Avg /100</span></div></div><div class="ratSignals"><div class="ratSignal"><label>Reaches for</label><div class="ratPills">${pills(tastes,true)}</div></div><div class="ratSignal"><label>Top-rated tray</label><div class="ratPills">${rat.topRated.length?pills(rated):'<span class="ratPill empty">No Overall ratings yet</span>'}</div></div><div class="ratSignal"><label>Most logged strains</label><div class="ratPills">${rat.mostLogged.length?pills(logged):'<span class="ratPill empty">First experiment pending</span>'}</div></div><div class="ratSignal"><label>Common Effects</label><div class="ratPills">${pills(effects,true)}</div></div></div></article>`;
+  }).join('');
+  renderTasteMap(crew);
+  renderSpecimenBoard();
+}
+function countValues(values){const counts={};values.filter(Boolean).forEach(value=>counts[value]=(counts[value]||0)+1);return Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));}
+function intelRows(entries){
+  if(!entries.length)return '<div class="labEmpty">The Lab needs a few more Sessions for this signal.</div>';
+  const max=entries[0][1]||1;
+  return entries.slice(0,6).map(([label,count])=>`<div class="intelRow"><span>${safeHtml(effectLabel(label))}</span><div class="intelBar"><i style="width:${Math.max(8,Math.round(count/max*100))}%"></i></div><b>${count}</b></div>`).join('');
+}
+function renderTasteMap(crew){
+  const rows=sessionSpecimens(RAW_SESSIONS),effects=aggregateSessions(RAW_SESSIONS).effects||{};
+  const effectEntries=Object.entries(effects).filter(([effect,value])=>EFFECTS.includes(effect)&&value>0).sort((a,b)=>b[1]-a[1]);
+  const ratSignals=crew.filter(rat=>rat.sessions).map(rat=>`<div class="intelRow"><span>${safeHtml(displayName(rat.name))}</span><div class="ratPills">${[rat.favoriteType,...rat.topEffects.slice(0,2)].filter(Boolean).map(value=>`<span class="ratPill">${safeHtml(effectLabel(value))}</span>`).join('')}</div><b>${rat.sessions}</b></div>`).join('')||'<div class="labEmpty">No personal taste signals yet.</div>';
+  document.getElementById('tasteGrid').innerHTML=`<div class="intelCard"><h4>Favorite types</h4>${intelRows(countValues(rows.map(row=>row.batch.Type)))}</div><div class="intelCard"><h4>Most-smoked brands</h4>${intelRows(countValues(rows.map(row=>row.batch.Brand)))}</div><div class="intelCard"><h4>Strongest Effect signals</h4>${intelRows(effectEntries)}</div><div class="intelCard"><h4>Rat-by-rat snapshot</h4>${ratSignals}</div>`;
+}
+function renderSpecimenBoard(){
+  const groups={};
+  sessionSpecimens(RAW_SESSIONS).forEach(row=>{const key=row.strain.url;const group=groups[key]||(groups[key]={name:row.strain.Name,brand:row.batch.Brand,sessions:[],members:new Set()});group.sessions.push(row.session);memberNames(row.session).forEach(name=>group.members.add(name.toLowerCase()));});
+  const ranked=Object.values(groups).sort((a,b)=>b.sessions.length-a.sessions.length||a.name.localeCompare(b.name)).slice(0,14);
+  document.getElementById('specimenBoard').innerHTML=ranked.length?ranked.map(group=>{const stats=communityAggregate(group.sessions);return `<div class="specimenRow"><div><h4>${safeHtml(group.name)}</h4><p>${safeHtml(group.brand||'Unknown brand')} · ${group.sessions.length} Session${group.sessions.length===1?'':'s'} · ${group.members.size} Rat${group.members.size===1?'':'s'}</p></div><div class="specimenScore"><small>Community</small>${stats.score==null?'—':scoreOutOf100(stats.score)+'/100'}</div></div>`;}).join(''):'<div class="labEmpty">The specimen shelf fills as Sessions are logged.</div>';
+}
+function setLabTab(tab){document.querySelectorAll('[data-lab-tab]').forEach(button=>{const on=button.dataset.labTab===tab;button.classList.toggle('on',on);button.setAttribute('aria-selected',on?'true':'false');});document.querySelectorAll('[data-lab-panel]').forEach(panel=>panel.classList.toggle('on',panel.dataset.labPanel===tab));}
+function labHubIsOpen(){return document.getElementById('labHubOverlay').classList.contains('show');}
+function openTheLab(){renderTheLab();setLabTab('crew');document.getElementById('labHubOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function closeTheLab(){document.getElementById('labHubOverlay').classList.remove('show');document.body.style.overflow=menuIsOpen()?'hidden':'';}
 function applyMemberAppIcon(){
   const member=CURRENT_MEMBER.trim().toLowerCase();
   const isAmber=member==='amber';
@@ -3597,13 +3734,15 @@ try{
     RAW_BATCHES = data.batches;
     RAW_SESSIONS = data.sessions;
     RAW_TERPENES = data.terpenes || [];
+    RAW_MEMBERS = data.members || [];
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
     applyMemberUi(); hideCodeGate();
     $('#lcount').textContent = STRAINS.length;
     const now=new Date();
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
     buildChips(); render();
-    toast((initial?'Welcome, '+CURRENT_MEMBER:'Updated — '+STRAINS.length+' strains'),'ok');
+    if(labHubIsOpen())renderTheLab();
+    toast((initial?'Welcome, '+displayName(CURRENT_MEMBER):'Updated — '+STRAINS.length+' strains'),'ok');
   }catch(err){
     if(initial){
       clearStoredCode();
@@ -3694,7 +3833,7 @@ function buildLogForm(s, preferredBrand='', preferredBatchUrl='') {
     h += '</div>';
   }
 
-  h += '<div class="memberline">Logging this session as <b>' + CURRENT_MEMBER + '</b></div>';
+  h += '<div class="memberline">Logging this session as <b>' + safeHtml(displayName(CURRENT_MEMBER)) + '</b></div>';
 
   h += '<div class="overall-box"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
   h += '<div class="log-hint">1 Poor · 2 Below Average · 3 Solid · 4 Very Good · 5 Excellent</div><div class="overall-grid">';
@@ -4126,6 +4265,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
 document.getElementById('appVersion').textContent=APP_VERSION;
 document.getElementById('infoVersion').textContent=APP_VERSION;
 document.getElementById('menuVersion').textContent=APP_VERSION;
+document.getElementById('landingVersion').textContent=APP_VERSION;
 function menuIsOpen(){return document.getElementById('menuOverlay').classList.contains('show');}
 function openRatingsInfo(){document.getElementById('infoOverlay').classList.add('show');document.body.style.overflow='hidden';}
 document.getElementById('ratingsInfoBtn').addEventListener('click',openRatingsInfo);
@@ -4180,6 +4320,9 @@ document.getElementById('appearanceToggle').addEventListener('click',e=>setAppea
 document.getElementById('labNoticeClose').addEventListener('click',closeLabNotice);
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',e=>setNoticeOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
+document.getElementById('menuTheLab').addEventListener('click',openTheLab);
+document.getElementById('labHubClose').addEventListener('click',closeTheLab);
+document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
 document.getElementById('menuRatings').addEventListener('click',openRatingsInfo);
 document.getElementById('themeToggle').addEventListener('click',()=>setColorMode(document.documentElement.classList.contains('light-mode')?'dark':'light'));
@@ -4198,12 +4341,11 @@ function setDockSearch(open){const panel=document.getElementById('dockSearch');p
 function closeDockSearch(){setDockSearch(false);}
 document.getElementById('dockSearchBtn').addEventListener('click',()=>setDockSearch(!document.getElementById('dockSearch').classList.contains('show')));
 document.getElementById('searchClose').addEventListener('click',closeDockSearch);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('referenceOverlay').classList.contains('show'))closeReference();else if(document.getElementById('infoOverlay').classList.contains('show'))closeRatingsInfo();else if(menuIsOpen())closeMenu();else{closeLabNotice();closeDockSearch();blazeClose();closePhotoEditor();}}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(labHubIsOpen())closeTheLab();else if(document.getElementById('referenceOverlay').classList.contains('show'))closeReference();else if(document.getElementById('infoOverlay').classList.contains('show'))closeRatingsInfo();else if(menuIsOpen())closeMenu();else{closeLabNotice();closeDockSearch();blazeClose();closePhotoEditor();}}});
 
 setColorMode(colorMode());
 buildChips(); render();
-showCheckingGate();
-refresh(true);
+showCheckingGate();refresh(true);
 </script>
 </body>
 </html>

@@ -121,6 +121,12 @@ export default {
         return codeRejected(cors);
       }
 
+      // The Lab only needs the public-facing names of active members. Never
+      // return invite codes or the underlying Invite Codes records.
+      const activeMemberMap = await activeMembers(env.NOTION_TOKEN);
+      const members = [...new Set([...activeMemberMap.values()].map(entry => entry.name).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
+
       const [strainPages, batchPages, sessionPages, terpenePages] = await Promise.all([
         queryAll(DS.strains, env.NOTION_TOKEN),
         queryAll(DS.batches, env.NOTION_TOKEN),
@@ -133,6 +139,7 @@ export default {
       const payload = {
         updated: new Date().toISOString(),
         viewer: member.name,
+        members,
         strains: strainPages.map(p => ({
           url:       idToUrl(p.id),
           Name:      title(p, "Name"),

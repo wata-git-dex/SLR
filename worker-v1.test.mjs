@@ -34,6 +34,7 @@ const getRes=await worker.fetch(new Request('https://worker.test/?code=TEST-CODE
 assert.equal(getRes.status,200);
 const getData=await getRes.json();
 assert.equal(getData.viewer,'Cyrus');
+assert.deepEqual(getData.members,['Amber','Cyrus']);
 assert.equal(getData.sessions[0].OverallRating,5);
 assert.equal(getData.sessions[0].Sleepy,'🟢🟢');
 assert.equal(getData.sessions[0].KnockedOut,'-');
