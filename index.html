@@ -525,7 +525,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .verdict.mini .dot{width:6px;height:6px}
 .cname{display:block;min-width:0}
 .cn{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(13px,4.2vw,16px);font-weight:600;letter-spacing:-.01em;line-height:1.14}
-.cardBrand{display:block;width:fit-content;max-width:100%;box-sizing:border-box;margin:6px auto 0;padding:2px 7px;border:1px solid color-mix(in srgb,var(--text) 20%,var(--line));border-radius:999px;background:rgba(255,255,255,.025);color:color-mix(in srgb,var(--text) 72%,var(--dim));font:8px/1.3 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cardBrand{display:block;width:fit-content;max-width:100%;box-sizing:border-box;margin:6px 0 0;padding:2px 7px;border:1px solid color-mix(in srgb,var(--text) 20%,var(--line));border-radius:999px;background:rgba(255,255,255,.025);color:color-mix(in srgb,var(--text) 72%,var(--dim));font:8px/1.3 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .brandpill{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);background:var(--panel2);
   border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;letter-spacing:.02em}
 .thctext{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.02em}
@@ -740,7 +740,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
     <div class="landing-version">SLR <span id="landingVersion"></span></div>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 15</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 22</div>
   </div>
 </div>
 <header>
@@ -3127,7 +3127,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Sep 15');   // baked snapshot date (set at build time)
+setUpdated('Sep 22');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
