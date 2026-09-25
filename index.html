@@ -723,7 +723,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .log-toggle:active{opacity:.7}
 .log-hint{font-size:10px;color:var(--faint);margin:2px 0 10px;font-family:'Space Mono',monospace;letter-spacing:.02em}
 .overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(230,178,76,.06);border:1px solid rgba(230,178,76,.28)}
-.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{padding:10px 2px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:700 14px 'Space Mono',monospace;cursor:pointer}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
+.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{min-width:0;padding:7px 2px 6px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);cursor:pointer}.overall-btn strong{display:block;font:700 14px 'Space Mono',monospace}.overall-btn span{display:block;margin-top:2px;font:700 7.5px/1 'Space Mono',monospace;white-space:nowrap}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -740,7 +740,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
     <div class="landing-version">SLR <span id="landingVersion"></span></div>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 22</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 25</div>
   </div>
 </div>
 <header>
@@ -1029,7 +1029,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 <div class="infoOverlay" id="infoOverlay">
   <div class="infoSheet">
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
-    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience. You rate each Blaze from 1 Poor to 5 Excellent using whole numbers. Strain averages display as a score out of 100. Effects and Side Effects explain the experience—they do not secretly change your score.</p></div>
+    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience: 1 Bleh, 2 Okay, 3 Solid, 4 Great or 5 Fire. That choice sets the main score. Each green Effect dot then adds 0.5 points and each red Side Effect dot subtracts 0.5 points, capped from 0–100. If Overall is skipped, Effects are still saved but no score is created.</p></div>
     <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.</p><div class="effectDefs">
       <div class="effectDef"><span class="emoji">✨</span><b>Euphoric</b><span>Lifted, happy or unusually good mood.</span></div><div class="effectDef"><span class="emoji">🎯</span><b>Focused</b><span>Easier to concentrate or stay locked in.</span></div><div class="effectDef"><span class="emoji">🎨</span><b>Creative</b><span>Ideas, imagination or making things flowed.</span></div><div class="effectDef"><span class="emoji">🎉</span><b>Social</b><span>More talkative, open or comfortable with people.</span></div><div class="effectDef"><span class="emoji">😂</span><b>Giggly</b><span>Laughed more easily or found things funnier.</span></div><div class="effectDef"><span class="emoji">⚡</span><b>Energized</b><span>More alert, active or motivated to move.</span></div><div class="effectDef"><span class="emoji">🧘</span><b>Relaxed</b><span>Calm or loose without necessarily feeling sleepy.</span></div><div class="effectDef"><span class="emoji">🛋️</span><b>Couch-Locked</b><span>Heavy-bodied, planted or hard to get up.</span></div><div class="effectDef"><span class="emoji">😴</span><b>Sleepy</b><span>Drowsy or ready for sleep.</span></div><div class="effectDef"><span class="emoji">🍕</span><b>Hungry</b><span>More appetite or serious munchies.</span></div>
     </div></div>
@@ -1047,15 +1047,15 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.0.2';
+const APP_VERSION = 'v2.1.0';
 const LAB_NOTICE = {
-  id:'slr-v2.0.2', version:'Version 2.0.2', audience:'all',
-  title:'Your shelf is now truly yours.',
-  copy:'My Score focuses on strains you have actually logged. Community remains the complete shared Lab. Your Sessions and ratings have not changed.',
+  id:'slr-v2.1.0', version:'Version 2.1.0', audience:'all',
+  title:'Ratings now reflect the whole Blaze.',
+  copy:'Overall still sets the baseline. Saved Effects now add detail and Side Effects subtract it, so some calculated scores may move slightly. Your original Session answers have not changed.',
   items:[
-    ['◎','My Score is your shelf','Blaze more strains to grow the personal collection attached to your invite code.'],
-    ['▦','Community shows the Lab','Switch to Community to see every shared strain and what the other Lab Rats are smoking.'],
-    ['✦','Clearer brand tags','Brands are easier to identify in the compact strain cards.']
+    ['1–5','New rating language','1 Bleh · 2 Okay · 3 Solid · 4 Great · 5 Fire.'],
+    ['+','Effects add detail','Each green dot adds 0.5 points to the 100-point score.'],
+    ['−','Side Effects count','Each red dot subtracts 0.5 points. Final displayed scores stay clean and between 0–100.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3036,6 +3036,12 @@ const BRAND_ABBR={Oakfruitland:'OFL',Connected:'CON','Jet Set':'JS',UpNorth:'UN'
 function dotVal(v){ if(!v||v==='-')return 0; return (v.split('🟢').length-1)+(v.split('🔴').length-1); }
 function sessionRated(s){const n=Number(s.OverallRating);return Number.isInteger(n)&&n>=1&&n<=5;}
 function sessionHasEffects(s){return EFFECTS.concat(SIDE_EFFECTS).some(a=>s[a]!=null);}
+function sessionScore100(s){
+  if(!sessionRated(s))return null;
+  const positive=EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
+  const negative=SIDE_EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
+  return Math.max(0,Math.min(100,Number(s.OverallRating)*20+(positive-negative)*0.5));
+}
 function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1); return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; }
 
 let CURRENT_MEMBER = '';
@@ -3045,12 +3051,12 @@ function memberNames(s){
   return names.length ? names : ['Cyrus'];
 }
 function aggregateSessions(sessions){
-  const rated=sessions.filter(sessionRated), effectSessions=sessions.filter(sessionHasEffects), effects={}, scores=[];
-  rated.forEach(s=>scores.push(Number(s.OverallRating)));
+  const rated=sessions.filter(sessionRated), effectSessions=sessions.filter(sessionHasEffects), effects={};
+  const scores100=rated.map(sessionScore100).filter(score=>score!=null);
   effectSessions.forEach(s=>{
     EFFECTS.concat(SIDE_EFFECTS).forEach(a=>{const v=dotVal(s[a]); if(v>0) effects[a]=(effects[a]||0)+v;});
   });
-  return {score:scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*10)/10:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
+  return {score:scores100.length?(scores100.reduce((a,b)=>a+b,0)/scores100.length)/20:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
 }
 function communityAggregate(sessions){
   const byMember={};
@@ -3058,7 +3064,7 @@ function communityAggregate(sessions){
   const members=Object.keys(byMember), perMember=members.map(name=>aggregateSessions(byMember[name]));
   const memberScores=perMember.map(x=>x.score).filter(x=>x!=null);
   const base=aggregateSessions(sessions);
-  return {...base,score:memberScores.length?Math.round(memberScores.reduce((a,b)=>a+b,0)/memberScores.length*10)/10:null,num_members:memberScores.length};
+  return {...base,score:memberScores.length?memberScores.reduce((a,b)=>a+b,0)/memberScores.length:null,num_members:memberScores.length};
 }
 function verdictFor(stats){
   if(stats.score!=null) return stats.score>=4?'loved':stats.score>=3?'good':stats.score>=2?'mixed':'avoid';
@@ -3127,7 +3133,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Sep 22');   // baked snapshot date (set at build time)
+setUpdated('Sep 25');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
@@ -3801,6 +3807,15 @@ function toggleLogSection() {
   const open = c.style.display !== 'none';
   c.style.display = open ? 'none' : 'block';
   b.textContent = open ? '🔥 Blaze +' : '🔥 Blaze −';
+  if(!open) requestAnimationFrame(()=>requestAnimationFrame(scrollBlazeToRating));
+}
+
+function scrollBlazeToRating(){
+  const sh=document.getElementById('sheet');
+  const target=document.getElementById('overallRatingBox');
+  if(!sh||!target)return;
+  const top=sh.scrollTop+target.getBoundingClientRect().top-sh.getBoundingClientRect().top-18;
+  sh.scrollTo({top:Math.max(0,top),behavior:'smooth'});
 }
 
 $('#refreshBtn').addEventListener('click',refresh);
@@ -3873,9 +3888,10 @@ function buildLogForm(s, preferredBrand='', preferredBatchUrl='') {
 
   h += '<div class="memberline">Logging this session as <b>' + safeHtml(displayName(CURRENT_MEMBER)) + '</b></div>';
 
-  h += '<div class="overall-box"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
-  h += '<div class="log-hint">1 Poor · 2 Below Average · 3 Solid · 4 Very Good · 5 Excellent</div><div class="overall-grid">';
-  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')">' + n + '</button>';});
+  h += '<div class="overall-box" id="overallRatingBox"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
+  h += '<div class="log-hint">Pick the closest vibe. Effects fine-tune the final score.</div><div class="overall-grid">';
+  const overallLabels={1:'Bleh',2:'Okay',3:'Solid',4:'Great',5:'Fire'};
+  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')"><strong>' + n + '</strong><span>' + overallLabels[n] + '</span></button>';});
   h += '</div></div>';
 
 h += '<div class="eff-group pos">';
@@ -4043,7 +4059,7 @@ function openBlazeForStrain(strain,brand='',batchUrl=''){
   const b=document.getElementById('logToggleBtn');
   if(c)c.style.display='block';
   if(b)b.textContent='🔥 Blaze −';
-  requestAnimationFrame(()=>{const sh=document.getElementById('sheet');if(sh&&c)sh.scrollTop=Math.max(0,c.offsetTop-18);});
+  requestAnimationFrame(()=>requestAnimationFrame(scrollBlazeToRating));
 }
 document.getElementById('blazeFab').addEventListener('click',blazeOpen);
 document.getElementById('blazeClose').addEventListener('click',blazeClose);
