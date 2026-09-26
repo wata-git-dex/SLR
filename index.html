@@ -93,7 +93,7 @@
 .photoSave{padding:12px;border-radius:10px;border:0;background:var(--green);color:#0d120e;font:700 13px 'Space Grotesk',sans-serif;cursor:pointer}.photoSave:disabled{opacity:.5}
 
 /* ---- compact main action dock ---- */
-.actionDock{position:fixed;left:50%;bottom:calc(var(--safe-b) + 2px);z-index:345;width:min(224px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));display:none;grid-template-columns:repeat(2,1fr);gap:3px;padding:4px;border:1px solid rgba(var(--accent-rgb),.44);border-radius:26px;background:linear-gradient(128deg,rgba(255,255,255,.07),transparent 24%,rgba(var(--accent-rgb),.08) 58%,transparent),rgba(var(--header-rgb),.76);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -1px 0 rgba(var(--accent-rgb),.08),0 10px 28px rgba(0,0,0,.42),0 0 20px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(22px) saturate(1.18);backdrop-filter:blur(22px) saturate(1.18);transform:translateX(-50%)}
+.actionDock{position:fixed;left:50%;bottom:calc(var(--safe-b) + 2px);z-index:345;width:min(310px,calc(100vw - var(--safe-l) - var(--safe-r) - 28px));display:none;grid-template-columns:repeat(3,1fr);gap:3px;padding:4px;border:1px solid rgba(var(--accent-rgb),.44);border-radius:26px;background:linear-gradient(128deg,rgba(255,255,255,.07),transparent 24%,rgba(var(--accent-rgb),.08) 58%,transparent),rgba(var(--header-rgb),.76);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -1px 0 rgba(var(--accent-rgb),.08),0 10px 28px rgba(0,0,0,.42),0 0 20px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(22px) saturate(1.18);backdrop-filter:blur(22px) saturate(1.18);transform:translateX(-50%)}
 body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-open .actionDock{display:none}body.lab-open main{padding-bottom:calc(var(--safe-b) + 98px)}
 .dockBtn{min-width:0;height:46px;border:0;border-radius:21px;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font:700 8px 'Space Mono',monospace;transition:.15s}
 .dockBtn svg{width:18px;height:18px;padding:2px;border-radius:50%;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.dockBtn.blaze{color:var(--green);background:rgba(var(--accent-rgb),.12);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.24),0 0 12px rgba(var(--accent-rgb),.10)}.dockBtn.blaze svg{width:20px;height:20px;fill:currentColor;stroke:none}.dockBtn:active{transform:scale(.95)}.dockBtn.active{background:rgba(var(--accent-rgb),.13);color:var(--green)}
@@ -424,7 +424,8 @@ header{
 .menuBtn:active{transform:scale(.95)}.menuBtn:hover{border-color:var(--line2)}
 .menuBtn svg{width:18px;height:18px;fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round}
 .headerToggle{width:40px;height:40px;flex:0 0 auto;display:grid;place-items:center;background:var(--panel);border:1px solid rgba(var(--accent-rgb),.36);border-radius:12px;padding:0;color:var(--green);cursor:pointer;transition:transform .15s,border-color .15s}.headerToggle:active{transform:scale(.95)}.headerToggle:hover{border-color:var(--line2)}.headerToggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}.headerToggle[aria-expanded="true"] svg{transform:rotate(180deg)}
-header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1;margin-bottom:0}.controls-collapsed .hstat{grid-column:2;grid-row:1;margin-bottom:0}.controls-collapsed .memberbar,.controls-collapsed .filterrow{display:none!important}
+.headerControls{grid-column:1/-1;position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:7px;width:100%;min-width:0;box-sizing:border-box;margin-top:0;padding:8px;border:1px solid rgba(var(--accent-rgb),.28);border-radius:15px;background:linear-gradient(145deg,rgba(var(--accent-rgb),.085),rgba(var(--header-rgb),.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 8px 20px rgba(0,0,0,.16)}.headerControls::before{content:"";position:absolute;right:66px;top:-6px;width:10px;height:10px;transform:rotate(45deg);background:color-mix(in srgb,var(--green) 8%,rgb(var(--header-rgb)));border-left:1px solid rgba(var(--accent-rgb),.28);border-top:1px solid rgba(var(--accent-rgb),.28)}.headerControls .memberbar{grid-column:auto;grid-row:auto;min-width:0;margin:0}.headerControls .filterrow{grid-column:auto;grid-row:auto;min-width:0}.headerControls .dockSearch{top:calc(100% + 9px)}
+header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1;margin-bottom:0}.controls-collapsed .hstat{grid-column:2;grid-row:1;margin-bottom:0}.controls-collapsed .headerControls{display:none}
 
 .controls{display:flex;gap:10px;align-items:center;margin-bottom:7px;padding-top:9px;border-top:1px solid var(--line)}
 .iconbtn{flex:0 0 auto;width:40px;height:40px;border-radius:11px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;transition:.15s}
@@ -468,6 +469,7 @@ header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template
 .chipdiv{flex:0 0 auto;width:1px;height:20px;align-self:center;background:var(--line2);margin:0 5px}
 .filterrow{grid-column:1/-1;position:relative;display:flex;align-items:center;justify-content:space-between;gap:7px}.filterrow .typechips{flex:1 1 auto}
 .filterSearchBtn{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);display:grid;place-items:center;cursor:pointer}.filterSearchBtn.active{border-color:var(--green-soft);color:var(--green)}.filterSearchBtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+#cardViewBtn .viewRows{display:none}#cardViewBtn.grid-on .viewRows{display:block}#cardViewBtn.grid-on .viewGrid{display:none}
 .filterbtn{flex:0 0 auto;height:34px;padding:0 11px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer;white-space:nowrap}
 .filterbtn.active{border-color:var(--green-soft);color:var(--green)}
 .filterbadge{display:none;margin-left:5px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--green);color:var(--ink);align-items:center;justify-content:center;font-size:9px}
@@ -484,7 +486,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 @media(min-width:760px){
   header{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:7px 12px;padding-top:12px}
   .brandrow{grid-column:1;grid-row:1;margin:0}.hstat{grid-column:2;grid-row:1;margin:0}
-  .memberbar{grid-column:1;grid-row:2;margin:0;min-width:0}.filterrow{grid-column:2;grid-row:2;min-width:0}
+  .headerControls{grid-column:1/-1;grid-row:2;grid-template-columns:minmax(0,1fr) auto}.headerControls .memberbar{grid-column:1;grid-row:1;min-width:0}.headerControls .filterrow{grid-column:2;grid-row:1;min-width:0}
   .brandbox{padding:5px 10px 5px 5px}.memberbar .refresh{min-width:55px}
 }
 @media(orientation:landscape) and (max-height:500px){
@@ -493,12 +495,12 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   .memberbar{padding-top:4px;padding-bottom:4px}.memberwho{font-size:9px}.scoretoggle button{font-size:8px;padding:5px}
 }
 @media(min-width:1050px){
-  header{max-width:none;margin:0;grid-template-columns:auto minmax(315px,1fr) auto auto;grid-template-rows:auto;gap:10px;padding-top:12px;padding-left:max(16px,calc((100vw - 1180px)/2 + 16px),calc(var(--safe-l) + 12px));padding-right:max(16px,calc((100vw - 1180px)/2 + 16px),calc(var(--safe-r) + 12px))}
-  .brandrow{grid-column:1;grid-row:1}.memberbar{grid-column:2;grid-row:1}.filterrow{grid-column:3;grid-row:1}.hstat{grid-column:4;grid-row:1}
+  header{max-width:none;margin:0;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:8px 12px;padding-top:12px;padding-left:max(16px,calc((100vw - 1180px)/2 + 16px),calc(var(--safe-l) + 12px));padding-right:max(16px,calc((100vw - 1180px)/2 + 16px),calc(var(--safe-r) + 12px))}
+  .brandrow{grid-column:1;grid-row:1}.hstat{grid-column:2;grid-row:1}.headerControls{grid-column:1/-1;grid-row:2;grid-template-columns:minmax(315px,1fr) auto}
   .grid{grid-template-columns:repeat(3,1fr)}main{max-width:1180px}.actionDock{bottom:14px}
 }
 @media(min-width:760px){header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1}.controls-collapsed .hstat{grid-column:2;grid-row:1}}
-@media(max-width:340px){header{padding-left:max(10px,var(--safe-l));padding-right:max(10px,var(--safe-r))}.brandbox{padding:5px 8px 5px 5px}.brandicon{width:28px;height:28px}.wordmark{font-size:14px;white-space:nowrap}.hstat{gap:5px}}
+@media(max-width:340px){header{padding-left:max(10px,var(--safe-l));padding-right:max(10px,var(--safe-r))}.brandbox{padding:5px 8px 5px 5px}.brandicon{width:28px;height:28px}.wordmark{font-size:14px;white-space:nowrap}.hstat{gap:5px}.memberbar{gap:3px;padding:5px}.memberwho{max-width:66px;font-size:8px}.scoretoggle{gap:1px;padding:2px}.scoretoggle button{padding:5px 4px;font-size:7px}.memberbar .refresh{min-width:50px;padding:0 5px}.memberbar .refreshCount{font-size:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--ink2));
@@ -574,10 +576,15 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .led i{width:6px;height:6px;border-radius:50%}
 .led.pos i{background:var(--positive)} .led.pos.hi i{box-shadow:0 0 6px var(--positive)}
 .led.neg i{background:var(--red)}
-.terps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:8px;min-width:0}
-.terppill{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:'Space Mono',monospace;font-size:7.5px;padding:3px 2px;border-radius:999px;border:1px solid;white-space:nowrap}
+.terps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;margin-top:8px;min-width:0}
+.terppill{display:block;min-width:0;overflow:hidden;text-overflow:clip;text-align:center;font-family:'Space Mono',monospace;font-size:6.6px;padding:3px 1px;border-radius:999px;border:1px solid;white-space:nowrap}
 .noterp{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.02em}
 .terps.emptyTerps{display:block}
+.grid.compactGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.gridCard{aspect-ratio:1/1;padding:10px;display:flex;flex-direction:column;min-width:0}.gridCard .gridCardTop{display:flex;align-items:flex-start;justify-content:space-between;gap:7px}.gridCard .thumb{width:52px;height:52px;border-radius:11px}.gridCard .score{width:38px;height:38px;border-radius:10px;font-size:15px}.gridCard .score .q{font-size:14px}.gridIdentity{min-width:0;margin-top:8px}.gridName{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700;line-height:1.15}.gridBrand{display:block;margin-top:4px;padding-top:4px;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dim);font:6.8px/1.2 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em}.gridInfo{display:flex;align-items:center;gap:5px;margin-top:7px;min-width:0}.gridInfo .tag.type{font-size:7px;padding:2px 4px}.gridInfo .thctext{margin-left:auto;font-size:7px;white-space:nowrap}.terpDots{display:flex;align-items:center;gap:5px;margin-top:auto;padding-top:8px;min-height:9px}.terpDot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;box-shadow:0 0 5px currentColor}.terpDotsEmpty{color:var(--faint);font:7px 'Space Mono',monospace}
+@media(min-width:620px){.grid.compactGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1050px){.grid.compactGrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:340px){.gridCard{padding:8px}.gridCard .thumb{width:46px;height:46px}.gridCard .score{width:34px;height:34px;font-size:13px}.gridName{font-size:12px}.terpDots{gap:4px}.terpDot{width:6px;height:6px}}
 
 .empty{text-align:center;color:var(--faint);padding:60px 20px;font-family:'Space Mono',monospace;font-size:13px}.empty h3{margin:0 0 8px;color:var(--text);font:700 18px 'Space Grotesk',sans-serif}.empty p{max-width:390px;margin:0 auto;color:var(--dim);font:10px/1.65 'Space Mono',monospace}.emptyAction{margin-top:16px;padding:10px 15px;border:1px solid rgba(var(--accent-rgb),.5);border-radius:999px;background:rgba(var(--accent-rgb),.1);color:var(--green);font:700 10px 'Space Mono',monospace;cursor:pointer}
 .shelfIntro{display:none;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(110deg,rgba(var(--accent-rgb),.08),var(--panel))}.shelfIntroCopy{min-width:0}.shelfIntroCopy b{display:block;font-size:12px}.shelfIntroCopy span{display:block;margin-top:2px;color:var(--dim);font:8.5px/1.4 'Space Mono',monospace}.shelfIntro button{flex:0 0 auto;padding:8px 10px;border:1px solid rgba(var(--accent-rgb),.42);border-radius:999px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:700 8.5px 'Space Mono',monospace;cursor:pointer}@media(max-width:370px){.shelfIntro{align-items:flex-start;flex-direction:column}.shelfIntro button{align-self:stretch}}
@@ -762,33 +769,37 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <button class="headerToggle" id="headerToggle" type="button" aria-label="Show lab controls" aria-expanded="false" title="Show lab controls"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg></button>
     <button class="menuBtn" id="menuBtn" aria-label="Open menu" title="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
-  <div class="memberbar" id="memberBar" style="display:none">
-    <div class="memberwho">Rating as <b id="memberName">—</b></div>
-    <div class="scoretoggle" aria-label="Score view">
-      <button id="mineView" data-view="mine">My score</button>
-      <button id="communityView" data-view="community">Community</button>
+  <div class="headerControls" id="headerControls">
+    <div class="memberbar" id="memberBar" style="display:none">
+      <div class="memberwho">Rating as <b id="memberName">—</b></div>
+      <div class="scoretoggle" aria-label="Score view">
+        <button id="mineView" data-view="mine">My score</button>
+        <button id="communityView" data-view="community">Community</button>
+      </div>
+      <div class="refresh" id="refreshBtn" title="Pull the latest from Notion">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        <div class="rt">Refresh<b id="updated">—</b></div>
+        <div class="refreshCount"><u id="shown">0</u>/<span id="total">0</span></div>
+      </div>
     </div>
-    <div class="refresh" id="refreshBtn" title="Pull the latest from Notion">
-      <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-      <div class="rt">Refresh<b id="updated">—</b></div>
-      <div class="refreshCount"><u id="shown">0</u>/<span id="total">0</span></div>
-    </div>
-  </div>
-  <div class="filterrow">
-    <div class="typechips" id="typerow"></div>
-    <button class="filterSearchBtn" id="dockSearchBtn" aria-label="Search strains" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-    <button class="filterbtn" id="filterBtn">Filters<span class="filterbadge" id="filterBadge">0</span></button>
-    <div class="dockSearch" id="dockSearch">
-      <div class="searchbox" id="searchbox">
-        <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" placeholder="Search strains…" autocomplete="off" spellcheck="false">
-        <button class="searchclose" id="searchClose" aria-label="Close search">✕</button>
+    <div class="filterrow">
+      <div class="typechips" id="typerow"></div>
+      <button class="filterSearchBtn" id="cardViewBtn" aria-label="Switch to grid view" title="Grid view"><svg class="viewRows" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h14"/></svg><svg class="viewGrid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button>
+      <button class="filterSearchBtn" id="dockSearchBtn" aria-label="Search strains" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <button class="filterbtn" id="filterBtn">Filters<span class="filterbadge" id="filterBadge">0</span></button>
+      <div class="dockSearch" id="dockSearch">
+        <div class="searchbox" id="searchbox">
+          <svg class="mag" viewBox="0 0 24 24" fill="none" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" placeholder="Search strains…" autocomplete="off" spellcheck="false">
+          <button class="searchclose" id="searchClose" aria-label="Close search">✕</button>
+        </div>
       </div>
     </div>
   </div>
 </header>
 
 <nav class="actionDock" id="actionDock" aria-label="Main actions">
+  <button class="dockBtn" id="specimensBtn" aria-label="Open specimens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9M8 13c-3.3 0-5-2-5-5 3.3 0 5 2 5 5ZM16 13c3.3 0 5-2 5-5-3.3 0-5 2-5 5ZM12 9c0-3 1.7-5 5-6 0 3.4-1.7 5.4-5 6Z"/></svg><span>Specimens</span></button>
   <button class="dockBtn blaze" id="blazeFab" aria-label="Blaze"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3.001 2.48ZM12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" clip-rule="evenodd"/></svg><span>Blaze</span></button>
   <button class="dockBtn" id="addStrainBtn" aria-label="Add new strain"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>New Strain</span></button>
 </nav>
@@ -1056,15 +1067,16 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.2.0';
+const APP_VERSION = 'v2.3.0';
 const LAB_NOTICE = {
-  id:'slr-v2.2.0', version:'Version 2.2.0', audience:'all',
-  title:'More room for the specimens.',
-  copy:'The Lab controls now tuck away when you do not need them, compact strain cards are easier to scan, and the new rating calibration is included. Your original Session answers have not changed.',
+  id:'slr-v2.3.0', version:'Version 2.3.0', audience:'all',
+  title:'Choose how you scan the shelf.',
+  copy:'The familiar row view is still the default. You can now switch to a compact grid, open the specimen shelf directly, and see up to six terpene signals without changing any saved strain or Session data.',
   items:[
-    ['⌃','Collapsible controls','Use the arrow beside the menu to show or hide ratings, quick types, search and filters.'],
-    ['Ab','Compact terp labels','The feed uses consistent four-letter terp labels; open a strain to see every full name.'],
-    ['—','Clearer identity','Strain and brand now share one aligned block with a simple divider.'],
+    ['▦','Two shelf views','Keep the detailed rows or switch to a compact two-column grid. Your choice stays on this phone.'],
+    ['●','Six terpene signals','Rows show readable short names and grid cards use the same terpene colors as dots. Open any strain for full names.'],
+    ['⌁','Specimens shortcut','The new bottom shortcut opens the shared specimen shelf inside The Lab.'],
+    ['⌃','Connected controls','The arrow beside the menu opens ratings, quick types, search, views and filters in one drawer.'],
     ['±.5','Ratings calibrated','Each saved Effect dot adds 0.5 points and each Side Effect dot subtracts 0.5 points.']
   ]
 };
@@ -1072,6 +1084,7 @@ const MEMBER_LAB_NOTICES = {};
 const LAB_NOTICE_SEEN_KEY = 'slr_lab_notice_seen';
 const CYRUS_PALETTE_KEY = 'slr_cyrus_palette';
 const HEADER_PANEL_KEY = 'slr_header_controls';
+const CARD_VIEW_KEY = 'slr_card_view';
 const MEMBER_PALETTES = {
   cyrus:{key:CYRUS_PALETTE_KEY,default:'green',options:['green','blue','purple','amber']},
   amber:{key:'slr_amber_palette',default:'pink',options:['pink','amber']},
@@ -3129,6 +3142,7 @@ function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=
 
 let CURRENT_MEMBER = '';
 let SCORE_VIEW = localStorage.getItem('slr_score_view') || 'mine';
+let CARD_VIEW = localStorage.getItem(CARD_VIEW_KEY)==='grid' ? 'grid' : 'row';
 function memberNames(s){
   const names=parseArr(s.Blazers).map(n=>String(n).trim()).filter(Boolean);
   return names.length ? names : ['Cyrus'];
@@ -3364,6 +3378,7 @@ function render(){
   list=sortList(list);
   viewList=list;
   const grid=$('#grid');grid.innerHTML='';
+  grid.classList.toggle('compactGrid',CARD_VIEW==='grid');
   $('#shown').textContent=list.length; $('#total').textContent=STRAINS.length;
   const empty=$('#empty');
   empty.style.display=list.length?'none':'block';
@@ -3376,22 +3391,38 @@ function render(){
       empty.innerHTML=`<h3>No community strains match.</h3><p>Try clearing a search or filter to get back to the shared Lab library.</p>`;
     }
   }
-  list.forEach(s=>grid.appendChild(cardEl(s)));
+  list.forEach(s=>grid.appendChild(CARD_VIEW==='grid'?gridCardEl(s):cardEl(s)));
 }
 
-const TERP_ABBR={Terpinolene:'Tpin',Caryophyllene:'Cary',Limonene:'Limo',Myrcene:'Myrc',Linalool:'Lina',Pinene:'Pine',Humulene:'Humu',Ocimene:'Ocim',Bisabolol:'Bisa',Nerolidol:'Nero',Valencene:'Vale',Geraniol:'Gera',Camphene:'Camp'};
-function terpAbbr(name){return TERP_ABBR[name]||String(name||'').slice(0,4);}
+const TERP_ABBR={Terpinolene:'Terpin',Caryophyllene:'Caryo',Limonene:'Limon',Myrcene:'Myrc',Linalool:'Linal',Pinene:'Pinene',Humulene:'Humul',Ocimene:'Ocime',Bisabolol:'Bisab',Nerolidol:'Nerol',Valencene:'Valen',Geraniol:'Geran',Camphene:'Camph'};
+function terpAbbr(name){return TERP_ABBR[name]||String(name||'').slice(0,6);}
+
+function scoreTile(s){
+  const sc=s.score,scoreLabel=scoreOutOf100(sc);
+  return sc==null?`<div class="score s-na" aria-label="No overall score yet" title="No overall score yet"><span class="q">—</span></div>`:`<div class="score ${scoreClass(sc)}" aria-label="Score ${scoreLabel} out of 100" title="${scoreLabel} out of 100">${scoreLabel}</div>`;
+}
+
+function gridCardEl(s){
+  const c=document.createElement('div');
+  c.className='card gridCard t-'+(s.type||'x');
+  const thc=thcLabel(s),brand=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
+  const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
+  const thcText=thc?`<span class="thctext" style="color:${typeHex(s.type)}">THC ${thc}</span>`:'';
+  const dots=s.terpenes&&s.terpenes.length?s.terpenes.slice(0,6).map(t=>{const color=terpColor(t);return `<span class="terpDot" style="color:${color};background:${color}" title="${t}" aria-label="${t}"></span>`;}).join(''):'<span class="terpDotsEmpty">No terpenes logged</span>';
+  c.innerHTML=`<div class="gridCardTop"><div class="thumb" style="background:linear-gradient(140deg,${typeColor(s.type)},#0d120e)">${thumbHTML(s,false)}</div>${scoreTile(s)}</div><div class="gridIdentity"><span class="gridName">${s.name}</span><span class="gridBrand">${brand}</span></div><div class="gridInfo">${typeTag}${thcText}</div><div class="terpDots" aria-label="Terpenes">${dots}</div>`;
+  c.onclick=()=>openSheet(s);
+  return c;
+}
 
 function cardEl(s){
   const c=document.createElement('div');
   c.className='card t-'+(s.type||'x');
   const thc=thcLabel(s), sc=s.score;
-  const scoreLabel=scoreOutOf100(sc);
-  const scoreHtml = sc==null?`<div class="score s-na" aria-label="No overall score yet" title="No overall score yet"><span class="q">—</span></div>`:`<div class="score ${scoreClass(sc)}" aria-label="Score ${scoreLabel} out of 100" title="${scoreLabel} out of 100">${scoreLabel}</div>`;
+  const scoreHtml=scoreTile(s);
   let strip=''; const ranked=topEffects(s), positives=ranked.filter(e=>e.pos), negatives=ranked.filter(e=>!e.pos);
   const te=negatives.length?[...positives.slice(0,3),negatives[0]]:ranked.slice(0,4);
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
-  let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,4).map(t=>{const c=terpColor(t);return `<span class="terppill" title="${t}" aria-label="${t}" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${terpAbbr(t)}</span>`;}).join('')}</div>`; else terps=`<div class="terps emptyTerps"><span class="noterp">no terpenes logged</span></div>`;
+  let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,6).map(t=>{const c=terpColor(t);return `<span class="terppill" title="${t}" aria-label="${t}" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${terpAbbr(t)}</span>`;}).join('')}</div>`; else terps=`<div class="terps emptyTerps"><span class="noterp">no terpenes logged</span></div>`;
   const brandInline=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
   const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
   const th=typeHex(s.type);
@@ -3811,7 +3842,7 @@ function renderSpecimenBoard(){
 }
 function setLabTab(tab){document.querySelectorAll('[data-lab-tab]').forEach(button=>{const on=button.dataset.labTab===tab;button.classList.toggle('on',on);button.setAttribute('aria-selected',on?'true':'false');});document.querySelectorAll('[data-lab-panel]').forEach(panel=>panel.classList.toggle('on',panel.dataset.labPanel===tab));}
 function labHubIsOpen(){return document.getElementById('labHubOverlay').classList.contains('show');}
-function openTheLab(){renderTheLab();setLabTab('crew');document.getElementById('labHubOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function openTheLab(tab='crew'){renderTheLab();setLabTab(tab);document.getElementById('labHubOverlay').classList.add('show');document.body.style.overflow='hidden';}
 function closeTheLab(){document.getElementById('labHubOverlay').classList.remove('show');document.body.style.overflow=menuIsOpen()?'hidden':'';}
 function applyMemberAppIcon(){
   const member=CURRENT_MEMBER.trim().toLowerCase();
@@ -3903,7 +3934,7 @@ function scrollBlazeToRating(){
   const target=document.getElementById('overallRatingBox');
   if(!sh||!target)return;
   const top=sh.scrollTop+target.getBoundingClientRect().top-sh.getBoundingClientRect().top-18;
-  sh.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  sh.scrollTo({top:Math.max(0,top),behavior:'auto'});
 }
 
 $('#refreshBtn').addEventListener('click',refresh);
@@ -4462,7 +4493,8 @@ document.getElementById('appearanceToggle').addEventListener('click',e=>setAppea
 document.getElementById('labNoticeClose').addEventListener('click',closeLabNotice);
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',e=>setNoticeOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
-document.getElementById('menuTheLab').addEventListener('click',openTheLab);
+document.getElementById('menuTheLab').addEventListener('click',()=>openTheLab('crew'));
+document.getElementById('specimensBtn').addEventListener('click',()=>openTheLab('specimens'));
 document.getElementById('labHubClose').addEventListener('click',closeTheLab);
 document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
@@ -4483,6 +4515,14 @@ function setDockSearch(open){const panel=document.getElementById('dockSearch');p
 function closeDockSearch(){setDockSearch(false);}
 document.getElementById('dockSearchBtn').addEventListener('click',()=>setDockSearch(!document.getElementById('dockSearch').classList.contains('show')));
 document.getElementById('searchClose').addEventListener('click',closeDockSearch);
+function syncCardViewButton(){
+  const button=document.getElementById('cardViewBtn'),isGrid=CARD_VIEW==='grid';
+  button.classList.toggle('grid-on',isGrid);
+  button.setAttribute('aria-label',isGrid?'Switch to row view':'Switch to grid view');
+  button.title=isGrid?'Row view':'Grid view';
+}
+function setCardView(view){CARD_VIEW=view==='grid'?'grid':'row';localStorage.setItem(CARD_VIEW_KEY,CARD_VIEW);syncCardViewButton();render();}
+document.getElementById('cardViewBtn').addEventListener('click',()=>setCardView(CARD_VIEW==='grid'?'row':'grid'));
 function setHeaderPanel(open,persist=true){
   const header=document.querySelector('header');
   const button=document.getElementById('headerToggle');
@@ -4498,6 +4538,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(labHubIsOpen())c
 
 setColorMode(colorMode());
 setHeaderPanel(localStorage.getItem(HEADER_PANEL_KEY)==='open',false);
+syncCardViewButton();
 buildChips(); render();
 showCheckingGate();refresh(true);
 </script>
