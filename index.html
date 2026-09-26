@@ -423,6 +423,8 @@ header{
 .menuBtn{width:40px;height:40px;flex:0 0 auto;display:grid;place-items:center;background:var(--panel);border:1px solid rgba(var(--accent-rgb),.52);border-radius:12px;padding:0;cursor:pointer;transition:.15s;box-shadow:0 0 16px rgba(var(--accent-rgb),.08)}
 .menuBtn:active{transform:scale(.95)}.menuBtn:hover{border-color:var(--line2)}
 .menuBtn svg{width:18px;height:18px;fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round}
+.headerToggle{width:40px;height:40px;flex:0 0 auto;display:grid;place-items:center;background:var(--panel);border:1px solid rgba(var(--accent-rgb),.36);border-radius:12px;padding:0;color:var(--green);cursor:pointer;transition:transform .15s,border-color .15s}.headerToggle:active{transform:scale(.95)}.headerToggle:hover{border-color:var(--line2)}.headerToggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}.headerToggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1;margin-bottom:0}.controls-collapsed .hstat{grid-column:2;grid-row:1;margin-bottom:0}.controls-collapsed .memberbar,.controls-collapsed .filterrow{display:none!important}
 
 .controls{display:flex;gap:10px;align-items:center;margin-bottom:7px;padding-top:9px;border-top:1px solid var(--line)}
 .iconbtn{flex:0 0 auto;width:40px;height:40px;border-radius:11px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;cursor:pointer;transition:.15s}
@@ -487,7 +489,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 }
 @media(orientation:landscape) and (max-height:500px){
   header{padding-top:calc(var(--safe-t) + 6px);padding-bottom:7px}
-  .brandicon{width:26px;height:26px}.wordmark{font-size:14px}.menuBtn{width:32px;height:32px}
+  .brandicon{width:26px;height:26px}.wordmark{font-size:14px}.menuBtn,.headerToggle{width:32px;height:32px}
   .memberbar{padding-top:4px;padding-bottom:4px}.memberwho{font-size:9px}.scoretoggle button{font-size:8px;padding:5px}
 }
 @media(min-width:1050px){
@@ -495,6 +497,9 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   .brandrow{grid-column:1;grid-row:1}.memberbar{grid-column:2;grid-row:1}.filterrow{grid-column:3;grid-row:1}.hstat{grid-column:4;grid-row:1}
   .grid{grid-template-columns:repeat(3,1fr)}main{max-width:1180px}.actionDock{bottom:14px}
 }
+@media(min-width:760px){header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1}.controls-collapsed .hstat{grid-column:2;grid-row:1}}
+@media(max-width:340px){header{padding-left:max(10px,var(--safe-l));padding-right:max(10px,var(--safe-r))}.brandbox{padding:5px 8px 5px 5px}.brandicon{width:28px;height:28px}.wordmark{font-size:14px;white-space:nowrap}.hstat{gap:5px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 .card{position:relative;background:linear-gradient(180deg,var(--panel),var(--ink2));
   border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 13px;cursor:pointer;overflow:hidden;transition:.16s}
@@ -509,6 +514,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   display:grid;place-items:center;border:2px solid var(--typecol,var(--line2))}
 .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .thumb .mono-ph{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;color:#0d120e}
+.cardMain{min-width:0}
 .cmid{min-width:0;display:grid;grid-template-columns:minmax(0,1fr) 68px;align-items:stretch;gap:6px}
 .cfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .efficons-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -525,7 +531,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .verdict.mini .dot{width:6px;height:6px}
 .cname{display:block;min-width:0}
 .cn{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(13px,4.2vw,16px);font-weight:600;letter-spacing:-.01em;line-height:1.14}
-.cardBrand{display:block;width:fit-content;max-width:100%;box-sizing:border-box;margin:6px 0 0;padding:2px 7px;border:1px solid color-mix(in srgb,var(--text) 20%,var(--line));border-radius:999px;background:rgba(255,255,255,.025);color:color-mix(in srgb,var(--text) 72%,var(--dim));font:8px/1.3 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cardBrand{display:block;width:100%;max-width:100%;box-sizing:border-box;margin:7px 0 0;padding:6px 0 0;border-top:1px solid var(--line);color:color-mix(in srgb,var(--text) 72%,var(--dim));font:8px/1.3 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.08em;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .brandpill{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);background:var(--panel2);
   border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;letter-spacing:.02em}
 .thctext{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.02em}
@@ -540,6 +546,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 .meta{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-width:0;padding:4px 3px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);text-align:center}
 .meta .tag.type{font-size:9px;padding:2px 5px}.meta .thctext{font-size:9px;white-space:nowrap}
+@media(max-width:340px){.cmid{grid-template-columns:minmax(0,1fr) 60px}.cnbox{padding-left:8px;padding-right:8px}.meta .tag.type,.meta .thctext{font-size:8px}}
 .tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.03em;padding:3px 7px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--dim);white-space:nowrap}
 .tag.brand{color:var(--text)}
 .tag.type{border:none;font-weight:700}
@@ -567,9 +574,10 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .led i{width:6px;height:6px;border-radius:50%}
 .led.pos i{background:var(--positive)} .led.pos.hi i{box-shadow:0 0 6px var(--positive)}
 .led.neg i{background:var(--red)}
-.terps{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-.terppill{font-family:'Space Mono',monospace;font-size:8.5px;padding:3px 7px;border-radius:999px;border:1px solid;white-space:nowrap}
+.terps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:8px;min-width:0}
+.terppill{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:'Space Mono',monospace;font-size:7.5px;padding:3px 2px;border-radius:999px;border:1px solid;white-space:nowrap}
 .noterp{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.02em}
+.terps.emptyTerps{display:block}
 
 .empty{text-align:center;color:var(--faint);padding:60px 20px;font-family:'Space Mono',monospace;font-size:13px}.empty h3{margin:0 0 8px;color:var(--text);font:700 18px 'Space Grotesk',sans-serif}.empty p{max-width:390px;margin:0 auto;color:var(--dim);font:10px/1.65 'Space Mono',monospace}.emptyAction{margin-top:16px;padding:10px 15px;border:1px solid rgba(var(--accent-rgb),.5);border-radius:999px;background:rgba(var(--accent-rgb),.1);color:var(--green);font:700 10px 'Space Mono',monospace;cursor:pointer}
 .shelfIntro{display:none;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(110deg,rgba(var(--accent-rgb),.08),var(--panel))}.shelfIntroCopy{min-width:0}.shelfIntroCopy b{display:block;font-size:12px}.shelfIntroCopy span{display:block;margin-top:2px;color:var(--dim);font:8.5px/1.4 'Space Mono',monospace}.shelfIntro button{flex:0 0 auto;padding:8px 10px;border:1px solid rgba(var(--accent-rgb),.42);border-radius:999px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:700 8.5px 'Space Mono',monospace;cursor:pointer}@media(max-width:370px){.shelfIntro{align-items:flex-start;flex-direction:column}.shelfIntro button{align-self:stretch}}
@@ -740,7 +748,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
     <div class="landing-version">SLR <span id="landingVersion"></span></div>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 25</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Sep 26</div>
   </div>
 </div>
 <header>
@@ -751,6 +759,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     </div>
   </div>
   <div class="hstat">
+    <button class="headerToggle" id="headerToggle" type="button" aria-label="Show lab controls" aria-expanded="false" title="Show lab controls"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg></button>
     <button class="menuBtn" id="menuBtn" aria-label="Open menu" title="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
   <div class="memberbar" id="memberBar" style="display:none">
@@ -1047,20 +1056,22 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.1.0';
+const APP_VERSION = 'v2.2.0';
 const LAB_NOTICE = {
-  id:'slr-v2.1.0', version:'Version 2.1.0', audience:'all',
-  title:'Ratings now reflect the whole Blaze.',
-  copy:'Overall still sets the baseline. Saved Effects now add detail and Side Effects subtract it, so some calculated scores may move slightly. Your original Session answers have not changed.',
+  id:'slr-v2.2.0', version:'Version 2.2.0', audience:'all',
+  title:'More room for the specimens.',
+  copy:'The Lab controls now tuck away when you do not need them, compact strain cards are easier to scan, and the new rating calibration is included. Your original Session answers have not changed.',
   items:[
-    ['1–5','New rating language','1 Bleh · 2 Okay · 3 Solid · 4 Great · 5 Fire.'],
-    ['+','Effects add detail','Each green dot adds 0.5 points to the 100-point score.'],
-    ['−','Side Effects count','Each red dot subtracts 0.5 points. Final displayed scores stay clean and between 0–100.']
+    ['⌃','Collapsible controls','Use the arrow beside the menu to show or hide ratings, quick types, search and filters.'],
+    ['Ab','Compact terp labels','The feed uses consistent four-letter terp labels; open a strain to see every full name.'],
+    ['—','Clearer identity','Strain and brand now share one aligned block with a simple divider.'],
+    ['±.5','Ratings calibrated','Each saved Effect dot adds 0.5 points and each Side Effect dot subtracts 0.5 points.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
 const LAB_NOTICE_SEEN_KEY = 'slr_lab_notice_seen';
 const CYRUS_PALETTE_KEY = 'slr_cyrus_palette';
+const HEADER_PANEL_KEY = 'slr_header_controls';
 const MEMBER_PALETTES = {
   cyrus:{key:CYRUS_PALETTE_KEY,default:'green',options:['green','blue','purple','amber']},
   amber:{key:'slr_amber_palette',default:'pink',options:['pink','amber']},
@@ -3205,7 +3216,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Sep 25');   // baked snapshot date (set at build time)
+setUpdated('Sep 26');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
@@ -3368,6 +3379,9 @@ function render(){
   list.forEach(s=>grid.appendChild(cardEl(s)));
 }
 
+const TERP_ABBR={Terpinolene:'Tpin',Caryophyllene:'Cary',Limonene:'Limo',Myrcene:'Myrc',Linalool:'Lina',Pinene:'Pine',Humulene:'Humu',Ocimene:'Ocim',Bisabolol:'Bisa',Nerolidol:'Nero',Valencene:'Vale',Geraniol:'Gera',Camphene:'Camp'};
+function terpAbbr(name){return TERP_ABBR[name]||String(name||'').slice(0,4);}
+
 function cardEl(s){
   const c=document.createElement('div');
   c.className='card t-'+(s.type||'x');
@@ -3377,7 +3391,7 @@ function cardEl(s){
   let strip=''; const ranked=topEffects(s), positives=ranked.filter(e=>e.pos), negatives=ranked.filter(e=>!e.pos);
   const te=negatives.length?[...positives.slice(0,3),negatives[0]]:ranked.slice(0,4);
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
-  let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,4).map(t=>{const c=terpColor(t);return `<span class="terppill" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${t}</span>`;}).join('')}</div>`; else terps=`<div class="terps"><span class="noterp">no terpenes logged</span></div>`;
+  let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,4).map(t=>{const c=terpColor(t);return `<span class="terppill" title="${t}" aria-label="${t}" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${terpAbbr(t)}</span>`;}).join('')}</div>`; else terps=`<div class="terps emptyTerps"><span class="noterp">no terpenes logged</span></div>`;
   const brandInline=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
   const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
   const th=typeHex(s.type);
@@ -3387,12 +3401,14 @@ function cardEl(s){
   c.innerHTML=`
     <div class="chead">
       <div class="thumb" style="background:linear-gradient(140deg,${typeColor(s.type)},#0d120e)">${thumbHTML(s,false)}</div>
-      <div class="cmid">
-        <div class="cname"><span class="cnbox t-${s.type||'x'}"><span class="cn">${s.name}</span><span class="cardBrand">${brandInline}</span></span></div>
-        <div class="meta">${typeTag}${thcTxt}</div>
+      <div class="cardMain">
+        <div class="cmid">
+          <div class="cname"><span class="cnbox t-${s.type||'x'}"><span class="cn">${s.name}</span><span class="cardBrand">${brandInline}</span></span></div>
+          <div class="meta">${typeTag}${thcTxt}</div>
+        </div>
+        ${terps}
       </div>
     </div>
-    ${terps}
     ${footer}`;
   c.onclick=()=>openSheet(s);
   return c;
@@ -4467,9 +4483,21 @@ function setDockSearch(open){const panel=document.getElementById('dockSearch');p
 function closeDockSearch(){setDockSearch(false);}
 document.getElementById('dockSearchBtn').addEventListener('click',()=>setDockSearch(!document.getElementById('dockSearch').classList.contains('show')));
 document.getElementById('searchClose').addEventListener('click',closeDockSearch);
+function setHeaderPanel(open,persist=true){
+  const header=document.querySelector('header');
+  const button=document.getElementById('headerToggle');
+  header.classList.toggle('controls-collapsed',!open);
+  button.setAttribute('aria-expanded',String(open));
+  button.setAttribute('aria-label',open?'Hide lab controls':'Show lab controls');
+  button.title=open?'Hide lab controls':'Show lab controls';
+  if(!open)closeDockSearch();
+  if(persist)localStorage.setItem(HEADER_PANEL_KEY,open?'open':'closed');
+}
+document.getElementById('headerToggle').addEventListener('click',e=>setHeaderPanel(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(labHubIsOpen())closeTheLab();else if(document.getElementById('referenceOverlay').classList.contains('show'))closeReference();else if(document.getElementById('infoOverlay').classList.contains('show'))closeRatingsInfo();else if(menuIsOpen())closeMenu();else{closeLabNotice();closeDockSearch();blazeClose();closePhotoEditor();}}});
 
 setColorMode(colorMode());
+setHeaderPanel(localStorage.getItem(HEADER_PANEL_KEY)==='open',false);
 buildChips(); render();
 showCheckingGate();refresh(true);
 </script>
