@@ -691,9 +691,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .labTabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:16px 0 0;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.labTab{min-width:0;padding:9px 4px;border:0;border-radius:10px;background:transparent;color:var(--dim);font:700 9px 'Space Mono',monospace;cursor:pointer}.labTab.on{background:rgba(var(--accent-rgb),.15);color:var(--green);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.32)}.labPanel{display:none}.labPanel.on{display:block}
 .labSectionHead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:18px 2px 10px}.labSectionHead h3{margin:0;font-size:17px}.labSectionHead span{color:var(--faint);font:8.5px 'Space Mono',monospace}.ratGrid{display:grid;grid-template-columns:1fr;gap:11px}.ratCard{--rat-a:#63d374;--rat-b:#24c8ff;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--rat-a) 42%,var(--line));border-left-width:3px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--rat-a) 7%,var(--panel)),color-mix(in srgb,var(--rat-b) 4%,var(--ink2)));box-shadow:0 10px 28px rgba(0,0,0,.22)}.ratCard.you{box-shadow:0 0 0 1px color-mix(in srgb,var(--rat-a) 40%,transparent),0 12px 34px rgba(0,0,0,.26)}.ratSummary{display:block;width:100%;padding:15px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}.ratTop{display:flex;align-items:center;gap:11px}.ratAvatar{width:50px;height:50px;box-sizing:border-box;padding:1px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--rat-a) 55%,var(--line));border-radius:15px;overflow:hidden;background:var(--ink2);box-shadow:0 0 13px color-mix(in srgb,var(--rat-a) 14%,transparent)}.ratAvatar img{display:block;width:100%;height:100%;border-radius:12px;object-fit:cover}.ratIdentity{min-width:0;flex:1}.ratIdentity b{display:block;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ratIdentity span{display:block;margin-top:2px;color:var(--dim);font:9px 'Space Mono',monospace}.ratXp{font:700 12px 'Space Mono',monospace;color:var(--rat-a);text-align:right}.ratXp small{display:block;color:var(--faint);font-size:7px;text-transform:uppercase}.ratChevron{width:25px;height:25px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--rat-a) 32%,var(--line));border-radius:8px;color:var(--rat-a);font-size:15px;transition:transform .18s}.ratCard.open .ratChevron{transform:rotate(180deg)}.ratMetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.ratMetric{padding:9px 4px;text-align:center;border:1px solid var(--line);border-radius:10px;background:rgba(var(--profile-stat),.4)}.ratMetric b{display:block;font:700 15px 'Space Mono',monospace}.ratMetric span{display:block;color:var(--faint);font:7.5px 'Space Mono',monospace;text-transform:uppercase}.ratSignals{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .2s ease,opacity .18s ease}.ratSignalsInner{min-height:0;overflow:hidden;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 10px;padding:0 15px}.ratCard.open .ratSignals{grid-template-rows:1fr;opacity:1}.ratCard.open .ratSignalsInner{padding-bottom:15px}.ratSignal{min-width:0}.ratSignal label{display:block;margin:0 0 5px;color:var(--rat-a);font:700 7.5px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.09em}.ratPills{display:flex;flex-wrap:wrap;gap:5px}.ratPill{max-width:100%;overflow-wrap:anywhere;padding:6px 8px;border:1px solid color-mix(in srgb,var(--rat-a) 27%,var(--line));border-radius:999px;color:var(--text);background:var(--panel2);font:8.5px/1.2 'Space Mono',monospace}.ratPill.accent{color:var(--text);background:color-mix(in srgb,var(--rat-a) 8%,var(--panel2))}.ratPill.empty{color:var(--faint);border-style:dashed}.labFormula{margin:13px 2px 0;color:var(--faint);font:8.5px/1.5 'Space Mono',monospace;text-align:center}.labEmpty{padding:22px;text-align:center;border:1px dashed var(--line2);border-radius:16px;color:var(--dim);font:10px/1.6 'Space Mono',monospace}
 @media(max-width:340px){.ratSignalsInner{grid-template-columns:1fr}}
-.intelGrid{display:grid;grid-template-columns:1fr;gap:10px}.intelCard{padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--ink2))}.intelCard h4{margin:0 0 10px;font-size:13px}.intelRow{display:grid;grid-template-columns:minmax(90px,1fr) 2fr auto;gap:8px;align-items:center;margin-top:8px}.intelRow>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:9px 'Space Mono',monospace;color:var(--dim)}.intelBar{height:7px;border-radius:999px;background:var(--panel2);overflow:hidden}.intelBar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--intel-color,var(--green)),color-mix(in srgb,var(--intel-color,var(--green)) 72%,white))}.intelRow b{font:700 9px 'Space Mono',monospace;color:var(--text)}.ratSnapshot{grid-template-columns:auto minmax(0,1fr) auto}.ratNamePill{padding:5px 8px;border:1px solid color-mix(in srgb,var(--rat-a) 45%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--rat-a) 10%,var(--panel2));color:var(--text)!important;font-weight:700!important}.ratSnapshot .ratPills{min-width:0}.specimenBoard{display:grid;gap:8px}.specimenRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,var(--panel),var(--ink2))}.specimenRow h4{margin:0;font-size:13px}.specimenRow p{margin:3px 0 0;color:var(--dim);font:8.5px 'Space Mono',monospace}.specimenScore{text-align:right;color:var(--green);font:700 14px 'Space Mono',monospace}.specimenScore small{display:block;color:var(--faint);font-size:7px;text-transform:uppercase}
-.specimenRow.t-Sativa{--spec-type:var(--sativa)}.specimenRow.t-Hybrid{--spec-type:var(--hybrid)}.specimenRow.t-Indica{--spec-type:var(--indica)}
-.specimenRow[class*="t-"]{border-left:3px solid var(--spec-type);background:linear-gradient(110deg,color-mix(in srgb,var(--spec-type) 10%,var(--panel)),var(--ink2) 75%)}
+.intelGrid{display:grid;grid-template-columns:1fr;gap:10px}.intelCard{padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--ink2))}.intelCard h4{margin:0 0 10px;font-size:13px}.intelRow{display:grid;grid-template-columns:minmax(90px,1fr) 2fr auto;gap:8px;align-items:center;margin-top:8px}.intelRow>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:9px 'Space Mono',monospace;color:var(--dim)}.intelBar{height:7px;border-radius:999px;background:var(--panel2);overflow:hidden}.intelBar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--intel-color,var(--green)),color-mix(in srgb,var(--intel-color,var(--green)) 72%,white))}.intelRow b{font:700 9px 'Space Mono',monospace;color:var(--text)}.ratSnapshot{grid-template-columns:auto minmax(0,1fr) auto}.ratNamePill{padding:5px 8px;border:1px solid color-mix(in srgb,var(--rat-a) 45%,var(--line));border-radius:999px;background:color-mix(in srgb,var(--rat-a) 10%,var(--panel2));color:var(--text)!important;font-weight:700!important}.ratSnapshot .ratPills{min-width:0}
+.labTestBoard{display:grid;gap:8px}.labTestRow{--rat-a:#63d374;--rat-b:#24c8ff;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:10px;align-items:center;padding:11px;border:1px solid color-mix(in srgb,var(--rat-a) 38%,var(--line));border-left-width:3px;border-radius:14px;background:linear-gradient(120deg,color-mix(in srgb,var(--rat-a) 9%,var(--panel)),color-mix(in srgb,var(--rat-b) 4%,var(--ink2)) 78%)}.labTestAvatar{width:38px;height:38px;border-radius:11px;overflow:hidden;border:1px solid color-mix(in srgb,var(--rat-a) 52%,var(--line));background:var(--ink2)}.labTestAvatar img{display:block;width:100%;height:100%;object-fit:cover}.labTestMain{min-width:0}.labTestMain h4{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.labTestMeta,.labTestSub{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:4px;color:var(--dim);font:8px/1.35 'Space Mono',monospace}.labTestRat,.labTestLegacy{padding:3px 6px;border:1px solid color-mix(in srgb,var(--rat-a) 35%,var(--line));border-radius:999px;color:var(--text);background:color-mix(in srgb,var(--rat-a) 9%,var(--panel2))}.labTestLegacy{color:var(--rat-a);border-style:dashed}.labTestScore{min-width:47px;text-align:right;color:var(--rat-a);font:700 18px 'Space Mono',monospace}.labTestScore small{display:block;color:var(--faint);font-size:7px;text-transform:uppercase}.labTestScore.unrated{font-size:10px;color:var(--dim)}
 @media(min-width:700px){.ratGrid,.intelGrid{grid-template-columns:1fr 1fr}.labHero{padding:24px}.labHubTitle h2{font-size:22px}}
 @media(orientation:landscape) and (max-height:500px){.labHubHead{padding-top:calc(var(--safe-t) + 7px);padding-bottom:7px}.labHubMark{width:34px;height:34px;font-size:18px}.labHubBody{padding-top:12px}.labHero{padding:14px}.labPulse{grid-template-columns:repeat(3,minmax(100px,1fr));margin-top:10px}.ratGrid{grid-template-columns:1fr 1fr}}
 .referenceOverlay{position:fixed;inset:0;z-index:395;background:rgba(0,0,0,.78);display:none;align-items:flex-end;justify-content:center}.referenceOverlay.show{display:flex}.referenceSheet{width:100%;max-width:560px;height:min(88vh,820px);display:flex;flex-direction:column;background:var(--ink2);border:1px solid var(--line);border-radius:20px 20px 0 0;overflow:hidden}.referenceHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid var(--line)}.referenceHead h2{margin:0;font-size:17px}.referenceClose{width:34px;height:34px;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font-size:18px;cursor:pointer}.referenceBody{flex:1;min-height:0;overflow:auto;background:var(--ink)}.referenceBody img{display:block;width:100%;height:auto}.referenceBody iframe{display:block;width:100%;height:100%;border:0;background:#fff}
@@ -800,7 +799,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 </header>
 
 <nav class="actionDock" id="actionDock" aria-label="Main actions">
-  <button class="dockBtn" id="specimensBtn" aria-label="Open specimens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9M8 13c-3.3 0-5-2-5-5 3.3 0 5 2 5 5ZM16 13c3.3 0 5-2 5-5-3.3 0-5 2-5 5ZM12 9c0-3 1.7-5 5-6 0 3.4-1.7 5.4-5 6Z"/></svg><span>Specimens</span></button>
+  <button class="dockBtn" id="labDockBtn" aria-label="Open The Lab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v5l-5 9a2.5 2.5 0 0 0 2.2 3.7h9.6A2.5 2.5 0 0 0 19 17l-5-9V3M8 14h8M9.5 17h.01M14.5 18h.01"/></svg><span>Lab</span></button>
   <button class="dockBtn blaze" id="blazeFab" aria-label="Blaze"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3.001 2.48ZM12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" clip-rule="evenodd"/></svg><span>Blaze</span></button>
   <button class="dockBtn" id="addStrainBtn" aria-label="Add new strain"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>New Strain</span></button>
 </nav>
@@ -1031,11 +1030,11 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
       <div class="labTabs" role="tablist" aria-label="The Lab views">
         <button class="labTab on" data-lab-tab="crew" role="tab" aria-selected="true">Crew</button>
         <button class="labTab" data-lab-tab="taste" role="tab" aria-selected="false">Taste Map</button>
-        <button class="labTab" data-lab-tab="specimens" role="tab" aria-selected="false">Specimens</button>
+        <button class="labTab" data-lab-tab="tests" role="tab" aria-selected="false">Lab Tests</button>
       </div>
       <div class="labPanel on" data-lab-panel="crew"><div class="labSectionHead"><h3>Lab Rat profiles</h3></div><div class="ratGrid" id="ratGrid"></div><div class="labFormula">Lab XP = 10 per Session + 5 per distinct strain. It measures activity, not who has better taste.</div></div>
       <div class="labPanel" data-lab-panel="taste"><div class="labSectionHead"><h3>Shared taste map</h3><span>What the crew keeps reporting.</span></div><div class="intelGrid" id="tasteGrid"></div></div>
-      <div class="labPanel" data-lab-panel="specimens"><div class="labSectionHead"><h3>Specimen shelf</h3><span>Most explored across The Lab.</span></div><div class="specimenBoard" id="specimenBoard"></div></div>
+      <div class="labPanel" data-lab-panel="tests"><div class="labSectionHead"><h3>Lab Tests</h3><span>Every Session, newest first.</span></div><div class="labTestBoard" id="labTestBoard"></div></div>
     </div>
   </section>
 </div>
@@ -1068,17 +1067,15 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.3.3';
+const APP_VERSION = 'v2.4.0';
 const LAB_NOTICE = {
-  id:'slr-v2.3.0', version:'Version 2.3.3', audience:'all',
-  title:'Choose how you scan the shelf.',
-  copy:'The familiar row view is still the default. You can now switch to a compact grid, open the specimen shelf directly, and see up to six terpene signals without changing any saved strain or Session data.',
+  id:'slr-v2.4.0', version:'Version 2.4.0', audience:'all',
+  title:'Every test now lives in The Lab.',
+  copy:'The Lab now keeps an uncapped, newest-first record of every Blaze Session. Nothing was removed from your personal shelf, and older effect-based results are restored only when the original data supports them.',
   items:[
-    ['▦','Two shelf views','Keep the detailed rows or switch to a compact two-column grid. Your choice stays on this phone.'],
-    ['●','Six terpene signals','Rows show readable short names and grid cards use the same terpene colors as dots. Open any strain for full names.'],
-    ['⌁','Specimens shortcut','The new bottom shortcut opens the shared specimen shelf inside The Lab.'],
-    ['⌃','Connected controls','The arrow beside the menu opens ratings, quick types, search, views and filters in one drawer.'],
-    ['±.5','Ratings calibrated','Each saved Effect dot adds 0.5 points and each Side Effect dot subtracts 0.5 points.']
+    ['⚗','Lab shortcut','The bottom-left button now opens The Lab at the Crew view.'],
+    ['≋','Uncapped Lab Tests','Every individual Session appears separately with its strain, brand, Lab Rat, date and result.'],
+    ['↺','Real legacy results','Older effect-based ratings are calculated from their original saved dots and clearly labeled. No ratings are invented.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3131,10 +3128,21 @@ const EFFECT_ICON = {
 const BRAND_ABBR={Oakfruitland:'OFL',Connected:'CON','Jet Set':'JS',UpNorth:'UN',Zombi:'ZOM','Fig Farms':'FF',Claybourne:'CLB',Traditional:'TRAD',Delighted:'DEL',Revelry:'REV',CAM:'CAM',Broccoli:'BRC',CDB:'CDB',KHYRS:'KHY',LOLO:'LOLO','Humbolt Farms':'HUM','Alien Labs':'AL','Pure Beauty':'PB'};
 
 function dotVal(v){ if(!v||v==='-')return 0; return (v.split('🟢').length-1)+(v.split('🔴').length-1); }
-function sessionRated(s){const n=Number(s.OverallRating);return Number.isInteger(n)&&n>=1&&n<=5;}
+const LEGACY_RATING_CUTOFF=Date.parse('2026-08-21T17:34:17Z');
+const LEGACY_POSITIVE=['Relaxed','Creative','Focused','MotivatedLegacy','Social'];
+const LEGACY_NEGATIVE=['Anxious','Headache','Paranoid','Sleepy','Washed'];
+function sessionModernRated(s){const n=Number(s.OverallRating);return Number.isInteger(n)&&n>=1&&n<=5;}
+function sessionIsLegacy(s){const when=Date.parse(s.Date||'');return Number.isFinite(when)?when<LEGACY_RATING_CUTOFF:Object.prototype.hasOwnProperty.call(s,'MotivatedLegacy');}
+function sessionLegacyRated(s){return !sessionModernRated(s)&&sessionIsLegacy(s)&&LEGACY_POSITIVE.concat(LEGACY_NEGATIVE).some(key=>dotVal(s[key])>0);}
+function sessionRated(s){return sessionModernRated(s)||sessionLegacyRated(s);}
 function sessionHasEffects(s){return EFFECTS.concat(SIDE_EFFECTS).some(a=>s[a]!=null);}
 function sessionScore100(s){
-  if(!sessionRated(s))return null;
+  if(sessionLegacyRated(s)){
+    const positive=LEGACY_POSITIVE.reduce((sum,key)=>sum+dotVal(s[key]),0);
+    const negative=LEGACY_NEGATIVE.reduce((sum,key)=>sum+dotVal(s[key]),0);
+    return Math.max(0,Math.min(100,Math.round(50+(positive-negative)*5)));
+  }
+  if(!sessionModernRated(s))return null;
   const positive=EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
   const negative=SIDE_EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
   return Math.max(0,Math.min(100,Number(s.OverallRating)*20+(positive-negative)*0.5));
@@ -3820,7 +3828,7 @@ function renderTheLab(){
   }).join('');
   grid.querySelectorAll('[data-rat-expand]').forEach(button=>button.addEventListener('click',()=>{const card=button.closest('.ratCard'),open=!card.classList.contains('open');card.classList.toggle('open',open);button.setAttribute('aria-expanded',open?'true':'false');}));
   renderTasteMap(crew);
-  renderSpecimenBoard();
+  renderLabTests();
 }
 function countValues(values){const counts={};values.filter(Boolean).forEach(value=>counts[value]=(counts[value]||0)+1);return Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));}
 function intelRows(entries,colorFor,labelFor=effectLabel){
@@ -3835,11 +3843,19 @@ function renderTasteMap(crew){
   const ratSignals=crew.map(rat=>{const colors=ratColors(rat.name),signals=[rat.favoriteType,...rat.topEffects.slice(0,2)].filter(Boolean);return `<div class="intelRow ratSnapshot" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><span class="ratNamePill">${safeHtml(displayName(rat.name))}</span><div class="ratPills">${signals.length?signals.map(value=>`<span class="ratPill">${EFFECTS.includes(value)?(EFFECT_ICON[value]||'')+' ':''}${safeHtml(effectLabel(value))}</span>`).join(''):'<span class="ratPill empty">First session pending</span>'}</div><b>${rat.sessions}</b></div>`;}).join('')||'<div class="labEmpty">No personal taste signals yet.</div>';
   document.getElementById('tasteGrid').innerHTML=`<div class="intelCard"><h4>Favorite types</h4>${intelRows(countValues(rows.map(row=>row.batch.Type)),label=>typeColors[label]||'#63d374')}</div><div class="intelCard"><h4>Most-smoked brands</h4>${intelRows(countValues(rows.map(row=>row.batch.Brand)),(_,index)=>brandColors[index%brandColors.length])}</div><div class="intelCard"><h4>Strongest Effect signals</h4>${intelRows(effectEntries,()=> '#63d374',label=>(EFFECT_ICON[label]||'')+' '+effectLabel(label))}</div><div class="intelCard"><h4>Rat-by-rat snapshot</h4>${ratSignals}</div>`;
 }
-function renderSpecimenBoard(){
-  const groups={};
-  sessionSpecimens(RAW_SESSIONS).forEach(row=>{const key=row.strain.url;const group=groups[key]||(groups[key]={name:row.strain.Name,brand:row.batch.Brand,type:row.batch.Type,sessions:[],members:new Set()});group.sessions.push(row.session);memberNames(row.session).forEach(name=>group.members.add(name.toLowerCase()));});
-  const ranked=Object.values(groups).sort((a,b)=>b.sessions.length-a.sessions.length||a.name.localeCompare(b.name)).slice(0,14);
-  document.getElementById('specimenBoard').innerHTML=ranked.length?ranked.map(group=>{const stats=communityAggregate(group.sessions),typeClass=['Sativa','Hybrid','Indica'].includes(group.type)?' t-'+group.type:'';return `<div class="specimenRow${typeClass}"><div><h4>${safeHtml(group.name)}</h4><p>${safeHtml(group.brand||'Unknown brand')} · ${group.sessions.length} Session${group.sessions.length===1?'':'s'} · ${group.members.size} Rat${group.members.size===1?'':'s'}</p></div><div class="specimenScore"><small>Community</small>${stats.score==null?'—':scoreOutOf100(stats.score)+'/100'}</div></div>`;}).join(''):'<div class="labEmpty">The specimen shelf fills as Sessions are logged.</div>';
+function labTestDate(row,index){
+  const raw=row.session.Date||row.batch.Date;
+  if(!raw)return {stamp:0,label:`Earlier test #${index+1}`};
+  const date=new Date(raw),stamp=date.getTime();
+  return {stamp:Number.isFinite(stamp)?stamp:0,label:Number.isFinite(stamp)?new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',year:'numeric'}).format(date):String(raw)};
+}
+function renderLabTests(){
+  const rows=sessionSpecimens(RAW_SESSIONS).map((row,index)=>({...row,index,date:labTestDate(row,index)})).sort((a,b)=>b.date.stamp-a.date.stamp||b.index-a.index);
+  document.getElementById('labTestBoard').innerHTML=rows.length?rows.map(row=>{
+    const names=memberNames(row.session),rat=names[0]||'Cyrus',colors=ratColors(rat),score=sessionScore100(row.session),legacy=sessionLegacyRated(row.session);
+    const people=names.map(name=>displayName(name)).join(' + '),brand=row.batch.Brand||'Unknown brand';
+    return `<article class="labTestRow" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><div class="labTestAvatar"><img src="${memberIconFor(rat)}" alt=""></div><div class="labTestMain"><h4>${safeHtml(row.strain.Name)}</h4><div class="labTestMeta"><span>${safeHtml(brand)}</span><span>·</span><span>${safeHtml(row.date.label)}</span></div><div class="labTestSub"><span class="labTestRat">${safeHtml(people)}</span>${legacy?'<span class="labTestLegacy">Legacy result</span>':''}</div></div><div class="labTestScore${score==null?' unrated':''}"><small>Result</small>${score==null?'Unrated':Math.round(score)}</div></article>`;
+  }).join(''):'<div class="labEmpty">Lab Tests appear here as Sessions are logged.</div>';
 }
 function setLabTab(tab){document.querySelectorAll('[data-lab-tab]').forEach(button=>{const on=button.dataset.labTab===tab;button.classList.toggle('on',on);button.setAttribute('aria-selected',on?'true':'false');});document.querySelectorAll('[data-lab-panel]').forEach(panel=>panel.classList.toggle('on',panel.dataset.labPanel===tab));}
 function labHubIsOpen(){return document.getElementById('labHubOverlay').classList.contains('show');}
@@ -4495,7 +4511,7 @@ document.getElementById('labNoticeClose').addEventListener('click',closeLabNotic
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',e=>setNoticeOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 document.getElementById('menuTheLab').addEventListener('click',()=>openTheLab('crew'));
-document.getElementById('specimensBtn').addEventListener('click',()=>openTheLab('specimens'));
+document.getElementById('labDockBtn').addEventListener('click',()=>openTheLab('crew'));
 document.getElementById('labHubClose').addEventListener('click',closeTheLab);
 document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));

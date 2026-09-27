@@ -161,6 +161,8 @@ export default {
           Date:   dateStart(p, "Purchase Date"),
         })),
         sessions: sessionPages.map(p => ({
+          url:       p.id ? idToUrl(p.id) : null,
+          Date:      p.created_time || null,
           Batch:     relation(p, "\uD83C\uDF3E Batches"),
           Blazers:   multiSelect(p, "Blazers"),
           OverallRating: number(p, "Overall Rating"),
@@ -171,6 +173,7 @@ export default {
           Giggly:    select(p, "Giggly"),
           Energized: select(p, "Energized"),
           Relaxed:   select(p, "Relaxed"),
+          MotivatedLegacy: select(p, "Motivated"),
           CouchLocked: select(p, "Couch-Locked"),
           Sleepy:    select(p, "Sleepy"),
           Hungry:    select(p, "Hungry"),
