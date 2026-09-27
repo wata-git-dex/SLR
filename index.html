@@ -500,6 +500,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   .grid{grid-template-columns:repeat(3,1fr)}main{max-width:1180px}.actionDock{bottom:14px}
 }
 @media(min-width:760px){header.controls-collapsed{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto}.controls-collapsed .brandrow{grid-column:1;grid-row:1}.controls-collapsed .hstat{grid-column:2;grid-row:1}}
+@media(max-width:619px){.headerControls .typechips{gap:5px}.headerControls .chip.typechip{font-size:9.5px;padding:6px 8px}.headerControls .filterrow{gap:6px}.headerControls .filterbtn{padding:0 9px}}
 @media(max-width:340px){header{padding-left:max(10px,var(--safe-l));padding-right:max(10px,var(--safe-r))}.brandbox{padding:5px 8px 5px 5px}.brandicon{width:28px;height:28px}.wordmark{font-size:14px;white-space:nowrap}.hstat{gap:5px}.memberbar{gap:3px;padding:5px}.memberwho{max-width:66px;font-size:8px}.scoretoggle{gap:1px;padding:2px}.scoretoggle button{padding:5px 4px;font-size:7px}.memberbar .refresh{min-width:50px;padding:0 5px}.memberbar .refreshCount{font-size:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
@@ -577,7 +578,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .led.pos i{background:var(--positive)} .led.pos.hi i{box-shadow:0 0 6px var(--positive)}
 .led.neg i{background:var(--red)}
 .terps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;margin-top:8px;min-width:0}
-.terppill{display:block;min-width:0;overflow:hidden;text-overflow:clip;text-align:center;font-family:'Space Mono',monospace;font-size:6.6px;padding:3px 1px;border-radius:999px;border:1px solid;white-space:nowrap}
+.terppill{display:block;min-width:0;overflow:hidden;text-overflow:clip;text-align:center;font-family:'Space Mono',monospace;font-size:6.6px;padding:3px 1px;border-radius:999px;border:1px solid;white-space:nowrap;text-transform:uppercase;letter-spacing:.02em}
 .noterp{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.02em}
 .terps.emptyTerps{display:block}
 .grid.compactGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
@@ -1067,9 +1068,9 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.3.1';
+const APP_VERSION = 'v2.3.2';
 const LAB_NOTICE = {
-  id:'slr-v2.3.0', version:'Version 2.3.1', audience:'all',
+  id:'slr-v2.3.0', version:'Version 2.3.2', audience:'all',
   title:'Choose how you scan the shelf.',
   copy:'The familiar row view is still the default. You can now switch to a compact grid, open the specimen shelf directly, and see up to six terpene signals without changing any saved strain or Session data.',
   items:[
