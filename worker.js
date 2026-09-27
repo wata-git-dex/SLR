@@ -162,7 +162,7 @@ export default {
         })),
         sessions: sessionPages.map(p => ({
           url:       p.id ? idToUrl(p.id) : null,
-          Date:      p.created_time || null,
+          Date:      dateStart(p, "Date") || p.created_time || null,
           Batch:     relation(p, "\uD83C\uDF3E Batches"),
           Blazers:   multiSelect(p, "Blazers"),
           OverallRating: number(p, "Overall Rating"),
@@ -302,6 +302,7 @@ async function createSession(data, token, memberName) {
   const properties = {
     "🌾 Batches": { relation: [{ id: urlToId(data.batchUrl) }] },
     "Blazers": { multi_select: [{ name: memberName }] },
+    "Date": { date: { start: new Date().toISOString() } },
     "Euphoric":   { select: { name: effect(data.Euphoric) } },
     "Focused":    { select: { name: effect(data.Focused) } },
     "Creative":   { select: { name: effect(data.Creative) } },

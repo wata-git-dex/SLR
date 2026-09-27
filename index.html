@@ -1067,13 +1067,13 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.4.2';
+const APP_VERSION = 'v2.4.3';
 const LAB_NOTICE = {
   id:'slr-v2.4.0', version:'Version 2.4.0', audience:'all',
   title:'Every test now lives in The Lab.',
   copy:'The Lab now keeps an uncapped, newest-first record of every Blaze Session. Nothing was removed from your personal shelf, and older effect-based results are restored only when the original data supports them.',
   items:[
-    ['⚗','Lab shortcut','The bottom-left button now opens The Lab at the Crew view.'],
+    ['⚗','Lab shortcut','The bottom-left button now opens The Lab directly at Lab Tests.'],
     ['≋','Uncapped Lab Tests','Every individual Session appears separately with its strain, brand, Lab Rat, date and result.'],
     ['↺','Real legacy results','Older effect-based ratings are calculated from their original saved dots and clearly labeled. No ratings are invented.']
   ]
@@ -4509,7 +4509,7 @@ document.getElementById('labNoticeClose').addEventListener('click',closeLabNotic
 document.getElementById('labNoticeDone').addEventListener('click',closeLabNotice);
 document.getElementById('menuLabNotice').addEventListener('click',e=>setNoticeOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 document.getElementById('menuTheLab').addEventListener('click',()=>openTheLab('crew'));
-document.getElementById('labDockBtn').addEventListener('click',()=>openTheLab('crew'));
+document.getElementById('labDockBtn').addEventListener('click',()=>openTheLab('tests'));
 document.getElementById('labHubClose').addEventListener('click',closeTheLab);
 document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
