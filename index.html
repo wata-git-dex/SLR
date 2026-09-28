@@ -538,13 +538,12 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .brandpill{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--dim);background:var(--panel2);
   border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;letter-spacing:.02em}
 .thctext{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.02em}
-.score{flex:0 0 auto;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;
-  font-family:'Space Mono',monospace;font-weight:700;font-size:19px;line-height:1;border:1px solid var(--line2);position:relative}
+.score{flex:0 0 auto;min-width:52px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 9px;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:15px;line-height:1;border:1px solid var(--line2);position:relative}
+.score .ratingStar{font-size:15px;line-height:1}
 .score.s-hi{background:rgba(var(--positive-rgb),.14);color:var(--positive);border-color:rgba(var(--positive-rgb),.35)}
 .score.s-mid{background:rgba(230,178,76,.13);color:var(--amber);border-color:rgba(230,178,76,.33)}
 .score.s-lo{background:rgba(228,106,84,.13);color:var(--red);border-color:rgba(228,106,84,.33)}
-.score.s-na{color:var(--faint)}
-.score.s-na .q{font-size:17px}
 .unratedNote{color:var(--faint);font:9px/1.3 'Space Mono',monospace}
 
 .meta{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-width:0;padding:4px 3px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);text-align:center}
@@ -582,10 +581,10 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .noterp{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.02em}
 .terps.emptyTerps{display:block}
 .grid.compactGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.gridCard{padding:10px;display:flex;flex-direction:column;align-self:start;min-width:0}.gridCardIdentity{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:stretch;gap:8px}.gridCard .thumb{width:52px;height:52px;border-radius:11px}.gridIdentity{display:flex;flex-direction:column;justify-content:center;min-width:0}.gridName{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700;line-height:1.15}.gridBrand{display:block;margin-top:5px;padding-top:5px;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dim);font:6.8px/1.2 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em}.gridData{display:flex;flex-direction:column;min-height:0;margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}.gridInfo{display:flex;align-items:center;gap:5px;min-width:0}.gridInfo .tag.type{font-size:7px;padding:2px 4px}.gridInfo .thctext{margin-left:auto;font-size:7px;white-space:nowrap}.gridDataBottom{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;margin-top:8px}.gridCard .score{width:38px;height:38px;flex:0 0 auto;border-radius:10px;font-size:15px}.gridCard .score .q{font-size:14px}.terpDots{display:flex;align-items:center;gap:5px;min-width:0;padding-bottom:3px;min-height:9px}.terpDot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;box-shadow:0 0 5px currentColor}.terpDotsEmpty{max-width:64px;color:var(--faint);font:7px/1.25 'Space Mono',monospace}
+.gridCard{padding:10px;display:flex;flex-direction:column;align-self:start;min-width:0}.gridCardIdentity{display:grid;grid-template-columns:52px minmax(0,1fr);align-items:stretch;gap:8px}.gridCard .thumb{width:52px;height:52px;border-radius:11px}.gridIdentity{display:flex;flex-direction:column;justify-content:center;min-width:0}.gridName{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700;line-height:1.15}.gridBrand{display:block;margin-top:5px;padding-top:5px;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dim);font:6.8px/1.2 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em}.gridData{display:flex;flex-direction:column;min-height:0;margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}.gridInfo{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0}.gridInfoMeta{display:flex;align-items:center;gap:4px;min-width:0}.gridInfo .tag.type{font-size:7px;padding:2px 4px}.gridInfo .thctext{font-size:7px;white-space:nowrap}.gridDataBottom{display:flex;align-items:center;gap:3px;margin-top:8px}.gridEffects{display:flex;align-items:center;gap:2px;min-width:0}.gridEffects .efficon{width:17px;height:17px;border-radius:5px;font-size:8px}.gridCard .score{min-width:38px;height:27px;margin-left:auto;padding:0 6px;border-radius:8px;font-size:10px;gap:3px}.gridCard .score .ratingStar{font-size:10px}.terpDots{display:flex;align-items:center;gap:4px;min-width:0;min-height:9px}.terpDot{width:7px;height:7px;flex:0 0 auto;border-radius:50%;box-shadow:0 0 5px currentColor}.terpDotsEmpty{max-width:64px;color:var(--faint);font:7px/1.25 'Space Mono',monospace}
 @media(min-width:620px){.grid.compactGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(min-width:1050px){.grid.compactGrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media(max-width:340px){.gridCard{padding:8px}.gridCardIdentity{grid-template-columns:46px minmax(0,1fr);gap:6px}.gridCard .thumb{width:46px;height:46px}.gridCard .score{width:34px;height:34px;font-size:13px}.gridName{font-size:12px}.terpDots{gap:4px}.terpDot{width:6px;height:6px}}
+@media(max-width:340px){.gridCard{padding:8px}.gridCardIdentity{grid-template-columns:46px minmax(0,1fr);gap:6px}.gridCard .thumb{width:46px;height:46px}.gridInfo .tag.type{font-size:6px;padding:2px 3px}.gridInfo .thctext{font-size:6px}.gridCard .score{min-width:34px;height:25px;padding:0 4px;font-size:9px}.gridCard .score .ratingStar{font-size:9px}.gridName{font-size:12px}.terpDots{gap:3px}.terpDot{width:6px;height:6px}.gridEffects .efficon{width:15px;height:15px;font-size:7px}}
 
 .empty{text-align:center;color:var(--faint);padding:60px 20px;font-family:'Space Mono',monospace;font-size:13px}.empty h3{margin:0 0 8px;color:var(--text);font:700 18px 'Space Grotesk',sans-serif}.empty p{max-width:390px;margin:0 auto;color:var(--dim);font:10px/1.65 'Space Mono',monospace}.emptyAction{margin-top:16px;padding:10px 15px;border:1px solid rgba(var(--accent-rgb),.5);border-radius:999px;background:rgba(var(--accent-rgb),.1);color:var(--green);font:700 10px 'Space Mono',monospace;cursor:pointer}
 .shelfIntro{display:none;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(110deg,rgba(var(--accent-rgb),.08),var(--panel))}.shelfIntroCopy{min-width:0}.shelfIntroCopy b{display:block;font-size:12px}.shelfIntroCopy span{display:block;margin-top:2px;color:var(--dim);font:8.5px/1.4 'Space Mono',monospace}.shelfIntro button{flex:0 0 auto;padding:8px 10px;border:1px solid rgba(var(--accent-rgb),.42);border-radius:999px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:700 8.5px 'Space Mono',monospace;cursor:pointer}@media(max-width:370px){.shelfIntro{align-items:flex-start;flex-direction:column}.shelfIntro button{align-self:stretch}}
@@ -637,6 +636,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .bigscore .bar{height:8px;border-radius:5px;background:var(--panel2);overflow:hidden;margin-bottom:6px}
 .bigscore .fill{height:100%;border-radius:5px}
 .bigscore .lbl{font-size:11px;color:var(--dim);font-family:'Space Mono',monospace;line-height:1.5}
+.ratingPair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ratingPanel{min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:var(--panel)}.ratingPanel .k{color:var(--green);font:8px 'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase}.ratingPanel .ratingValue{display:flex;align-items:center;gap:6px;margin-top:6px;color:var(--green);font:700 22px/1 'Space Mono',monospace}.ratingPanel .ratingValue .ratingStar{font-size:22px}.ratingPanel .ratingContext{margin-top:7px;color:var(--faint);font:8px/1.4 'Space Mono',monospace}.ratingPanel.unrated .ratingValue{color:var(--faint);font-size:12px;line-height:1.25}.ratingPanel.unrated .ratingValue .ratingStar{display:none}
 
 .statgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
 .statgrid.two{grid-template-columns:1fr 1fr}
@@ -737,8 +737,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .log-toggle{width:auto;margin:0 auto;text-align:left;background:rgba(var(--accent-rgb),.10);border:1px solid rgba(var(--accent-rgb),.42);border-radius:999px;color:var(--green);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;padding:9px 14px;text-transform:uppercase;display:flex;align-items:center;gap:6px;box-shadow:0 0 14px rgba(var(--accent-rgb),.08)}
 .log-toggle:active{opacity:.7}
 .log-hint{font-size:10px;color:var(--faint);margin:2px 0 10px;font-family:'Space Mono',monospace;letter-spacing:.02em}
-.overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(230,178,76,.06);border:1px solid rgba(230,178,76,.28)}
-.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{min-width:0;padding:7px 2px 6px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);cursor:pointer}.overall-btn strong{display:block;font:700 14px 'Space Mono',monospace}.overall-btn span{display:block;margin-top:2px;font:700 7.5px/1 'Space Mono',monospace;white-space:nowrap}.overall-btn.on{color:var(--ink);background:var(--amber);border-color:var(--amber)}
+.overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(var(--accent-rgb),.06);border:1px solid rgba(var(--accent-rgb),.28)}
+.overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{min-width:0;height:48px;padding:0;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--faint);cursor:pointer;font-size:27px;line-height:1}.overall-btn.on{color:var(--green);background:rgba(var(--accent-rgb),.1);border-color:rgba(var(--accent-rgb),.58)}.overall-readout{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;color:var(--faint);font:9px 'Space Mono',monospace}.overall-readout b{color:var(--green)}.overall-clear{border:0;padding:4px 0;background:transparent;color:var(--dim);font:9px 'Space Mono',monospace;text-decoration:underline;cursor:pointer}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -828,7 +828,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="filterGroup"><div class="filterLabel">Country purchased</div><div class="filterChoices" id="filterCountryrow"></div></div>
     <div class="filterGroup"><div class="filterLabel">Brand</div><select id="brandFilter" class="filterSelect" onchange="filterBrand(this.value)"><option value="">All brands</option></select></div>
     <div class="filterGroup"><div class="filterLabel">Sort by</div><select id="sort" class="filterSelect">
-      <option value="smart">Best match</option><option value="score">Score: high to low</option><option value="thc">THC: high to low</option><option value="recent">Recently bought</option><option value="az">A–Z</option>
+      <option value="smart">Best match</option><option value="score">Rating: high to low</option><option value="thc">THC: high to low</option><option value="recent">Recently bought</option><option value="az">A–Z</option>
     </select></div>
   </div>
 </div>
@@ -967,7 +967,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
       <div class="profileStats">
         <div class="profileStat"><b id="profileStrains">0</b><span>strains tried</span></div>
         <div class="profileStat"><b id="profileSessions">0</b><span>sessions</span></div>
-        <div class="profileStat"><b id="profileRating">—</b><span>avg overall /100</span></div>
+        <div class="profileStat"><b id="profileRating">—</b><span>avg overall</span></div>
       </div>
       <div class="profileEffects" id="profileEffects"></div>
     </div>
@@ -1049,12 +1049,12 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 <div class="infoOverlay" id="infoOverlay">
   <div class="infoSheet">
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
-    <div class="infoBlock"><h3>Overall</h3><p>How much you liked the experience: 1 Bleh, 2 Okay, 3 Solid, 4 Great or 5 Fire. That choice sets the main score. Each green Effect dot then adds 0.5 points and each red Side Effect dot subtracts 0.5 points, capped from 0–100. If Overall is skipped, Effects are still saved but no score is created.</p></div>
-    <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. Effects aren’t automatically good or bad. One dot = noticeable. Two dots = strong.</p><div class="effectDefs">
-      <div class="effectDef"><span class="emoji">✨</span><b>Euphoric</b><span>Lifted, happy or unusually good mood.</span></div><div class="effectDef"><span class="emoji">🎯</span><b>Focused</b><span>Easier to concentrate or stay locked in.</span></div><div class="effectDef"><span class="emoji">🎨</span><b>Creative</b><span>Ideas, imagination or making things flowed.</span></div><div class="effectDef"><span class="emoji">🎉</span><b>Social</b><span>More talkative, open or comfortable with people.</span></div><div class="effectDef"><span class="emoji">😂</span><b>Giggly</b><span>Laughed more easily or found things funnier.</span></div><div class="effectDef"><span class="emoji">⚡</span><b>Energized</b><span>More alert, active or motivated to move.</span></div><div class="effectDef"><span class="emoji">🧘</span><b>Relaxed</b><span>Calm or loose without necessarily feeling sleepy.</span></div><div class="effectDef"><span class="emoji">🛋️</span><b>Couch-Locked</b><span>Heavy-bodied, planted or hard to get up.</span></div><div class="effectDef"><span class="emoji">😴</span><b>Sleepy</b><span>Drowsy or ready for sleep.</span></div><div class="effectDef"><span class="emoji">🍕</span><b>Hungry</b><span>More appetite or serious munchies.</span></div>
+    <div class="infoBlock"><h3>Overall</h3><p>Tap 1–5 stars for how you rate the strain. Overall is optional and stays separate from Effects and Side Effects. In My Score, the app shows your average star rating; Community balances each Lab Rat equally.</p></div>
+    <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. One dot = noticeable. Two dots = strong. These describe the experience and never change the Overall star rating.</p><div class="effectDefs">
+      <div class="effectDef"><span class="emoji">✨</span><b>Euphoric</b><span>Lifted, happy or unusually good mood.</span></div><div class="effectDef"><span class="emoji">🎯</span><b>Focused</b><span>Easier to concentrate or stay locked in.</span></div><div class="effectDef"><span class="emoji">🎨</span><b>Creative</b><span>Ideas, imagination or making things flowed.</span></div><div class="effectDef"><span class="emoji">🎉</span><b>Social</b><span>More talkative, open or comfortable with people.</span></div><div class="effectDef"><span class="emoji">😂</span><b>Giggly</b><span>Laughed more easily or found things funnier.</span></div><div class="effectDef"><span class="emoji">⚡</span><b>Energized</b><span>More alert, active or motivated to move.</span></div><div class="effectDef"><span class="emoji">🧘</span><b>Relaxed</b><span>Calm or loose without necessarily feeling sleepy.</span></div><div class="effectDef"><span class="emoji">🛋️</span><b>Couch-Locked</b><span>Heavy-bodied, planted or hard to get up.</span></div><div class="effectDef"><span class="emoji">🍕</span><b>Hungry</b><span>More appetite or serious munchies.</span></div>
     </div></div>
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity.</p><div class="effectDefs">
-      <div class="effectDef"><span class="emoji">😰</span><b>Anxious</b><span>Worried, tense or uncomfortable.</span></div><div class="effectDef"><span class="emoji">👀</span><b>Paranoid</b><span>Suspicious, unsafe-feeling or spiraling thoughts.</span></div><div class="effectDef"><span class="emoji">😶‍🌫️</span><b>Washed</b><span>Foggy, depleted, cooked or not useful.</span></div><div class="effectDef"><span class="emoji">💤</span><b>KO’d</b><span>Unexpectedly put to sleep or fully out.</span></div><div class="effectDef"><span class="emoji">💫</span><b>Dizzy</b><span>Lightheaded, spinning or unsteady.</span></div><div class="effectDef"><span class="emoji">🤕</span><b>Headache</b><span>Head pain or pressure.</span></div>
+      <div class="effectDef"><span class="emoji">😴</span><b>Sleepy</b><span>Drowsy or ready for sleep.</span></div><div class="effectDef"><span class="emoji">😰</span><b>Anxious</b><span>Worried, tense or uncomfortable.</span></div><div class="effectDef"><span class="emoji">👀</span><b>Paranoid</b><span>Suspicious, unsafe-feeling or spiraling thoughts.</span></div><div class="effectDef"><span class="emoji">😶‍🌫️</span><b>Washed</b><span>Foggy, depleted, cooked or not useful.</span></div><div class="effectDef"><span class="emoji">💤</span><b>KO’d</b><span>Unexpectedly put to sleep or fully out.</span></div><div class="effectDef"><span class="emoji">💫</span><b>Dizzy</b><span>Lightheaded, spinning or unsteady.</span></div><div class="effectDef"><span class="emoji">🤕</span><b>Headache</b><span>Head pain or pressure.</span></div>
     </div></div>
     <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
     <div class="infoVersion">SLR <span id="infoVersion"></span> · Saltyview Productions</div>
@@ -1067,15 +1067,15 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.4.3';
+const APP_VERSION = 'v2.5.0';
 const LAB_NOTICE = {
-  id:'slr-v2.4.0', version:'Version 2.4.0', audience:'all',
-  title:'Every test now lives in The Lab.',
-  copy:'The Lab now keeps an uncapped, newest-first record of every Blaze Session. Nothing was removed from your personal shelf, and older effect-based results are restored only when the original data supports them.',
+  id:'slr-v2.5.0', version:'Version 2.5.0', audience:'all',
+  title:'Overall ratings are now stars.',
+  copy:'The app keeps the same strains, sessions, Effects and Side Effects. Overall is now a clear 1–5 star opinion and no longer changes when effect dots are added.',
   items:[
-    ['⚗','Lab shortcut','The bottom-left button now opens The Lab directly at Lab Tests.'],
-    ['≋','Uncapped Lab Tests','Every individual Session appears separately with its strain, brand, Lab Rat, date and result.'],
-    ['↺','Real legacy results','Older effect-based ratings are calculated from their original saved dots and clearly labeled. No ratings are invented.']
+    ['★','One clear rating','Cards show one compact star and number; Blaze uses five tappable stars.'],
+    ['◎','Experience stays separate','Effects and Side Effects describe what happened without altering Overall.'],
+    ['≋','Nothing else moved','The Blaze flow, strain details, expandable header and Lab navigation stay where they were.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3105,8 +3105,8 @@ const DS = {
   sessions: "collection://1fa2f04b-41fe-4de5-bc28-9f3c432d1234"
 };
 
-const EFFECTS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Sleepy','Hungry'];
-const SIDE_EFFECTS=['Anxious','Paranoid','Washed','KnockedOut','Dizzy','Headache'];
+const EFFECTS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Hungry'];
+const SIDE_EFFECTS=['Sleepy','Anxious','Paranoid','Washed','KnockedOut','Dizzy','Headache'];
 const EFFECT_ICON = {
   Euphoric:  '✨',
   Creative:  '🎨',
@@ -3137,12 +3137,7 @@ function sessionIsLegacy(s){const when=Date.parse(s.Date||'');return Number.isFi
 function sessionLegacyRated(s){return !sessionModernRated(s)&&sessionIsLegacy(s)&&LEGACY_POSITIVE.concat(LEGACY_NEGATIVE).some(key=>dotVal(s[key])>0);}
 function sessionRated(s){return sessionModernRated(s);}
 function sessionHasEffects(s){return EFFECTS.concat(SIDE_EFFECTS).some(a=>s[a]!=null);}
-function sessionScore100(s){
-  if(!sessionModernRated(s))return null;
-  const positive=EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
-  const negative=SIDE_EFFECTS.reduce((sum,key)=>sum+dotVal(s[key]),0);
-  return Math.max(0,Math.min(100,Number(s.OverallRating)*20+(positive-negative)*0.5));
-}
+function sessionOverallRating(s){return sessionModernRated(s)?Number(s.OverallRating):null;}
 function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1); return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; }
 
 let CURRENT_MEMBER = '';
@@ -3155,11 +3150,11 @@ function memberNames(s){
 }
 function aggregateSessions(sessions){
   const rated=sessions.filter(sessionRated), effectSessions=sessions.filter(sessionHasEffects), effects={};
-  const scores100=rated.map(sessionScore100).filter(score=>score!=null);
+  const ratings=rated.map(sessionOverallRating).filter(score=>score!=null);
   effectSessions.forEach(s=>{
     EFFECTS.concat(SIDE_EFFECTS).forEach(a=>{const v=dotVal(s[a]); if(v>0) effects[a]=(effects[a]||0)+v;});
   });
-  return {score:scores100.length?(scores100.reduce((a,b)=>a+b,0)/scores100.length)/20:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
+  return {score:ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:null,effects,effect_samples:effectSessions.length,num_sessions:sessions.length,num_scored:rated.length};
 }
 function communityAggregate(sessions){
   const byMember={};
@@ -3290,7 +3285,7 @@ $('#filterOverlay').addEventListener('click',e=>{if(e.target.id==='filterOverlay
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFilters();});
 
 function scoreClass(v){if(v==null)return 's-na';if(v>=4)return 's-hi';if(v>=3)return 's-mid';return 's-lo';}
-function scoreOutOf100(v){return v==null?null:Math.round(Number(v)*20);}
+function formatRating(v){if(v==null)return null;const n=Math.round(Number(v)*10)/10;return Number.isInteger(n)?String(n):n.toFixed(1);}
 function thcLabel(s){return s.thc_avg==null?null:`${s.thc_avg}%`;}
 function topEffects(s,limit){const e=s.effects||{},max=Math.max(1,(s.effect_samples||0)*2);const arr=Object.keys(e).map(k=>({k,v:e[k],strength:Math.round(e[k]/max*100),pos:!SIDE_EFFECTS.includes(k)}));arr.sort((a,b)=>b.strength-a.strength);return limit?arr.slice(0,limit):arr;}
 function typeColor(t){return t==='Sativa'?'var(--sativa)':t==='Hybrid'?'var(--hybrid)':t==='Indica'?'var(--indica)':'var(--line2)';}
@@ -3404,8 +3399,15 @@ const TERP_ABBR={Terpinolene:'Terpin',Caryophyllene:'Caryo',Limonene:'Limon',Myr
 function terpAbbr(name){return TERP_ABBR[name]||String(name||'').slice(0,6);}
 
 function scoreTile(s){
-  const sc=s.score,scoreLabel=scoreOutOf100(sc);
-  return sc==null?`<div class="score s-na" aria-label="No overall score yet" title="No overall score yet"><span class="q">—</span></div>`:`<div class="score ${scoreClass(sc)}" aria-label="Score ${scoreLabel} out of 100" title="${scoreLabel} out of 100">${scoreLabel}</div>`;
+  const sc=s.score,scoreLabel=formatRating(sc);
+  return sc==null?'':`<div class="score ${scoreClass(sc)}" aria-label="Overall rating ${scoreLabel} out of 5" title="${scoreLabel} out of 5"><span class="ratingStar" aria-hidden="true">★</span><span>${scoreLabel}</span></div>`;
+}
+
+function cardEffects(s,limit=5){
+  const ranked=topEffects(s),positives=ranked.filter(effect=>effect.pos),negatives=ranked.filter(effect=>!effect.pos);
+  if(!ranked.length)return [];
+  if(negatives.length&&positives.length)return [...positives.slice(0,Math.max(0,limit-1)),negatives[0]].slice(0,limit);
+  return ranked.slice(0,limit);
 }
 
 function gridCardEl(s){
@@ -3415,7 +3417,9 @@ function gridCardEl(s){
   const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
   const thcText=thc?`<span class="thctext" style="color:${typeHex(s.type)}">THC ${thc}</span>`:'';
   const dots=s.terpenes&&s.terpenes.length?s.terpenes.slice(0,6).map(t=>{const color=terpColor(t);return `<span class="terpDot" style="color:${color};background:${color}" title="${t}" aria-label="${t}"></span>`;}).join(''):'<span class="terpDotsEmpty">No terpenes logged</span>';
-  c.innerHTML=`<div class="gridCardIdentity"><div class="thumb" style="background:linear-gradient(140deg,${typeColor(s.type)},#0d120e)">${thumbHTML(s,false)}</div><div class="gridIdentity"><span class="gridName">${s.name}</span><span class="gridBrand">${brand}</span></div></div><div class="gridData"><div class="gridInfo">${typeTag}${thcText}</div><div class="gridDataBottom"><div class="terpDots" aria-label="Terpenes">${dots}</div>${scoreTile(s)}</div></div>`;
+  const effects=cardEffects(s,5).map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
+  const score=scoreTile(s),bottom=effects||score?`<div class="gridDataBottom"><div class="gridEffects">${effects}</div>${score}</div>`:'';
+  c.innerHTML=`<div class="gridCardIdentity"><div class="thumb" style="background:linear-gradient(140deg,${typeColor(s.type)},#0d120e)">${thumbHTML(s,false)}</div><div class="gridIdentity"><span class="gridName">${s.name}</span><span class="gridBrand">${brand}</span></div></div><div class="gridData"><div class="gridInfo"><span class="gridInfoMeta">${typeTag}${thcText}</span><div class="terpDots" aria-label="Terpenes">${dots}</div></div>${bottom}</div>`;
   c.onclick=()=>openSheet(s);
   return c;
 }
@@ -3425,8 +3429,7 @@ function cardEl(s){
   c.className='card t-'+(s.type||'x');
   const thc=thcLabel(s), sc=s.score;
   const scoreHtml=scoreTile(s);
-  let strip=''; const ranked=topEffects(s), positives=ranked.filter(e=>e.pos), negatives=ranked.filter(e=>!e.pos);
-  const te=negatives.length?[...positives.slice(0,3),negatives[0]]:ranked.slice(0,4);
+  let strip=''; const te=cardEffects(s,4);
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
   let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,6).map(t=>{const c=terpColor(t);return `<span class="terppill" title="${t}" aria-label="${t}" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${terpAbbr(t)}</span>`;}).join('')}</div>`; else terps=`<div class="terps emptyTerps"><span class="noterp">no terpenes logged</span></div>`;
   const brandInline=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
@@ -3449,6 +3452,16 @@ function cardEl(s){
     ${footer}`;
   c.onclick=()=>openSheet(s);
   return c;
+}
+
+function ratingPanel(label,stats,community=false){
+  const rating=formatRating(stats&&stats.score);
+  if(rating==null){
+    const hasSessions=Boolean(stats&&stats.num_sessions);
+    return `<div class="ratingPanel unrated"><div class="k">${label}</div><div class="ratingValue">No rating yet</div><div class="ratingContext">${hasSessions?'Effects are still recorded.':'No rated sessions yet.'}</div></div>`;
+  }
+  const context=community?`${stats.num_members||0} Lab Rat${stats.num_members===1?'':'s'}`:`${stats.num_scored||0} rated session${stats.num_scored===1?'':'s'}`;
+  return `<div class="ratingPanel"><div class="k">${label}</div><div class="ratingValue"><span class="ratingStar" aria-hidden="true">★</span><span>${rating}</span></div><div class="ratingContext">${context}</div></div>`;
 }
 
 function navSheet(d){ const ni=currentIdx+d; if(ni>=0 && ni<viewList.length) openSheet(viewList[ni]); }
@@ -3512,21 +3525,8 @@ html+=`<div class="sect"><div class="statgrid two">
   }
   html+=`</div>`;
 
-  // Rating
-  html+=`<div class="sect"><h3>Rating</h3>`;
-  if(s.score!=null){
-    const cls=scoreClass(s.score);
-    const col=cls==='s-hi'?'var(--positive)':cls==='s-mid'?'var(--amber)':'var(--red)';
-    const scoreLabel=scoreOutOf100(s.score);
-    html+=`<div class="bigscore">
-      <div class="num" style="color:${col}">${scoreLabel}<small>/100</small></div>
-      <div class="meter"><div class="bar"><div class="fill" style="width:${s.score*20}%;background:${col}"></div></div>
-      <div class="lbl">${SCORE_VIEW==='community'?'balanced rating across '+s.num_members+' Rat'+(s.num_members===1?'':'s'):'your rating'}</div></div></div>`;
-  }else{
-    const msg = s.num_sessions>0?`Smoked ${s.num_sessions}× but no Overall rating logged yet. Effects still appear below.`:`No sessions logged for this one yet.`;
-    html+=`<div class="bigscore"><div class="meter"><div class="lbl" style="line-height:1.6">${msg}</div></div></div>`;
-  }
-  html+=`</div>`;
+  // Rating — Overall remains independent from Effects and Side Effects.
+  html+=`<div class="sect"><h3>Rating</h3><div class="ratingPair">${ratingPanel('My score',s.mine,false)}${ratingPanel('Community',s.community,true)}</div></div>`;
 
   // Lab Results: normalized frequency + intensity bars, without numeric clutter.
   const te=topEffects(s);
@@ -3747,7 +3747,7 @@ function renderProfile(){
   document.getElementById('profileName').textContent=displayName(name);
   document.getElementById('profileStrains').textContent=tried.length;
   document.getElementById('profileSessions').textContent=stats.num_sessions;
-  document.getElementById('profileRating').textContent=profileRating==null?'—':scoreOutOf100(profileRating);
+  document.getElementById('profileRating').textContent=profileRating==null?'—':`★ ${formatRating(profileRating)}`;
   const summary=document.getElementById('profileSummary');
   summary.textContent=favorites.length?'Top picks: '+favorites.map(s=>s.name).join(' · '):stats.num_sessions?'Keep logging Overall ratings to build your top picks.':'Your first Blaze session will start your personal history.';
   const effects=document.getElementById('profileEffects');
@@ -3790,7 +3790,7 @@ function memberLabStats(name){
   const topRated=Object.entries(byStrain).map(([strain,items])=>({strain,stats:aggregateSessions(items)})).filter(item=>item.stats.score!=null).sort((a,b)=>b.stats.score-a.stats.score||b.stats.num_sessions-a.stats.num_sessions).slice(0,3);
   const stats=aggregateSessions(sessions);
   const topEffects=Object.entries(stats.effects||{}).filter(([effect])=>EFFECTS.includes(effect)).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([effect])=>effect);
-  return {name,sessions:sessions.length,strains:distinct.size,points:sessions.length*10+distinct.size*5,average:stats.score==null?null:scoreOutOf100(stats.score),favoriteType:mode(rows.map(row=>row.batch.Type).filter(Boolean)),favoriteBrand:mode(rows.map(row=>row.batch.Brand).filter(Boolean)),mostLogged,topRated,topEffects};
+  return {name,sessions:sessions.length,strains:distinct.size,points:sessions.length*10+distinct.size*5,average:stats.score==null?null:formatRating(stats.score),favoriteType:mode(rows.map(row=>row.batch.Type).filter(Boolean)),favoriteBrand:mode(rows.map(row=>row.batch.Brand).filter(Boolean)),mostLogged,topRated,topEffects};
 }
 function ratColors(name){
   const known=RAT_IDENTITIES[name.toLowerCase()];if(known)return known;
@@ -3816,12 +3816,12 @@ function renderTheLab(){
   const pills=(values,accent=false)=>values.length?values.map(value=>`<span class="ratPill${accent?' accent':''}">${value}</span>`).join(''):'<span class="ratPill empty">Still testing</span>';
   grid.innerHTML=crew.map(rat=>{
     const colors=ratColors(rat.name),isYou=rat.name.toLowerCase()===CURRENT_MEMBER.trim().toLowerCase();
-    const rated=rat.topRated.map(item=>`${safeHtml(item.strain)} · ${scoreOutOf100(item.stats.score)}/100`);
+    const rated=rat.topRated.map(item=>`${safeHtml(item.strain)} · ★ ${formatRating(item.stats.score)}`);
     const logged=rat.mostLogged.map(safeHtml);
     const tastes=[rat.favoriteType,rat.favoriteBrand].filter(Boolean).map(safeHtml);
     const effects=rat.topEffects.map(effect=>`${EFFECT_ICON[effect]||''} ${safeHtml(effectLabel(effect))}`);
     const key=safeHtml(rat.name.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
-    return `<article class="ratCard${isYou?' you':''}" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><button class="ratSummary" type="button" data-rat-expand="${key}" aria-expanded="false"><div class="ratTop"><div class="ratAvatar${rat.name.toLowerCase()==='cyrus'?' cyrus':''}"><img src="${memberIconFor(rat.name)}" alt=""></div><div class="ratIdentity"><b>${safeHtml(displayName(rat.name))}${isYou?' · You':''}</b><span>${rat.sessions?'Active Lab Rat':'New Lab Rat · first experiment pending'}</span></div><div class="ratXp"><small>Lab XP</small>${rat.points}</div><span class="ratChevron" aria-hidden="true">⌄</span></div><div class="ratMetrics"><div class="ratMetric"><b>${rat.sessions}</b><span>Sessions</span></div><div class="ratMetric"><b>${rat.strains}</b><span>Strains</span></div><div class="ratMetric"><b>${rat.average==null?'—':rat.average}</b><span>Avg /100</span></div></div></button><div class="ratSignals"><div class="ratSignalsInner"><div class="ratSignal"><label>Reaches for</label><div class="ratPills">${pills(tastes,true)}</div></div><div class="ratSignal"><label>Top-rated tray</label><div class="ratPills">${rat.topRated.length?pills(rated):'<span class="ratPill empty">No Overall ratings yet</span>'}</div></div><div class="ratSignal"><label>Most logged strains</label><div class="ratPills">${rat.mostLogged.length?pills(logged):'<span class="ratPill empty">First experiment pending</span>'}</div></div><div class="ratSignal"><label>Common Effects</label><div class="ratPills">${pills(effects,true)}</div></div></div></div></article>`;
+    return `<article class="ratCard${isYou?' you':''}" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><button class="ratSummary" type="button" data-rat-expand="${key}" aria-expanded="false"><div class="ratTop"><div class="ratAvatar${rat.name.toLowerCase()==='cyrus'?' cyrus':''}"><img src="${memberIconFor(rat.name)}" alt=""></div><div class="ratIdentity"><b>${safeHtml(displayName(rat.name))}${isYou?' · You':''}</b><span>${rat.sessions?'Active Lab Rat':'New Lab Rat · first experiment pending'}</span></div><div class="ratXp"><small>Lab XP</small>${rat.points}</div><span class="ratChevron" aria-hidden="true">⌄</span></div><div class="ratMetrics"><div class="ratMetric"><b>${rat.sessions}</b><span>Sessions</span></div><div class="ratMetric"><b>${rat.strains}</b><span>Strains</span></div><div class="ratMetric"><b>${rat.average==null?'—':`★ ${rat.average}`}</b><span>Avg rating</span></div></div></button><div class="ratSignals"><div class="ratSignalsInner"><div class="ratSignal"><label>Reaches for</label><div class="ratPills">${pills(tastes,true)}</div></div><div class="ratSignal"><label>Top-rated tray</label><div class="ratPills">${rat.topRated.length?pills(rated):'<span class="ratPill empty">No Overall ratings yet</span>'}</div></div><div class="ratSignal"><label>Most logged strains</label><div class="ratPills">${rat.mostLogged.length?pills(logged):'<span class="ratPill empty">First experiment pending</span>'}</div></div><div class="ratSignal"><label>Common Effects</label><div class="ratPills">${pills(effects,true)}</div></div></div></div></article>`;
   }).join('');
   grid.querySelectorAll('[data-rat-expand]').forEach(button=>button.addEventListener('click',()=>{const card=button.closest('.ratCard'),open=!card.classList.contains('open');card.classList.toggle('open',open);button.setAttribute('aria-expanded',open?'true':'false');}));
   renderTasteMap(crew);
@@ -3849,10 +3849,10 @@ function labTestDate(row,index){
 function renderLabTests(){
   const rows=sessionSpecimens(RAW_SESSIONS).map((row,index)=>({...row,index,date:labTestDate(row,index)})).sort((a,b)=>b.date.stamp-a.date.stamp||b.index-a.index);
   document.getElementById('labTestBoard').innerHTML=rows.length?rows.map(row=>{
-    const names=memberNames(row.session),rat=names[0]||'Cyrus',primary=ratColors(rat),secondary=ratColors(names[1]||rat),colors=[primary[0],secondary[0]],score=sessionScore100(row.session),legacy=sessionLegacyRated(row.session);
+    const names=memberNames(row.session),rat=names[0]||'Cyrus',primary=ratColors(rat),secondary=ratColors(names[1]||rat),colors=[primary[0],secondary[0]],score=sessionOverallRating(row.session),legacy=sessionLegacyRated(row.session);
     const people=names.map(name=>displayName(name)).join(' + '),brand=row.batch.Brand||'Unknown brand';
     const avatars=names.slice(0,2).map(name=>`<div class="labTestAvatar"><img src="${memberIconFor(name)}" alt=""></div>`).join('');
-    return `<article class="labTestRow" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><div class="labTestAvatars">${avatars}</div><div class="labTestMain"><h4>${safeHtml(row.strain.Name)}</h4><div class="labTestMeta"><span>${safeHtml(brand)}</span><span>·</span><span>${safeHtml(row.date.label)}</span></div><div class="labTestSub"><span class="labTestRat">${safeHtml(people)}</span>${legacy?'<span class="labTestLegacy">Needs 1–5 review</span>':''}</div></div><div class="labTestScore${score==null?' unrated':''}"><small>Result</small>${score==null?'Unrated':Math.round(score)}</div></article>`;
+    return `<article class="labTestRow" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><div class="labTestAvatars">${avatars}</div><div class="labTestMain"><h4>${safeHtml(row.strain.Name)}</h4><div class="labTestMeta"><span>${safeHtml(brand)}</span><span>·</span><span>${safeHtml(row.date.label)}</span></div><div class="labTestSub"><span class="labTestRat">${safeHtml(people)}</span>${legacy?'<span class="labTestLegacy">Needs 1–5 review</span>':''}</div></div><div class="labTestScore${score==null?' unrated':''}"><small>Overall</small>${score==null?'Unrated':`★ ${formatRating(score)}`}</div></article>`;
   }).join(''):'<div class="labEmpty">Lab Tests appear here as Sessions are logged.</div>';
 }
 function setLabTab(tab){document.querySelectorAll('[data-lab-tab]').forEach(button=>{const on=button.dataset.labTab===tab;button.classList.toggle('on',on);button.setAttribute('aria-selected',on?'true':'false');});document.querySelectorAll('[data-lab-panel]').forEach(panel=>panel.classList.toggle('on',panel.dataset.labPanel===tab));}
@@ -3983,10 +3983,10 @@ const EFFS_POS = [
   {key:'Energized', emoji:'⚡', label:'Energized'},
   {key:'Relaxed', emoji:'🧘', label:'Relaxed'},
   {key:'CouchLocked', emoji:'🛋️', label:'Couch-Locked'},
-  {key:'Sleepy', emoji:'😴', label:'Sleepy'},
   {key:'Hungry', emoji:'🍕', label:'Hungry'},
 ];
 const EFFS_NEG = [
+  {key:'Sleepy', emoji:'😴', label:'Sleepy'},
   {key:'Anxious',  emoji:'😰', label:'Anxious'},
   {key:'Paranoid', emoji:'👀', label:'Paranoid'},
   {key:'Washed',   emoji:'😶‍🌫️', label:'Washed'},
@@ -4022,11 +4022,10 @@ function buildLogForm(s, preferredBrand='', preferredBatchUrl='') {
 
   h += '<div class="memberline">Logging this session as <b>' + safeHtml(displayName(CURRENT_MEMBER)) + '</b></div>';
 
-  h += '<div class="overall-box" id="overallRatingBox"><div class="eff-section-lbl" style="margin-top:0;color:var(--amber)">Overall rating — optional</div>';
-  h += '<div class="log-hint">Pick the closest vibe. Effects fine-tune the final score.</div><div class="overall-grid">';
-  const overallLabels={1:'Bleh',2:'Okay',3:'Solid',4:'Great',5:'Fire'};
-  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')"><strong>' + n + '</strong><span>' + overallLabels[n] + '</span></button>';});
-  h += '</div></div>';
+  h += '<div class="overall-box" id="overallRatingBox"><div class="eff-section-lbl" style="margin-top:0;color:var(--green)">Overall — optional</div>';
+  h += '<div class="log-hint">Tap 1–5 stars for how you rate the strain. Effects stay separate.</div><div class="overall-grid" aria-label="Overall star rating">';
+  [1,2,3,4,5].forEach(n=>{h += '<button class="overall-btn" data-rating="' + n + '" onclick="setOverall(' + n + ')" aria-label="' + n + ' star' + (n===1?'':'s') + '" aria-pressed="false">☆</button>';});
+  h += '</div><div class="overall-readout"><b id="overallRatingReadout">No overall rating</b><button class="overall-clear" type="button" onclick="clearOverall()">Clear rating</button></div></div>';
 
 h += '<div class="eff-group pos">';
 h += '<div class="eff-section-lbl">🟢 Effects — tap to rate</div>';
@@ -4059,7 +4058,15 @@ h += '<div class="eff-section-lbl">🔴 Side Effects — tap to rate</div>';
 
 function setOverall(n){
   logState.OverallRating = logState.OverallRating===n ? null : n;
-  document.querySelectorAll('.overall-btn').forEach(b=>b.classList.toggle('on',logState.OverallRating===Number(b.dataset.rating)));
+  syncOverallStars();
+}
+
+function clearOverall(){logState.OverallRating=null;syncOverallStars();}
+function syncOverallStars(){
+  const rating=Number(logState.OverallRating)||0;
+  document.querySelectorAll('.overall-btn').forEach(b=>{const on=Number(b.dataset.rating)<=rating;b.classList.toggle('on',on);b.textContent=on?'★':'☆';b.setAttribute('aria-pressed',on?'true':'false');});
+  const readout=document.getElementById('overallRatingReadout');
+  if(readout)readout.textContent=rating?`${rating} of 5`:'No overall rating';
 }
 
 function selectLogBatch(el) {
@@ -4109,7 +4116,8 @@ async function submitSession() {
     Giggly:    logState.Giggly,
     Energized: logState.Energized,
     CouchLocked: logState.CouchLocked,
-    Sleepy:    logState.Sleepy,
+    // Keep the existing Notion Sleepy select options while presenting it as a Side Effect in the app.
+    Sleepy:    logState.Sleepy==='🔴🔴'?'🟢🟢':logState.Sleepy==='🔴'?'🟢':logState.Sleepy,
     Hungry:    logState.Hungry,
     Anxious:   logState.Anxious,
     Paranoid:  logState.Paranoid,
