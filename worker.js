@@ -98,6 +98,16 @@ export default {
           });
         }
 
+        if (data.kind === "historical-rating") {
+          if (member.name.trim().toLowerCase() !== "cyrus") {
+            return jsonError("Only Cyrus can review historical ratings.", 403, cors);
+          }
+          const updated = await updateHistoricalSessionRating(data, env.NOTION_TOKEN);
+          return new Response(JSON.stringify({ ok: true, viewer: member.name, ...updated }), {
+            headers: { ...cors, "Content-Type": "application/json" },
+          });
+        }
+
         await createSession(data, env.NOTION_TOKEN, member.name);
         return new Response(JSON.stringify({ ok: true, viewer: member.name }), {
           headers: { ...cors, "Content-Type": "application/json" },
@@ -337,6 +347,41 @@ async function createSession(data, token, memberName) {
 
   if (!r.ok) throw new Error("Notion write " + r.status + ": " + (await r.text()).slice(0, 200));
   return await r.json();
+}
+
+// ---- Apply one reviewed Overall rating to an existing historical Session ----
+// The rating belongs to the Session itself. A shared Cyrus + Amber Session stays
+// one record, so the same rating appears on both profiles without duplication.
+async function updateHistoricalSessionRating(data, token) {
+  const sessionId = urlToPageId(String(data.sessionUrl || ""));
+  const overall = data.OverallRating == null || data.OverallRating === "" ? null : Number(data.OverallRating);
+  if (overall != null && (!Number.isInteger(overall) || overall < 1 || overall > 5)) {
+    throw new Error("Overall Rating must be a whole number from 1 to 5");
+  }
+
+  const sessionPages = await queryAll(DS.sessions, token);
+  const session = sessionPages.find(page => String(page.id).replace(/-/g, "") === sessionId.replace(/-/g, ""));
+  if (!session) throw new Error("Historical Session not found");
+
+  const response = await fetch(`https://api.notion.com/v1/pages/${sessionId}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Notion-Version": NOTION_VERSION,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ properties: { "Overall Rating": { number: overall } } }),
+  });
+  if (!response.ok) {
+    throw new Error("Notion historical rating update " + response.status + ": " + (await response.text()).slice(0, 200));
+  }
+
+  return {
+    sessionUrl: idToUrl(session.id),
+    OverallRating: overall,
+    Blazers: multiSelect(session, "Blazers"),
+    Date: dateStart(session, "Date") || session.created_time || null,
+  };
 }
 
 // ---- Notion query with pagination ----
