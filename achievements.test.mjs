@@ -36,7 +36,13 @@ assert.equal(byId['couch-culture'].earned,true);
 assert.equal(byId['super-dosed'].earned,true);
 assert.equal(byId['lab-contributor'].earned,false);
 assert.equal(byId['lab-contributor'].unavailable,true);
+assert.equal(byId['deep-archive'].earned,false);
+assert.equal(byId['star-stash'].value,1,'five-star milestones count distinct strains, not duplicate Sessions');
+assert.equal(byId['rat-recruiter'].earned,false,'referrals require deliberate attribution');
 assert.equal(result.activityXp,150,'activity XP remains 10/session + 5/distinct strain');
+
+const credited=engine.calculateMember({sessions,trackedTerpenes:[],referrals:{cyrus:1}},'Cyrus');
+assert.equal(credited.achievements.find(item=>item.id==='rat-recruiter').earned,true,'manual referral attribution unlocks Rat Recruiter');
 
 const amber=engine.calculateMember({sessions,trackedTerpenes:[]},'Amber');
 assert.equal(amber.metrics.sessions,1,'joint historical Session credits both Rats');
