@@ -740,6 +740,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .overall-box{padding:11px;margin-bottom:10px;border-radius:12px;background:rgba(var(--accent-rgb),.06);border:1px solid rgba(var(--accent-rgb),.28)}
 .overall-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.overall-btn{min-width:0;height:48px;padding:0;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--faint);cursor:pointer;font-size:27px;line-height:1}.overall-btn.on{color:var(--green);background:rgba(var(--accent-rgb),.1);border-color:rgba(var(--accent-rgb),.58)}.overall-readout{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;color:var(--faint);font:9px 'Space Mono',monospace}.overall-readout b{color:var(--green)}.overall-clear{border:0;padding:4px 0;background:transparent;color:var(--dim);font:9px 'Space Mono',monospace;text-decoration:underline;cursor:pointer}
 </style>
+<link rel="stylesheet" href="my-lab-preview.css">
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
   <img id="lightboxImg" src="" alt="">
@@ -811,8 +812,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
       <div><div class="blazeTitle">Ready to <b>Blaze?</b></div><div class="blazeSub">Pick what you have, then log the session.</div></div>
       <button class="blazeClose" id="blazeClose" aria-label="Close Blaze">✕</button>
     </div>
-    <div class="blazeField"><div class="blazeLabel">1 · Brand</div><select class="blazeSelect" id="blazeBrand"><option value="">— pick a brand —</option></select></div>
-    <div class="blazeField"><div class="blazeLabel">2 · Strain</div><select class="blazeSelect" id="blazeStrain" disabled><option value="">— pick a brand first —</option></select></div>
+    <div class="blazeField"><div class="blazeLabel">1 · Strain</div><select class="blazeSelect" id="blazeStrain"><option value="">— pick a strain —</option></select></div>
+    <div class="blazeField"><div class="blazeLabel">2 · Brand</div><select class="blazeSelect" id="blazeBrand" disabled><option value="">— pick a strain first —</option></select></div>
     <button class="blazeContinue" id="blazeContinue" disabled>Continue to Blaze</button>
     <div class="blazeOr">or</div>
     <button class="blazeNew" id="blazeNew">＋ Add a new strain & Blaze</button>
@@ -880,9 +881,9 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="asLbl">Photo <span style="text-transform:none;letter-spacing:0">(optional)</span></div>
     <div class="photoPick">
       <div class="photoPreview" id="asPhotoPreview">📷</div>
-      <div class="photoPickText"><b id="asPhotoName">No photo selected</b><span>Add one now or later from Edit strain.</span></div>
-      <button class="photoChoose" id="asPhotoChoose" type="button">Choose</button>
-      <input id="asPhotoInput" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" hidden>
+      <div class="photoPickText"><b id="asPhotoName">No photo selected</b><span>Choose one from this device now, or add it later.</span></div>
+      <button class="photoChoose" id="asPhotoChoose" type="button">Choose from device</button>
+      <input id="asPhotoInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
     </div>
 
     <div class="asLbl">Member</div>
@@ -905,9 +906,9 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <div class="asLbl">Strain photo</div>
     <div class="photoPick">
       <div class="photoPreview" id="editPhotoPreview">📷</div>
-      <div class="photoPickText"><b id="editPhotoName">Choose a photo</b><span>JPEG, PNG or WebP. SLR will resize it for you.</span></div>
-      <button class="photoChoose" id="editPhotoChoose" type="button">Choose</button>
-      <input id="editPhotoInput" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" hidden>
+      <div class="photoPickText"><b id="editPhotoName">Choose a photo</b><span>Upload from this device. JPEG, PNG or WebP; SLR resizes it for you.</span></div>
+      <button class="photoChoose" id="editPhotoChoose" type="button">Choose from device</button>
+      <input id="editPhotoInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
     </div>
     <div class="asHint" id="editPhotoHint"></div>
     <div class="photoActions">
@@ -1065,6 +1066,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 <div class="sheet" id="sheet"><div class="grip" id="sheetGrip" role="button" tabindex="0" aria-label="Drag up to expand or down to close"></div><div id="sheetContent"></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 const APP_VERSION = 'v2.5.0';
@@ -4163,28 +4165,35 @@ async function submitSession() {
 function filterBrand(val){activeBrand=val;syncChips();render();}
 
 /* ================= BLAZE LAUNCHER ================= */
-const BLAZE={brand:'',strainUrl:''};
+const BLAZE={brand:'',strainUrl:'',availableBrands:[]};
 
-function fillBlazeBrands(){
+function fillBlazeBrands(strainUrl){
   const sel=document.getElementById('blazeBrand');
-  const brands=[...new Set(RAW_BATCHES.map(b=>b.Brand).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  sel.replaceChildren(new Option('— pick a brand —',''),...brands.map(b=>new Option(b,b)));
+  const raw=RAW_STRAINS.find(strain=>strain.url===strainUrl);
+  const batchUrls=new Set(parseArr(raw?.Batches));
+  const brands=[...new Set(RAW_BATCHES.filter(batch=>batchUrls.has(batch.url)).map(batch=>batch.Brand).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  BLAZE.availableBrands=brands;
+  sel.replaceChildren(new Option(strainUrl?'— pick a brand —':'— pick a strain first —',''),...brands.map(brand=>new Option(brand,brand)));
+  sel.disabled=!strainUrl||!brands.length;
+  BLAZE.brand=brands.length===1?brands[0]:'';
+  sel.value=BLAZE.brand;
+  syncBlazeContinue();
 }
-function fillBlazeStrains(brand){
+function fillBlazeStrains(){
   const sel=document.getElementById('blazeStrain');
-  const strains=STRAINS.filter(s=>(s.brands||[]).some(b=>b.toLowerCase()===brand.toLowerCase())).sort((a,b)=>a.name.localeCompare(b.name));
-  sel.replaceChildren(new Option(brand?'— pick a strain —':'— pick a brand first —',''),...strains.map(s=>new Option(s.name,s.url)));
-  sel.disabled=!brand;
+  const strains=[...STRAINS].sort((a,b)=>a.name.localeCompare(b.name));
+  sel.replaceChildren(new Option('— pick a strain —',''),...strains.map(s=>new Option(s.name,s.url)));
+  sel.disabled=false;
   BLAZE.strainUrl='';
-  document.getElementById('blazeContinue').disabled=true;
+  fillBlazeBrands('');
 }
+function syncBlazeContinue(){document.getElementById('blazeContinue').disabled=!BLAZE.strainUrl||(BLAZE.availableBrands.length>1&&!BLAZE.brand);}
 function blazeOpen(){
   closeDockSearch();
   closeSheet(); closeFilters(); closeMenu(); closeRatingsInfo(); asClose();
   BLAZE.brand=''; BLAZE.strainUrl='';
-  fillBlazeBrands();
-  document.getElementById('blazeBrand').value='';
-  fillBlazeStrains('');
+  fillBlazeStrains();
+  document.getElementById('blazeStrain').value='';
   document.getElementById('blazeOverlay').classList.add('show');
   document.body.style.overflow='hidden';
 }
@@ -4206,8 +4215,8 @@ function openBlazeForStrain(strain,brand='',batchUrl=''){
 document.getElementById('blazeFab').addEventListener('click',blazeOpen);
 document.getElementById('blazeClose').addEventListener('click',blazeClose);
 document.getElementById('blazeOverlay').addEventListener('click',e=>{if(e.target.id==='blazeOverlay')blazeClose();});
-document.getElementById('blazeBrand').addEventListener('change',e=>{BLAZE.brand=e.target.value;fillBlazeStrains(BLAZE.brand);});
-document.getElementById('blazeStrain').addEventListener('change',e=>{BLAZE.strainUrl=e.target.value;document.getElementById('blazeContinue').disabled=!BLAZE.strainUrl;});
+document.getElementById('blazeStrain').addEventListener('change',e=>{BLAZE.strainUrl=e.target.value;fillBlazeBrands(BLAZE.strainUrl);});
+document.getElementById('blazeBrand').addEventListener('change',e=>{BLAZE.brand=e.target.value;syncBlazeContinue();});
 document.getElementById('blazeContinue').addEventListener('click',()=>openBlazeForStrain(STRAINS.find(s=>s.url===BLAZE.strainUrl),BLAZE.brand));
 document.getElementById('blazeNew').addEventListener('click',()=>{blazeClose();asOpen('blaze');});
 
@@ -4565,5 +4574,6 @@ syncCardViewButton();
 buildChips(); render();
 showCheckingGate();refresh(true);
 </script>
+<script src="my-lab-preview.js"></script>
 </body>
 </html>
