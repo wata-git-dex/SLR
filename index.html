@@ -658,6 +658,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 .terpchips{display:flex;flex-wrap:wrap;gap:6px}
 .terpchip{font-family:'Space Mono',monospace;font-size:11px;padding:5px 10px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);color:var(--dim)}
+.detailChemistryGrid{display:grid;grid-template-columns:minmax(184px,210px) minmax(0,1fr);align-items:stretch;gap:10px}.detailChemistryStats{height:100%}.detailChemistryStats .stat{min-height:70px;box-sizing:border-box}.detailTerpenes{min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}.detailTerpenes h3{margin-bottom:9px}.detailTerpenes .terpchip{font-size:9px;padding:4px 7px}
+@media(max-width:430px){.detailChemistryGrid{grid-template-columns:1fr}.detailChemistryStats .stat{min-height:76px}.detailTerpenes{padding:0;border:0;background:transparent}.detailTerpenes h3{margin:0 0 11px}.detailTerpenes .terpchip{font-size:10px;padding:5px 9px}}
 .hint{font-size:11px;color:var(--faint);font-family:'Space Mono',monospace;line-height:1.6}
 .footnote{text-align:center;color:var(--faint);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.03em;padding:8px 20px 0;line-height:1.7}
 .footnote b{color:var(--green-soft);font-weight:400}
@@ -3509,14 +3511,11 @@ let html=`
 </div>
 <div class="s">`;
  
-  // Type / THC
-html+=`<div class="sect"><div class="statgrid two">
+  // Compact chemistry row: Type and THC stay concise while Terpenes use the remaining width.
+html+=`<div class="sect detailChemistry"><div class="detailChemistryGrid"><div class="statgrid two detailChemistryStats">
     <div class="stat typeStat"><div class="k">Type</div><span class="chip typechip ${tcode}">${s.type||'—'}</span></div>
     <div class="stat"><div class="k">THC</div><div class="v" style="color:${typeHex(s.type)};margin-top:4px">${thc||'—'}</div></div>
-  </div></div>`;
-
-  // Terpenes
-  html+=`<div class="sect"><h3>Terpenes</h3>`;
+  </div><div class="detailTerpenes"><h3>Terpenes</h3>`;
   if(s.terpenes&&s.terpenes.length){
     html+=`<div class="terpchips">`+s.terpenes.map(t=>{
       const c=terpColor(t);
@@ -3525,7 +3524,7 @@ html+=`<div class="sect"><div class="statgrid two">
   } else {
     html+=`<div class="hint">No terpenes logged.</div>`;
   }
-  html+=`</div>`;
+  html+=`</div></div></div>`;
 
   // Rating — Overall remains independent from Effects and Side Effects.
   html+=`<div class="sect"><h3>Rating</h3><div class="ratingPair">${ratingPanel('My score',s.mine,false)}${ratingPanel('Community',s.community,true)}</div></div>`;

@@ -6,6 +6,44 @@
   if(!engine)return;
   let badgeView='collection';
 
+  const confirmedBadgeSlots={
+    'first-sesh':[0,0],
+    'five-deep':[1,0],
+    'double-digits':[2,0],
+    'lab-regular':[3,0],
+    'five-star-find':[0,1],
+    'variety-pack':[1,1],
+    'terp-nerd':[2,1],
+    'guinea-pig':[3,1],
+    'shared-specimen':[0,2],
+    'lab-contributor':[1,2],
+    'couch-culture':[2,2],
+    'unknown-specimen':[3,2]
+  };
+  const supplementalBadgeSlots={
+    'specimen-shelf':[0,0],
+    'long-term-study':[1,0],
+    'fifty-experiments':[2,0],
+    'full-spectrum':[3,0],
+    'brand-hopper':[4,0],
+    'complete-observation':[0,1],
+    'high-voltage':[1,1],
+    'dreamwalker':[2,1],
+    'best-of-both':[3,1],
+    'super-dosed':[4,1],
+    'deep-archive':[0,2],
+    'century-study':[1,2],
+    'star-stash':[2,2],
+    'brand-passport':[3,2],
+    'peer-review':[4,2],
+    'complete-dossier':[0,3],
+    'sativa-specialist':[1,3],
+    'indica-specialist':[2,3],
+    'hybrid-specialist':[3,3],
+    'rat-recruiter':[4,3]
+  };
+  const badgeAssetIds=new Set([...Object.keys(confirmedBadgeSlots),...Object.keys(supplementalBadgeSlots)]);
+
   const badgeArt={
     rat:'<path d="M9 12C6 6 2 7 3 12c.4 2 2 3 4 3m16-3c3-6 7-5 6 0-.4 2-2 3-4 3M8 14c1-5 4-8 8-8s7 3 8 8l1 6c-1 6-5 9-9 9s-8-3-9-9l1-6Z"/><path d="m11 18 2 1m8-1-2 1m-5 4 2 1 2-1m-2 1v3M7 22l6 1m12-1-6 1"/>',
     fiveLeaves:'<path d="M16 26V11m0 5c-5-1-8-5-8-9 5 0 8 3 8 7m0 6c5-1 8-5 8-9-5 0-8 3-8 7M11 25h10"/><path d="M6 20c-3-2-4-5-3-8 4 1 6 4 6 7m14 1c3-2 4-5 3-8-4 1-6 4-6 7"/>',
@@ -44,7 +82,11 @@
     if(item.secret&&!item.earned)return '<span class="badgeSecretMark">?</span>';
     return `<svg viewBox="0 0 32 32" aria-hidden="true">${badgeArt[item.art]||badgeArt.rat}</svg>`;
   }
-  function coin(item){const progress=item.earned?100:Math.round((Number(item.progress)||0)*100);return `<div class="badgeCoin" style="--coin:${item.color};--progress:${progress}">${svgFor(item)}</div>`;}
+  function coin(item){
+    const progress=item.earned?100:Math.round((Number(item.progress)||0)*100);
+    if(badgeAssetIds.has(item.id))return `<div class="badgeCoin badgeCoinArt" style="--coin:${item.color};--progress:${progress}"><img class="badgeSprite" src="assets/badges/${item.id}.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>`;
+    return `<div class="badgeCoin" style="--coin:${item.color};--progress:${progress}">${svgFor(item)}</div>`;
+  }
   function normalizeContext(){
     const batches=new Map(RAW_BATCHES.map(batch=>[batch.url,batch]));
     const strains=new Map(RAW_STRAINS.map(strain=>[strain.url,strain]));
@@ -75,29 +117,43 @@
     return {sessions,trackedTerpenes:tracked};
   }
   function currentProgress(){return engine.calculateMember(normalizeContext(),CURRENT_MEMBER||'Cyrus');}
+  function orderedAchievements(items){
+    return items.map((item,index)=>({...item,_catalogIndex:index})).sort((a,b)=>{
+      const group=item=>item.earned?2:(item.unavailable||item.secret)?1:0;
+      const groupDiff=group(a)-group(b);if(groupDiff)return groupDiff;
+      if(group(a)===0){const progressDiff=b.progress-a.progress;if(progressDiff)return progressDiff;const remainingDiff=(a.threshold-a.value)-(b.threshold-b.value);if(remainingDiff)return remainingDiff;}
+      return a._catalogIndex-b._catalogIndex;
+    });
+  }
   function buildShell(){
-    const overlay=document.createElement('div');
-    overlay.className='myLabOverlay';overlay.id='myLabOverlay';
-    overlay.innerHTML=`<section class="myLabPage" role="dialog" aria-modal="true" aria-labelledby="myLabHeading"><header class="myLabHead"><div class="myLabHeadMark"><img id="myLabHeadIcon" alt=""></div><div class="myLabHeadCopy"><h2 id="myLabHeading">My Lab</h2><p>Identity · progress · artifacts</p></div><button class="myLabClose" id="myLabClose" aria-label="Close My Lab">✕</button></header><main class="myLabBody" id="myLabBody"></main></section>`;
-    document.body.append(overlay);
+    const tabs=document.querySelector('.labTabs');
+    const mineTab=document.createElement('button');mineTab.className='labTab';mineTab.dataset.labTab='mine';mineTab.setAttribute('role','tab');mineTab.setAttribute('aria-selected','false');mineTab.textContent='My Lab';tabs.append(mineTab);
+    const minePanel=document.createElement('div');minePanel.className='labPanel myLabPanel';minePanel.dataset.labPanel='mine';minePanel.innerHTML='<div class="labSectionHead"><h3>My Lab</h3><span>Private progress · only visible to you.</span></div><main class="myLabBody" id="myLabBody"></main>';document.querySelector('.labHubBody').append(minePanel);
     const detail=document.createElement('div');detail.className='badgeDetailOverlay';detail.id='badgeDetailOverlay';detail.innerHTML='<div class="badgeDetail" id="badgeDetail"></div>';document.body.append(detail);
-    overlay.querySelector('#myLabClose').addEventListener('click',closeMyLab);
     detail.addEventListener('click',event=>{if(event.target===detail||event.target.closest('[data-close-badge]'))closeBadgeDetail();});
-    const profile=document.querySelector('.profileCard');
-    const button=document.createElement('button');button.className='menuItem myLabPreviewBtn';button.id='menuMyLabPreview';button.innerHTML='<span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c.6-5 3-8 7-8s6.4 3 7 8M4 4h3M17 4h3"/></svg></span><span class="menuCopy"><b>Open My Lab</b><span>Your level, XP and Badge Case · preview</span></span><span class="menuArrow">›</span>';
-    profile.insertAdjacentElement('afterend',button);button.addEventListener('click',openMyLab);
+    document.querySelector('.profileCard').nextElementSibling.textContent='The Lab';
+    document.getElementById('menuTitle').textContent='Lab & Help';
+    const button=document.createElement('button');button.className='menuItem myLabPreviewBtn';button.id='menuMyLabPreview';button.innerHTML='<span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c.6-5 3-8 7-8s6.4 3 7 8M4 4h3M17 4h3"/></svg></span><span class="menuCopy"><b>My Lab</b><span>Your private level, XP and Badge Case</span></span><span class="menuArrow">›</span>';
+    document.getElementById('menuTheLab').insertAdjacentElement('afterend',button);button.addEventListener('click',openMyLab);
+    mineTab.addEventListener('click',()=>{renderMyLab();setLabTab('mine');});
+    document.getElementById('menuTheLab').addEventListener('click',()=>requestAnimationFrame(addPersonalLabLink));
+    document.getElementById('labDockBtn').addEventListener('click',()=>requestAnimationFrame(addPersonalLabLink));
+  }
+  function addPersonalLabLink(){
+    const inner=document.querySelector('.ratCard.you .ratSignalsInner');if(!inner||inner.querySelector('.ratMyLabLink'))return;
+    const button=document.createElement('button');button.className='ratMyLabLink';button.innerHTML='<span>My Lab</span><b>›</b>';button.addEventListener('click',()=>{renderMyLab();setLabTab('mine');});inner.append(button);
   }
   function renderMyLab(){
     const result=currentProgress(),earned=result.earned.length,total=result.achievements.filter(item=>!item.disabled).length,level=result.level;
     const avatar=memberIconFor(CURRENT_MEMBER||'Cyrus');
-    document.getElementById('myLabHeadIcon').src=avatar;
-    const badgeButtons=result.achievements.map(item=>{
+    const ordered=orderedAchievements(result.achievements);
+    const badgeButtons=ordered.map(item=>{
       const state=item.earned?'earned':item.secret?'secret':'locked';
       const accessible=item.secret&&!item.earned?'Hidden achievement':item.name;
       const progress=item.earned?'':item.unavailable?'<span class="badgeItemMeta">Not tracked</span>':item.secret?'<span class="badgeItemMeta">Secret</span>':`<span class="badgeItemMeta">${Math.min(item.value,item.threshold)} / ${item.threshold}</span>`;
       return `<button class="badgeItem ${state}" data-badge-id="${item.id}" aria-label="${safeHtml(accessible)}">${coin(item)}<span class="badgeName">${safeHtml(item.secret&&!item.earned?'Unknown':item.name)}</span>${progress}</button>`;
     }).join('');
-    const badgeRows=result.achievements.map(item=>{
+    const badgeRows=ordered.map(item=>{
       const hidden=item.secret&&!item.earned;
       const state=item.earned?'earned':item.secret?'secret':'locked';
       const name=hidden?'Unknown Specimen':item.name;
@@ -118,15 +174,16 @@
     const hidden=item.secret&&!item.earned;
     const state=item.earned?'Earned':item.unavailable?'Not available yet':hidden?'Secret specimen':'Still testing';
     const copy=hidden?'The Lab is keeping this one under wraps.':item.description;
-    const progress=item.unavailable?(item.unavailableReason||'Not available yet.'):item.earned?`Unlocked · +${item.xp} XP`:`${Math.min(item.value,item.threshold)} of ${item.threshold} complete · +${item.xp} XP when earned`;
+    const progress=item.unavailable?(item.unavailableReason||'Not available yet.'):item.earned?'Unlocked':`${Math.min(item.value,item.threshold)} of ${item.threshold} complete`;
     const meter=!item.earned&&!item.unavailable&&!hidden?`<div class="badgeDetailMeter"><i style="width:${Math.round(item.progress*100)}%"></i></div>`:'';
-    document.getElementById('badgeDetail').innerHTML=`<button class="badgeDetailX" data-close-badge aria-label="Close badge detail">✕</button>${coin(item)}<h3>${safeHtml(hidden?'Unknown Specimen':item.name)}</h3><div class="badgeDetailState">${safeHtml(state)}</div><p>${safeHtml(copy)}</p>${meter}<div class="badgeDetailProgress">${safeHtml(progress)}</div>`;
-    document.getElementById('badgeDetailOverlay').classList.add('show');
+    const name=hidden?'Unknown Specimen':item.name;
+    document.getElementById('badgeDetail').innerHTML=`<button class="badgeDetailX" data-close-badge aria-label="Close badge detail">✕</button><div class="badgeFlipCard" id="badgeFlipCard" role="button" tabindex="0" aria-label="Flip ${safeHtml(name)} badge" style="--coin:${item.color}"><div class="badgeFlipFace badgeFlipFront">${coin(item)}<h3>${safeHtml(name)}</h3><span>Specimen badge</span></div><div class="badgeFlipFace badgeFlipBack"><div class="badgeBackLabel">${safeHtml(state)}</div><h3>${safeHtml(name)}</h3><p>${safeHtml(copy)}</p>${meter}<div class="badgeDetailProgress">${safeHtml(progress)}</div><div class="badgeXp">+${item.xp} XP</div></div></div>`;
+    const overlay=document.getElementById('badgeDetailOverlay'),card=document.getElementById('badgeFlipCard');overlay.classList.add('show');
+    const flip=()=>card.classList.toggle('flipped');card.addEventListener('click',flip);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();flip();}});
   }
   function closeBadgeDetail(){document.getElementById('badgeDetailOverlay').classList.remove('show');}
-  function openMyLab(){closeMenu();renderMyLab();document.getElementById('myLabOverlay').classList.add('show');document.body.style.overflow='hidden';}
-  function closeMyLab(){closeBadgeDetail();document.getElementById('myLabOverlay').classList.remove('show');document.body.style.overflow='';}
+  function openMyLab(){closeMenu();openTheLab('mine');renderMyLab();addPersonalLabLink();}
 
   buildShell();
-  document.addEventListener('keydown',event=>{if(event.key!=='Escape')return;if(document.getElementById('badgeDetailOverlay').classList.contains('show'))closeBadgeDetail();else if(document.getElementById('myLabOverlay').classList.contains('show'))closeMyLab();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.getElementById('badgeDetailOverlay').classList.contains('show')){event.stopImmediatePropagation();closeBadgeDetail();}},true);
 })();
