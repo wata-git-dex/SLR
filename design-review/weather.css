@@ -1,0 +1,39 @@
+/* Proposed visual treatment. Loaded by the local review builder only. */
+.reviewToolbar{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--ink2);border-bottom:1px solid var(--line);color:var(--text);font:11px/1.5 'Space Grotesk',sans-serif}
+.reviewToolbar strong{margin-right:8px}.reviewToolbar button{min-height:36px;padding:6px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--panel);color:var(--text);font:inherit;cursor:pointer}.reviewToolbar button[aria-pressed=true]{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}
+.reviewToolbar small{color:var(--dim)}.reviewToolbar button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+html.weather-review body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--accent-rgb),.19),transparent 58%),radial-gradient(ellipse at 0% 80%,rgba(var(--accent-rgb),.06),transparent 50%),var(--ink);background-attachment:fixed}
+.weather-review header{background:rgba(var(--header-rgb),.9);border-bottom-color:var(--line);box-shadow:0 8px 30px rgba(0,0,0,.06)}
+.weather-review .brandbox{background:transparent;box-shadow:none;border-color:transparent;padding-left:0}
+.weather-review .grid{gap:14px}
+.weather-review .shelfIntro{background:transparent;border:0;padding:8px 2px 14px;flex-wrap:wrap;gap:10px}.weather-review .shelfIntroCopy{flex:1 1 190px}.weather-review .shelfIntroCopy b{font-size:16px;line-height:1.4}.weather-review .shelfIntroCopy span{font-size:10px;line-height:1.6}.weather-review #shelfCommunityBtn{white-space:normal;text-align:left;max-width:100%;font-size:10px}
+.weather-review .card{color:var(--text);transition:transform .16s,border-color .16s;border:1px solid color-mix(in srgb,var(--typecol) 17%,var(--line));border-radius:22px;background:radial-gradient(ellipse at 85% 0%,color-mix(in srgb,var(--typecol) 19%,transparent),transparent 66%),linear-gradient(135deg,color-mix(in srgb,var(--typecol) 9%,var(--panel)),var(--panel));box-shadow:0 10px 25px rgba(0,0,0,.12);padding:18px}
+.weather-review .card::before{display:none}.weather-review .card:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.weather-review .card:not(.gridCard) .chead{grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:start}
+.weather-review .card:not(.gridCard) .thumb{width:52px;height:58px;border-width:1px;border-color:color-mix(in srgb,var(--typecol) 35%,transparent);border-radius:13px}
+.weather-review .card:not(.gridCard) .cmid{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.weather-review .cnbox{border:0;background:transparent;padding:0;min-height:0}.weather-review .cn{font-size:21px;line-height:1.15;white-space:normal;overflow-wrap:anywhere;font-weight:600;letter-spacing:-.035em}
+.weather-review .cardBrand{margin:5px 0 0;padding:0;border:0;white-space:normal;overflow-wrap:anywhere;font-size:10px;letter-spacing:.06em}
+.weather-review .meta{display:flex;flex-direction:row;flex-wrap:wrap;gap:5px 9px;padding:0;border:0;background:transparent;justify-content:flex-start}.weather-review .meta .tag.type{padding:0;border:0;background:none;font:500 11px 'Space Grotesk',sans-serif}.weather-review .meta .thctext{font:500 11px 'Space Grotesk',sans-serif}
+.weather-review .card:not(.gridCard) .score{height:auto;min-width:0;padding:0;border:0;background:transparent;color:var(--text);font:400 38px/1 'Space Grotesk',sans-serif;gap:3px;align-items:flex-start}.weather-review .card:not(.gridCard) .score .ratingStar{font-size:13px;margin-top:3px;color:var(--green)}
+.weather-review .card .terps{margin-top:12px;gap:5px}.weather-review .card .terppill{font-size:9px;padding:3px 6px;border-color:transparent!important;background:rgba(0,0,0,.1)!important}
+.weather-review .cfoot{margin-top:14px;padding-top:12px;border-color:color-mix(in srgb,var(--text) 9%,transparent)}.weather-review .efficon{width:28px;height:28px;border-color:transparent;background:rgba(0,0,0,.1);border-radius:9px}.weather-review .unratedNote{font-size:10px}
+.weather-review.no-card-photos .card:not(.gridCard) .chead{grid-template-columns:minmax(0,1fr) auto}.weather-review.no-card-photos .card .thumb{display:none}.weather-review.no-card-photos .gridCardIdentity{grid-template-columns:minmax(0,1fr)}
+.weather-review .gridCard .gridName{white-space:normal;overflow-wrap:anywhere}.weather-review .gridCard{padding:13px}
+.weather-review .sheet{background:radial-gradient(ellipse at 80% 0%,rgba(var(--accent-rgb),.16),transparent 65%),var(--ink2);border-color:var(--line);height:93dvh;border-radius:26px 26px 0 0;box-shadow:0 -12px 55px rgba(0,0,0,.24)}
+.weather-review .shead{padding:12px 20px 22px}.weather-review .detailIdentity{align-items:center;gap:18px}.weather-review .detailName .namebox{padding:0;min-height:0;background:none;border:0}.weather-review .namebox::before{display:none}.weather-review .detailName h2{font-size:28px;line-height:1.15;letter-spacing:-.03em}.weather-review .detailMetaLabel{font-size:9px;letter-spacing:.13em}.weather-review .detailBrandInside{padding-top:9px;line-height:1.5}
+.weather-review .sect{padding:16px;margin:0 0 12px;border:1px solid var(--line);border-radius:19px;background:color-mix(in srgb,var(--panel) 88%,transparent)}
+.weather-review .detailChemistryGrid{grid-template-columns:minmax(145px,.8fr) minmax(0,1fr);gap:14px}.weather-review .detailChemistryStats .stat{padding:0;min-height:0;border:0;background:none}.weather-review .detailTerpenes{padding:0;border:0;background:none}.weather-review .detailTerpenes .terpchip{font-size:10px}
+.weather-review .ratingPanel{border:0;background:var(--panel2);border-radius:14px;padding:14px}.weather-review .ratingValue{font-size:32px}.weather-review .ratingContext{font-size:10px;line-height:1.5}
+.weather-review .menuSheet{border-radius:24px 24px 0 0;background:var(--ink2)}.weather-review .menuSection+.menuSection{border:0;padding-top:4px;margin-top:26px}.weather-review .menuItem{background:var(--panel);border-color:var(--line);border-radius:16px}.weather-review .menuDisclosure{border-radius:16px}
+.weather-review .labHub{background:radial-gradient(ellipse at 90% 0%,rgba(var(--accent-rgb),.17),transparent 55%),var(--ink)}.weather-review .labHero,.weather-review .myLabIdentity,.weather-review .ratCard{border-color:var(--line);box-shadow:0 10px 30px rgba(0,0,0,.1)}.weather-review .labTabs{gap:4px;border-radius:16px;padding:5px}.weather-review .labTab{font:600 11px 'Space Grotesk',sans-serif}.weather-review .labTab.on{box-shadow:none;border-radius:11px}
+.weather-review .actionDock{background:color-mix(in srgb,var(--ink2) 95%,transparent);border-color:var(--line2);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+@media(max-width:430px){.weather-review .detailChemistryGrid{grid-template-columns:1fr}.weather-review .card{padding:16px}.weather-review .cn{font-size:20px}.weather-review .detailName h2{font-size:25px}}
+@media(max-width:350px){.weather-review .card:not(.gridCard) .chead{gap:9px;grid-template-columns:42px minmax(0,1fr) auto}.weather-review .card:not(.gridCard) .thumb{width:42px;height:48px}.weather-review .card:not(.gridCard) .score{font-size:29px}.weather-review .cn{font-size:18px}.weather-review .labTab{font-size:10px}.weather-review .card{padding:14px}}
+@media(min-width:1050px){.weather-review .sheet{height:auto;max-height:90dvh;border-radius:26px}.weather-review .sheet.expanded{height:100dvh;max-height:none;border-radius:0}}
+@media(prefers-reduced-motion:reduce){.weather-review .sheet,.weather-review .card{transition:none}}
+
+.weather-review:not(.light-mode){--faint:#929e8c}
+.weather-review.light-mode{--faint:#576c5f}
+.weather-review.light-mode .card .meta .tag.type,.weather-review.light-mode .card .meta .thctext{color:color-mix(in srgb,var(--typecol) 48%,var(--text))!important}
+.weather-review.light-mode .card .terppill{color:var(--dim)!important}

@@ -1,0 +1,59 @@
+SLR recovery and design review — 1 October 2026
+
+Recovered from the failed SLR chat and the 30 September voice recording.
+Baseline: 13ee189 (three pre-existing, unpushed preview commits).
+Original owner chat was stopped with a system error; no parallel SLR work was observed.
+
+IMPLEMENTED IN SOURCE, NOT PUBLISHED
+- Separate semantic Personal profile, The Lab, and Settings & More sections.
+- Ten-pixel gaps within the Lab menu, larger separation between sections.
+- Consistent navigation SVGs, concise guide labels, wrapping menu copy.
+- Profile statistics reflow at narrow widths and enlarged text.
+- Existing My Lab preview follows the new grouped menu; removed the Cyrus fallback.
+- Shared Specimen uses a precise display crop of the approved master sheet.
+- Progress-ring colors follow the approved illustrated coins.
+
+REVIEW ONLY
+The recording explicitly requests a mockup before implementing the homepage
+redesign. design-review/weather.css and controls.js are not loaded by production
+index.html. They are injected only by tools/serve-design-review.py.
+The comparison offers current/layered cards, optional homepage thumbnails, light
+mode, working strain details, menus, My Lab, Collection/Checklist, and coin flips.
+The original header, identity colors, filters, grid/row switch, and Blaze remain.
+The existing strain-first Blaze flow and device photo picker are retained.
+
+Run from slr-app: python3 tools/serve-design-review.py
+Open http://127.0.0.1:8766/
+This local server only binds loopback and serves a whitelist of UI assets. CSP
+blocks all API connections and form submissions. POST and Worker source reads
+are unsupported. The review reads the older source-embedded snapshot, not the
+current authenticated database. Its counts and missing ratings are not live.
+No scores, XP awards, referrals, authorship credits, or historical records were
+invented or written. No credentials are inserted in the review.
+
+VALIDATION
+- Achievement engine and Worker regression suites passed.
+- Browser checks at 320, 393, 768, and 1280px: no horizontal overflow in the
+  homepage, strain detail, menu, or Lab; no JavaScript errors; zero Worker/API calls.
+- Current/layered comparison and thumbnail toggle tested.
+- Menu navigation, fourth My Lab tab, all 32 badge entries, earned-last ordering,
+  Collection/Checklist, coin front/flip/close tested.
+- Dark and light screenshots visually reviewed; contrast improved.
+- Menu tested at 200% text size with a deliberately long label at 320px.
+- Grid view, strain-first Blaze selector, device photo picker, and disabled
+  review writes tested. Server rejected POST and worker.js requests.
+
+REQUEST BUDGET
+Source menu/icon changes add zero network requests and no timers. My Lab reuses
+already-loaded session data; badge art loads when displayed. The isolated review
+makes zero live API requests. Auth refresh/write behavior in index.html and all
+Worker code are unchanged. These checks do not claim signed-in production or
+account-revocation acceptance.
+
+NEXT RELEASE STEP
+Review the proposed card design and thumbnail choice, then integrate the chosen
+treatment into the live app. The older achievements work remains a calculated
+preview, not a deployed award ledger. Before any production launch, compare the
+current remote/live baseline, preserve unrelated sync changes and bindings, test
+the exact release artifact, and record the release and rollback identifiers.
+No push, deployment, Notion schema change, or backfill occurred in this recovery.
