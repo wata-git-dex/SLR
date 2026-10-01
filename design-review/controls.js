@@ -4,31 +4,23 @@
   const toolbar=document.createElement('aside');
   toolbar.className='reviewToolbar';
   toolbar.setAttribute('aria-label','Design comparison');
-  toolbar.innerHTML='<strong>SLR · Design review</strong><button id="reviewCurrent" aria-pressed="false">Current cards</button><button id="reviewLayered" aria-pressed="true">Layered cards</button><button id="reviewPhotos" aria-pressed="false">Show thumbnails</button><button id="reviewLight" aria-pressed="false">Light mode</button><small>Saved snapshot · no live writes</small>';
+  toolbar.innerHTML='<strong>SLR · Design review</strong><button id="reviewCurrent" aria-pressed="false">Original backgrounds</button><button id="reviewLayered" aria-pressed="true">New backgrounds</button><button id="reviewLight" aria-pressed="false">Light mode</button><small>Current card layout · saved snapshot · no live writes</small>';
   document.body.prepend(toolbar);
-  root.classList.add('weather-review','no-card-photos');
-  function arrangeCards(){
-    document.querySelectorAll('.card:not(.gridCard)').forEach(card=>{
-      const head=card.querySelector('.chead'),footer=card.querySelector('.cfoot');
-      let score=card.querySelector('.score');
-      if(!head||!footer)return;
-      const layered=root.classList.contains('weather-review');
-      if(layered&&!score){score=document.createElement('div');score.className='score reviewUnrated';score.textContent='—';score.setAttribute('aria-label','No overall rating recorded');head.append(score);}
-      if(!layered&&score?.classList.contains('reviewUnrated')){score.remove();score=null;}
-      const destination=layered?head:footer;
-      if(score&&score.parentElement!==destination)destination.append(score);
-      card.tabIndex=0;card.setAttribute('role','button');
-      card.setAttribute('aria-label','View '+card.querySelector('.cn')?.textContent);
-      if(!card.dataset.keyboardReady){card.dataset.keyboardReady='true';card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();card.click();}});}
-    });
+  root.classList.add('weather-review');
+  function choose(updated){
+    root.classList.toggle('weather-review',updated);
+    document.getElementById('reviewCurrent').setAttribute('aria-pressed',String(!updated));
+    document.getElementById('reviewLayered').setAttribute('aria-pressed',String(updated));
   }
-  new MutationObserver(arrangeCards).observe(document.getElementById('grid'),{childList:true});
-  function choose(layered){root.classList.toggle('weather-review',layered);document.getElementById('reviewCurrent').setAttribute('aria-pressed',String(!layered));document.getElementById('reviewLayered').setAttribute('aria-pressed',String(layered));document.getElementById('reviewPhotos').disabled=!layered;arrangeCards();}
   document.getElementById('reviewCurrent').onclick=()=>choose(false);
   document.getElementById('reviewLayered').onclick=()=>choose(true);
-  document.getElementById('reviewPhotos').onclick=event=>{const hidden=root.classList.toggle('no-card-photos');event.currentTarget.textContent=hidden?'Show thumbnails':'Hide thumbnails';event.currentTarget.setAttribute('aria-pressed',String(!hidden));};
-  document.getElementById('reviewLight').onclick=event=>{const light=!root.classList.contains('light-mode');setColorMode(light?'light':'dark');event.currentTarget.setAttribute('aria-pressed',String(light));};
-  arrangeCards();
+  const lightButton=document.getElementById('reviewLight');
+  lightButton.setAttribute('aria-pressed',String(root.classList.contains('light-mode')));
+  lightButton.onclick=event=>{
+    const light=!root.classList.contains('light-mode');
+    setColorMode(light?'light':'dark');
+    event.currentTarget.setAttribute('aria-pressed',String(light));
+  };
   // Allow inspection of forms, but never authentication, refresh, photo or data writes.
   document.addEventListener('click',event=>{
     const action=event.target.closest('#refreshBtn,#asSubmit,#photoSave,#logSubmitBtn,#icSubmit');

@@ -17,8 +17,10 @@ REVIEW ONLY
 The recording explicitly requests a mockup before implementing the homepage
 redesign. design-review/weather.css and controls.js are not loaded by production
 index.html. They are injected only by tools/serve-design-review.py.
-The comparison offers current/layered cards, optional homepage thumbnails, light
-mode, working strain details, menus, My Lab, Collection/Checklist, and coin flips.
+The comparison now offers original/new backgrounds and light mode. The current
+card layout, thumbnails, typography, terpene chips, ratings, header and detail
+structure remain unchanged. Menus, My Lab, Collection/Checklist and coin flips
+continue to work.
 The original header, identity colors, filters, grid/row switch, and Blaze remain.
 The existing strain-first Blaze flow and device photo picker are retained.
 
@@ -35,7 +37,8 @@ VALIDATION
 - Achievement engine and Worker regression suites passed.
 - Browser checks at 320, 393, 768, and 1280px: no horizontal overflow in the
   homepage, strain detail, menu, or Lab; no JavaScript errors; zero Worker/API calls.
-- Current/layered comparison and thumbnail toggle tested.
+- Background-only comparison: exact card DOM, geometry, font and text-color
+  equality verified at all four widths, in row/grid and dark/light modes.
 - Menu navigation, fourth My Lab tab, all 32 badge entries, earned-last ordering,
   Collection/Checklist, coin front/flip/close tested.
 - Dark and light screenshots visually reviewed; contrast improved.
@@ -51,8 +54,9 @@ Worker code are unchanged. These checks do not claim signed-in production or
 account-revocation acceptance.
 
 NEXT RELEASE STEP
-Review the proposed card design and thumbnail choice, then integrate the chosen
-treatment into the live app. The older achievements work remains a calculated
+The user rejected card rearrangement and chose the current card structure with
+new backgrounds only. Review this narrower surface treatment before integrating
+it into the live app. The older achievements work remains a calculated
 preview, not a deployed award ledger. Before any production launch, compare the
 current remote/live baseline, preserve unrelated sync changes and bindings, test
 the exact release artifact, and record the release and rollback identifiers.
