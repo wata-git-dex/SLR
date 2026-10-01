@@ -32,7 +32,7 @@
   if(isAmber){let palette='pink';try{palette=localStorage.getItem('slr_amber_palette')||'pink';}catch(e){}if(palette==='amber')document.documentElement.classList.add('interface-amber-theme');}
   if(isFelipe){let palette='green';try{palette=localStorage.getItem('slr_felipe_palette')||'green';}catch(e){}if(palette==='yellow')document.documentElement.classList.add('felipe-yellow-theme');}
   if(isPiero){let palette='red';try{palette=localStorage.getItem('slr_piero_palette')||'red';}catch(e){}if(palette==='purple')document.documentElement.classList.add('piero-purple-theme');}
-  try{if(localStorage.getItem('slr_color_mode')==='light')document.documentElement.classList.add('light-mode');}catch(e){}
+  document.documentElement.classList.remove('light-mode');
   if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
@@ -226,79 +226,6 @@ body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-ope
   --body-glow:#220a3d;--body-glow-2:#420703;--header-rgb:3,2,5;--door-top:#11081d;--door-bottom:#020104;
   --profile-end:27,7,31;--profile-stat:10,2,12;
 }
-:root.light-mode{
-  color-scheme:light;
-  --ink:#f4f8f5; --ink2:#eaf2ec; --panel:#ffffff; --panel2:#dfeae2;
-  --line:#bfd0c2; --line2:#91ae97;
-  --text:#142219; --dim:#4c6352; --faint:#748278;
-  --green:#16813a; --green-soft:#397a4a;
-  --positive:#16813a; --positive-soft:#568f64; --positive-rgb:22,129,58;
-  --accent-rgb:22,129,58; --accent-hi:#279849; --accent-lo:#126d30; --accent-shadow-rgb:22,129,58;
-  --body-glow:#d7ecdc; --body-glow-2:#dce5f2; --header-rgb:244,248,245; --door-top:#edf6ef; --door-bottom:#dfe9e1;
-  --profile-end:235,244,237; --profile-stat:255,255,255;
-}
-:root.cyrus-blue-theme.light-mode{
-  --ink:#f5fbff; --ink2:#e8f4fb; --panel:#ffffff; --panel2:#dceef8;
-  --line:#acd3e7; --line2:#66afd2; --text:#082536; --dim:#41677b; --faint:#6d8592;
-  --green:#007daf; --green-soft:#267c9e; --positive:#007daf; --positive-soft:#4b8da7; --positive-rgb:0,125,175;
-  --accent-rgb:0,125,175; --accent-hi:#159bca; --accent-lo:#00658e; --accent-shadow-rgb:0,125,175;
-  --body-glow:#d6f0fb; --body-glow-2:#e2e9fb; --header-rgb:245,251,255; --door-top:#edf9ff; --door-bottom:#dceef7;
-  --profile-end:229,244,251; --profile-stat:255,255,255;
-}
-:root.cyrus-purple-theme.light-mode{
-  --ink:#fbf7ff; --ink2:#f0e8f8; --panel:#ffffff; --panel2:#e7dcf1;
-  --line:#ccb8de; --line2:#a47bc7; --text:#281438; --dim:#684e78; --faint:#897393;
-  --green:#7134a6; --green-soft:#754f94; --positive:#176fa7; --positive-soft:#4e82a4; --positive-rgb:23,111,167;
-  --accent-rgb:113,52,166; --accent-hi:#8f4fc7; --accent-lo:#5d278c; --accent-shadow-rgb:113,52,166;
-  --body-glow:#ecd9fa; --body-glow-2:#dceafb; --header-rgb:251,247,255; --door-top:#f7edff; --door-bottom:#e9dcf3;
-  --profile-end:242,232,250; --profile-stat:255,255,255;
-}
-:root.interface-amber-theme.light-mode{
-  --ink:#fffaf1;--ink2:#f8edda;--panel:#ffffff;--panel2:#f1dfbf;--line:#dfc28f;--line2:#bd8b3c;
-  --text:#2d1606;--dim:#73482f;--faint:#926b59;--green:#a94800;--green-soft:#884b1d;
-  --accent-rgb:169,72,0;--accent-hi:#ca6813;--accent-lo:#873700;--accent-shadow-rgb:169,72,0;
-  --body-glow:#f6dfb5;--body-glow-2:#f2e7d2;--header-rgb:255,250,241;--door-top:#fff5e5;--door-bottom:#f3e5cd;
-  --profile-end:249,237,218;--profile-stat:255,255,255;
-}
-:root.felipe-yellow-theme.light-mode{
-  --ink:#fffdf1;--ink2:#f4f1d9;--panel:#ffffff;--panel2:#ebe7bd;--line:#8eb6df;--line2:#377cc1;
-  --text:#282504;--dim:#625e2b;--faint:#85805b;--green:#8a7200;--green-soft:#716a22;
-  --accent-rgb:138,114,0;--accent-hi:#a98e00;--accent-lo:#6f5c00;--accent-shadow-rgb:138,114,0;
-  --body-glow:#f3edaf;--body-glow-2:#dce8fa;--header-rgb:255,253,241;--door-top:#fffbe5;--door-bottom:#eee9c5;
-  --profile-end:246,242,214;--profile-stat:255,255,255;
-}
-:root.piero-purple-theme.light-mode{
-  --ink:#faf8ff;--ink2:#eee9f8;--panel:#ffffff;--panel2:#e4ddf1;--line:#d1aaa6;--line2:#8768b5;
-  --text:#211531;--dim:#5f5274;--faint:#81758f;--green:#6035a5;--green-soft:#644d8b;
-  --accent-rgb:96,53,165;--accent-hi:#7d55bd;--accent-lo:#4d278b;--accent-shadow-rgb:96,53,165;
-  --body-glow:#efd4f4;--body-glow-2:#f1dbdc;--header-rgb:255,247,255;--door-top:#fcedff;--door-bottom:#edd9f0;
-  --profile-end:245,229,248;--profile-stat:255,255,255;
-}
-:root.amber-theme.light-mode{
-  --ink:#fff7fb; --ink2:#f9eaf2; --panel:#ffffff; --panel2:#f2dce7;
-  --line:#ddbacd; --line2:#c78eaa; --text:#321522; --dim:#765064; --faint:#99778a;
-  --green:#c72d6c; --green-soft:#9b3c65; --accent-rgb:199,45,108; --accent-hi:#df4b89; --accent-lo:#ad2057; --accent-shadow-rgb:199,45,108;
-  --body-glow:#f6d9e7; --body-glow-2:#eadff1; --header-rgb:255,247,251; --door-top:#fff0f7; --door-bottom:#f4dce8;
-  --profile-end:250,232,241; --profile-stat:255,255,255;
-}
-:root.felipe-theme.light-mode{
-  --ink:#f5fbf6; --ink2:#e7f3ea; --panel:#ffffff; --panel2:#dcecdf;
-  --line:#acd0b5; --line2:#72aa81; --text:#102819; --dim:#45634d; --faint:#708476;
-  --green:#087b36; --green-soft:#2d7545; --accent-rgb:8,123,54; --accent-hi:#149947; --accent-lo:#05632a; --accent-shadow-rgb:8,123,54;
-  --body-glow:#d3eedb; --body-glow-2:#d8e6fa; --header-rgb:245,251,246; --door-top:#eef9f1; --door-bottom:#dcecdf;
-  --profile-end:229,244,233; --profile-stat:255,255,255;
-}
-:root.piero-theme.light-mode{
-  --ink:#fff8f7; --ink2:#f6e9e7; --panel:#ffffff; --panel2:#ecdcd9;
-  --line:#d7b4ae; --line2:#bb8178; --text:#2b1512; --dim:#70514c; --faint:#91736e;
-  --green:#d51a0d; --green-soft:#9f3028; --accent-rgb:213,26,13; --accent-hi:#eb3022; --accent-lo:#b61107; --accent-shadow-rgb:213,26,13;
-  --body-glow:#f4d8d4; --body-glow-2:#eadfdd; --header-rgb:255,248,247; --door-top:#fff0ed; --door-bottom:#eddad7;
-  --profile-end:248,231,228; --profile-stat:255,255,255;
-}
-:root.light-mode .chip.on:not(.typechip){color:#fff}
-:root.light-mode .scrim{background:rgba(34,42,36,.46)}
-:root.light-mode .filterOverlay,:root.light-mode .menuOverlay,:root.light-mode .infoOverlay,:root.light-mode .asOverlay,:root.light-mode .blazeOverlay{background:rgba(29,36,31,.52)}
-:root.felipe-theme .brandbox{border-color:rgba(255,210,26,.72);box-shadow:0 0 18px rgba(255,210,26,.12),0 0 26px rgba(8,102,217,.08)}
 :root.felipe-theme .menuBtn{border-color:rgba(8,102,217,.8);color:var(--amber);box-shadow:0 0 15px rgba(8,102,217,.14)}
 :root.felipe-theme .menuBtn svg{stroke:var(--amber)}
 :root.felipe-theme .memberbar{border-color:rgba(8,102,217,.5);box-shadow:inset 3px 0 0 rgba(255,210,26,.8)}
@@ -751,6 +678,21 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .menuArrow{flex:0 0 auto}.menuItem:focus-visible,.labTab:focus-visible,.dockBtn:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 .labHubMark,.labHubClose{flex-shrink:0}.labSectionHead{flex-wrap:wrap}.labSectionHead span{line-height:1.5}.labTab{min-height:44px}
 @media(prefers-reduced-motion:reduce){.menuItem{transition:none}}
+
+/* Approved surfaces: preserve the existing card geometry and content. */
+body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--accent-rgb),.19),transparent 58%),radial-gradient(ellipse at 0% 80%,rgba(var(--accent-rgb),.06),transparent 50%),var(--ink);background-attachment:fixed}
+.card{background:radial-gradient(ellipse at 85% 0%,color-mix(in srgb,var(--typecol,var(--line2)) 19%,transparent),transparent 66%),linear-gradient(135deg,color-mix(in srgb,var(--typecol,var(--line2)) 9%,var(--panel)),var(--panel));border-color:color-mix(in srgb,var(--typecol,var(--line2)) 17%,var(--line));box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.menuHead{gap:12px}.menuHead h2{min-width:0;font-size:18px;line-height:1.35}.menuClose{flex:0 0 auto}
+.menuSection{--section-tint:var(--accent-rgb);padding:14px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(var(--section-tint),.07),transparent 65%)}
+.menuSection+.menuSection{padding-top:14px;margin-top:16px}
+.menuSection[aria-labelledby="menuSettingsHeading"]{--section-tint:var(--profile-stat)}
+.menuSection .menuEyebrow{margin-bottom:12px;color:var(--dim)}
+.menuSection[aria-labelledby="menuLabHeading"] .menuEyebrow{color:var(--green)}
+.menuSection .menuItem,.menuSection .menuDisclosure{border-color:color-mix(in srgb,var(--green) 10%,var(--line));background:linear-gradient(120deg,rgba(var(--section-tint),.045),transparent),var(--panel)}
+.menuSection .menuDisclosure>.menuItem{background:transparent}
+.menuSection .profileCard{border:0;background:transparent;padding:0}
+.profileBadgeLink{display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:9px 12px;min-height:40px;border:1px solid rgba(var(--accent-rgb),.3);border-radius:11px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
+.profileBadgeLink svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.profileBadgeLink:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 </style>
 <link rel="stylesheet" href="my-lab-preview.css">
 </head>
@@ -964,7 +906,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   <ul class="labNoticeList" id="labNoticeList">
     <li><span class="labNoticeIcon">⌕</span><span><b>Cleaner home controls</b>Search and New Strain are easier to spot; Refresh now lives beside your profile.</span></li>
     <li><span class="labNoticeIcon">⚑</span><span><b>Country tracking</b>Add where a strain was purchased, then filter the shared lab by country.</span></li>
-    <li><span class="labNoticeIcon">◐</span><span><b>Your preferred lighting</b>Every member can switch between dark and light mode from the menu.</span></li>
+    <li><span class="labNoticeIcon">◐</span><span><b>Your accent color</b>SLR uses dark mode, with accent choices for supported accounts.</span></li>
     <li><span class="labNoticeIcon">✓</span><span><b>Lab Notices</b>Future updates will explain themselves here. You only see each notice once.</span></li>
   </ul>
   <button class="labNoticeDone" id="labNoticeDone">Close notice</button>
@@ -972,7 +914,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 
 <div class="menuOverlay" id="menuOverlay">
   <div class="menuSheet" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
-    <div class="menuHead"><h2 id="menuTitle">Lab &amp; More</h2><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
+    <div class="menuHead"><h2 id="menuTitle">Settings &amp; Lab Menu</h2><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
     <section class="menuSection" aria-labelledby="menuProfileHeading">
     <h3 class="menuEyebrow" id="menuProfileHeading">Personal profile</h3>
     <div class="profileCard">
@@ -996,9 +938,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
     <h3 class="menuEyebrow" id="menuSettingsHeading">Settings &amp; More</h3>
     <div class="menuList">
       <div class="menuDisclosure">
-        <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor" stroke="none"/></svg></span><span class="menuCopy"><b>Appearance</b><span>Light, dark and interface colors</span></span><span class="menuArrow">⌄</span></button>
+        <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor" stroke="none"/></svg></span><span class="menuCopy"><b>Accent color</b><span>Choose your account’s interface color</span></span><span class="menuArrow">⌄</span></button>
         <div class="appearancePanel" id="appearancePanel">
-          <button class="menuItem themeItem" id="themeToggle" role="switch" aria-checked="false"><span class="menuIcon" id="themeIcon">☀</span><span class="menuCopy"><b>Light mode</b><span>Switch between light and dark on this phone</span></span><span class="themeSwitch" aria-hidden="true"><i></i></span></button>
           <div class="cyrusPalette" id="cyrusPalette">
             <div class="memberPaletteSet" data-palette-member="cyrus" role="group" aria-label="Cyrus interface color">
               <button class="cyrusPaletteBtn" data-member-palette="green"><i class="paletteDot green"></i>Green</button>
@@ -3721,7 +3662,7 @@ function memberPalette(){
 function syncMemberPalette(){
   const control=document.getElementById('cyrusPalette');
   const member=CURRENT_MEMBER.trim().toLowerCase(),hasPalette=Boolean(MEMBER_PALETTES[member]);
-  if(control)control.classList.toggle('show',hasPalette);
+  if(control){control.classList.toggle('show',hasPalette);control.closest('.menuDisclosure').hidden=!hasPalette;}
   document.querySelectorAll('[data-palette-member]').forEach(group=>group.classList.toggle('show',hasPalette&&group.dataset.paletteMember===member));
   const active=memberPalette();
   document.querySelectorAll('[data-member-palette]').forEach(button=>{
@@ -3736,21 +3677,11 @@ function setMemberPalette(palette){
   try{localStorage.setItem(config.key,palette);}catch(e){}
   applyMemberTheme();
   syncMemberPalette();
-  setColorMode(colorMode());
+  setColorMode();
 }
-function colorMode(){try{return localStorage.getItem('slr_color_mode')==='light'?'light':'dark';}catch(e){return 'dark';}}
-function syncThemeToggle(){
-  const light=document.documentElement.classList.contains('light-mode');
-  const toggle=document.getElementById('themeToggle');
-  if(toggle)toggle.setAttribute('aria-checked',light?'true':'false');
-  const icon=document.getElementById('themeIcon');
-  if(icon)icon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+(light?'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>':'<path d="M20.5 13.2A8.5 8.5 0 0 1 10.8 3.5a8.5 8.5 0 1 0 9.7 9.7Z"/>')+'</svg>';
-}
-function setColorMode(mode){
-  const light=mode==='light';
-  document.documentElement.classList.toggle('light-mode',light);
-  try{localStorage.setItem('slr_color_mode',light?'light':'dark');}catch(e){}
-  syncThemeToggle();
+function setColorMode(){
+  document.documentElement.classList.remove('light-mode');
+  try{localStorage.setItem('slr_color_mode','dark');}catch(e){}
   requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();});
 }
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
@@ -4533,7 +4464,7 @@ function setNoticeOpen(open){
   document.getElementById('noticePanel').classList.toggle('open',open);
   document.getElementById('menuLabNotice').setAttribute('aria-expanded',open?'true':'false');
 }
-function openMenu(){closeDockSearch();renderProfile();syncThemeToggle();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
+function openMenu(){closeDockSearch();renderProfile();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';}
 function closeMenu(){setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';}
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
@@ -4548,7 +4479,7 @@ document.getElementById('labHubClose').addEventListener('click',closeTheLab);
 document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
 document.getElementById('menuRatings').addEventListener('click',openRatingsInfo);
-document.getElementById('themeToggle').addEventListener('click',()=>setColorMode(document.documentElement.classList.contains('light-mode')?'dark':'light'));
+
 function openReference(title,type,url){
   document.getElementById('referenceTitle').textContent=title;
   document.getElementById('referenceBody').innerHTML=type==='image'?'<img src="'+url+'" alt="'+title+'">':'<iframe src="'+url+'" title="'+title+'"></iframe>';
@@ -4585,7 +4516,7 @@ function setHeaderPanel(open,persist=true){
 document.getElementById('headerToggle').addEventListener('click',e=>setHeaderPanel(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(labHubIsOpen())closeTheLab();else if(document.getElementById('referenceOverlay').classList.contains('show'))closeReference();else if(document.getElementById('infoOverlay').classList.contains('show'))closeRatingsInfo();else if(menuIsOpen())closeMenu();else{closeLabNotice();closeDockSearch();blazeClose();closePhotoEditor();}}});
 
-setColorMode(colorMode());
+setColorMode();
 setHeaderPanel(localStorage.getItem(HEADER_PANEL_KEY)==='open',false);
 syncCardViewButton();
 buildChips(); render();

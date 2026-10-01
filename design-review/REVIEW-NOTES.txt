@@ -1,63 +1,40 @@
 SLR recovery and design review — 1 October 2026
 
-Recovered from the failed SLR chat and the 30 September voice recording.
-Baseline: 13ee189 (three pre-existing, unpushed preview commits).
-Original owner chat was stopped with a system error; no parallel SLR work was observed.
-
 IMPLEMENTED IN SOURCE, NOT PUBLISHED
-- Separate semantic Personal profile, The Lab, and Settings & More sections.
-- Ten-pixel gaps within the Lab menu, larger separation between sections.
-- Consistent navigation SVGs, concise guide labels, wrapping menu copy.
-- Profile statistics reflow at narrow widths and enlarged text.
-- Existing My Lab preview follows the new grouped menu; removed the Cyrus fallback.
-- Shared Specimen uses a precise display crop of the approved master sheet.
-- Progress-ring colors follow the approved illustrated coins.
+Recovered the failed SLR work and applied the user's approved direction:
+- Preserve existing card structure, typography, terpene chips and rating placement.
+- Apply the approved tinted card backgrounds against a deeper app background.
+- Rename the menu Settings & Lab Menu, with coherent Personal profile, The Lab,
+  and Settings & More sections.
+- Add View badges under Personal profile; it opens the expanded private Badge Case.
+- Use dark mode only. Existing account-specific accent choices remain available;
+  accounts without a palette do not see the accent control.
+- Enable the calculated My Lab interface using already-loaded session history.
+- Preserve approved badge art, precise Shared Specimen crop and matching ring colors.
+No award ledger, historical ratings, referral or contribution records were invented.
 
-REVIEW ONLY
-The recording explicitly requests a mockup before implementing the homepage
-redesign. design-review/weather.css and controls.js are not loaded by production
-index.html. They are injected only by tools/serve-design-review.py.
-The comparison now offers original/new backgrounds and light mode. The current
-card layout, thumbnails, typography, terpene chips, ratings, header and detail
-structure remain unchanged. Menus, My Lab, Collection/Checklist and coin flips
-continue to work.
-The original header, identity colors, filters, grid/row switch, and Blaze remain.
-The existing strain-first Blaze flow and device photo picker are retained.
-
-Run from slr-app: python3 tools/serve-design-review.py
-Open http://127.0.0.1:8766/
-This local server only binds loopback and serves a whitelist of UI assets. CSP
-blocks all API connections and form submissions. POST and Worker source reads
-are unsupported. The review reads the older source-embedded snapshot, not the
-current authenticated database. Its counts and missing ratings are not live.
-No scores, XP awards, referrals, authorship credits, or historical records were
-invented or written. No credentials are inserted in the review.
+LOCAL REVIEW
+Run python3 tools/serve-design-review.py from slr-app and open
+http://127.0.0.1:8766/. The server binds loopback and serves a UI asset whitelist.
+CSP blocks API connections and form submissions; POST and Worker source reads
+are unsupported. The older embedded snapshot is used without credentials.
+Its missing Overall ratings and counts are not current live account data.
+Saved Overall ratings still render a star and number in both card layouts.
 
 VALIDATION
-- Achievement engine and Worker regression suites passed.
-- Browser checks at 320, 393, 768, and 1280px: no horizontal overflow in the
-  homepage, strain detail, menu, or Lab; no JavaScript errors; zero Worker/API calls.
-- Background-only comparison: exact card DOM, geometry, font and text-color
-  equality verified at all four widths, in row/grid and dark/light modes.
-- Menu navigation, fourth My Lab tab, all 32 badge entries, earned-last ordering,
-  Collection/Checklist, coin front/flip/close tested.
-- Dark and light screenshots visually reviewed; contrast improved.
-- Menu tested at 200% text size with a deliberately long label at 320px.
-- Grid view, strain-first Blaze selector, device photo picker, and disabled
-  review writes tested. Server rejected POST and worker.js requests.
+Achievement engine and Worker regression suites passed. Inline application
+scripts parse. Rating rendering checked for missing, integer and decimal scores.
+Browser verified account accent options, profile badge shortcut, selected My Lab
+and expanded Badge Case. Updated menu has no horizontal overflow at 320px.
+Earlier background-only comparison confirmed unchanged card DOM, geometry,
+fonts and text colors at 320, 393, 768 and 1280px in row/grid layouts.
+Earlier badge checks covered all 32 entries, earned-last ordering, checklist,
+coin flips, approved artwork and close/navigation behavior.
 
-REQUEST BUDGET
-Source menu/icon changes add zero network requests and no timers. My Lab reuses
-already-loaded session data; badge art loads when displayed. The isolated review
-makes zero live API requests. Auth refresh/write behavior in index.html and all
-Worker code are unchanged. These checks do not claim signed-in production or
-account-revocation acceptance.
-
-NEXT RELEASE STEP
-The user rejected card rearrangement and chose the current card structure with
-new backgrounds only. Review this narrower surface treatment before integrating
-it into the live app. The older achievements work remains a calculated
-preview, not a deployed award ledger. Before any production launch, compare the
-current remote/live baseline, preserve unrelated sync changes and bindings, test
-the exact release artifact, and record the release and rollback identifiers.
-No push, deployment, Notion schema change, or backfill occurred in this recovery.
+REQUEST BUDGET AND RELEASE STATUS
+UI changes add no API calls or timers. My Lab reuses loaded session data;
+badge art loads when displayed. Auth, refresh and write behavior are unchanged.
+No push, production deployment, schema change or backfill occurred.
+Before release, compare the current remote/live baseline, test the exact release
+artifact and record release/rollback identifiers. Local tests do not claim
+signed-in production or account-revocation acceptance.

@@ -28,10 +28,6 @@ document.getElementById('updated').textContent='Saved snapshot';
 """)
     for filename in ['achievements.js', 'my-lab-preview.js']:
         js = (APP / filename).read_text()
-        if filename == 'my-lab-preview.js':
-            gate = "if(!params.has('achievements-preview'))return;"
-            assert js.count(gate) == 1
-            js = js.replace(gate, '// Enabled only in this generated local review.')
         html = html.replace(f'<script src="{filename}"></script>', '<script>' + js + '</script>')
     css = (APP / 'my-lab-preview.css').read_text() + '\n' + (APP / 'design-review/weather.css').read_text()
     html = html.replace('<link rel="stylesheet" href="my-lab-preview.css">', '<style>' + css + '</style>')
