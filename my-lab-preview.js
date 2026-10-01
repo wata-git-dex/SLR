@@ -136,8 +136,8 @@
     document.getElementById('menuLabHeading').textContent='The Lab';
     const button=document.createElement('button');button.className='menuItem myLabPreviewBtn';button.id='menuMyLabPreview';button.innerHTML='<span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-2a7 7 0 0 1 10-6m4-1v5m-2.5-2.5h5M15 21h6"/></svg></span><span class="menuCopy"><b>My Lab</b><span>Your private level, XP and Badge Case</span></span><span class="menuArrow">›</span>';
     document.getElementById('menuTheLab').insertAdjacentElement('afterend',button);button.addEventListener('click',openMyLab);
-    const badgeLink=document.createElement('button');badgeLink.type='button';badgeLink.className='profileBadgeLink';badgeLink.id='profileBadgeLink';badgeLink.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 7 6-3 6 3-2-7m-4-8 1 2 2 .3-1.5 1.5.3 2.2-1.8-1-1.8 1 .3-2.2L9 8.3l2-.3Z"/></svg><span>View badges</span><span aria-hidden="true">›</span>';
-    document.querySelector('.profileCard').append(badgeLink);
+    const badgeLink=document.createElement('button');badgeLink.type='button';badgeLink.className='profileBadgeLink';badgeLink.id='profileBadgeLink';badgeLink.setAttribute('aria-label','View badges');badgeLink.title='View badges';badgeLink.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 7 6-3 6 3-2-7m-4-8 1 2 2 .3-1.5 1.5.3 2.2-1.8-1-1.8 1 .3-2.2L9 8.3l2-.3Z"/></svg>';
+    document.querySelector('.profileSectionHead').append(badgeLink);
     badgeLink.addEventListener('click',()=>{openMyLab();toggleBadgeCase();document.getElementById('badgeCase').scrollIntoView({block:'start',behavior:'instant'});document.getElementById('badgeCaseToggle').focus({preventScroll:true});});
     mineTab.addEventListener('click',()=>{renderMyLab();setLabTab('mine');});
     document.getElementById('menuTheLab').addEventListener('click',()=>requestAnimationFrame(addPersonalLabLink));

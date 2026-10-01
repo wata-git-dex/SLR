@@ -132,7 +132,7 @@ body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-ope
 .memberline b{color:var(--green)}
 .filterOverlay{position:fixed;inset:0;z-index:370;background:rgba(0,0,0,.72);display:none;align-items:flex-end;justify-content:center}
 .filterOverlay.show{display:flex}
-.filterSheet{width:100%;max-width:520px;max-height:91vh;overflow-y:auto;background:var(--ink2);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 16px calc(var(--safe-b) + 22px)}
+.filterSheet{width:100%;max-width:520px;max-height:91vh;overflow-y:auto;background:color-mix(in srgb,var(--ink) 80%,#000);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 16px calc(var(--safe-b) + 22px)}
 .filterHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .filterTitle{font-size:18px;font-weight:700}.filterClose{width:34px;height:34px;border-radius:9px;background:var(--panel);border:1px solid var(--line);color:var(--dim);cursor:pointer}
 .filterGroup{margin-top:15px}.filterLabel{font:10px 'Space Mono',monospace;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
@@ -598,7 +598,7 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .effectDefs{display:grid;gap:7px;margin-top:9px}.effectDef{display:grid;grid-template-columns:24px 92px 1fr;align-items:start;gap:7px;padding:8px 9px;border-radius:9px;background:var(--panel2);border:1px solid var(--line)}.effectDef .emoji{font-size:14px}.effectDef b{font-size:10px;color:var(--positive)}.effectDef span:last-child{font:9.5px/1.45 'Space Mono',monospace;color:var(--dim)}.infoBlock.side .effectDef b{color:var(--red)}
 .infoVersion{text-align:center;margin-top:16px;color:var(--faint);font:10px 'Space Mono',monospace}
 .menuOverlay{position:fixed;inset:0;z-index:380;background:rgba(0,0,0,.76);display:none;align-items:flex-end;justify-content:center}.menuOverlay.show{display:flex}
-.menuSheet{width:100%;max-width:560px;max-height:91vh;overflow-y:auto;background:var(--ink2);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 18px calc(24px + var(--safe-b));box-sizing:border-box}
+.menuSheet{width:100%;max-width:560px;max-height:91vh;overflow-y:auto;background:color-mix(in srgb,var(--ink) 80%,#000);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px 18px calc(24px + var(--safe-b));box-sizing:border-box}
 .menuHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}.menuHead h2{margin:0;font-size:19px}.menuClose{background:none;border:0;color:var(--dim);font-size:20px;cursor:pointer;padding:7px}
 .menuEyebrow{font:9px 'Space Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin:16px 0 8px}
 .profileCard{background:linear-gradient(145deg,rgba(var(--accent-rgb),.10),rgba(var(--profile-end),.96));border:1px solid rgba(var(--accent-rgb),.30);border-radius:16px;padding:14px}
@@ -683,15 +683,16 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--accent-rgb),.19),transparent 58%),radial-gradient(ellipse at 0% 80%,rgba(var(--accent-rgb),.06),transparent 50%),var(--ink);background-attachment:fixed}
 .card{background:radial-gradient(ellipse at 85% 0%,color-mix(in srgb,var(--typecol,var(--line2)) 19%,transparent),transparent 66%),linear-gradient(135deg,color-mix(in srgb,var(--typecol,var(--line2)) 9%,var(--panel)),var(--panel));border-color:color-mix(in srgb,var(--typecol,var(--line2)) 17%,var(--line));box-shadow:0 10px 25px rgba(0,0,0,.12)}
 .menuHead{gap:12px}.menuHead h2{min-width:0;font-size:18px;line-height:1.35}.menuClose{flex:0 0 auto}
-.menuSection{--section-tint:var(--accent-rgb);padding:14px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(var(--section-tint),.07),transparent 65%)}
+.menuSection{--section-tint:var(--accent-rgb);padding:14px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(var(--section-tint),.07),transparent 65%),var(--ink2)}
 .menuSection+.menuSection{padding-top:14px;margin-top:16px}
 .menuSection[aria-labelledby="menuSettingsHeading"]{--section-tint:var(--profile-stat)}
-.menuSection .menuEyebrow{margin-bottom:12px;color:var(--dim)}
-.menuSection[aria-labelledby="menuLabHeading"] .menuEyebrow{color:var(--green)}
+.menuSection .menuEyebrow{margin-bottom:12px;color:var(--green)}
+.profileSectionHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.profileSectionHead .menuEyebrow{margin:0;min-width:0;overflow-wrap:anywhere}
+.profileFeelingsLabel{font:10px/1.5 'Space Mono',monospace;color:var(--dim);margin:14px 0 0}.profileEffects{margin-top:6px}
 .menuSection .menuItem,.menuSection .menuDisclosure{border-color:color-mix(in srgb,var(--green) 10%,var(--line));background:linear-gradient(120deg,rgba(var(--section-tint),.045),transparent),var(--panel)}
 .menuSection .menuDisclosure>.menuItem{background:transparent}
 .menuSection .profileCard{border:0;background:transparent;padding:0}
-.profileBadgeLink{display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:9px 12px;min-height:40px;border:1px solid rgba(var(--accent-rgb),.3);border-radius:11px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
+.profileBadgeLink{display:inline-flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;padding:9px;border:1px solid rgba(var(--accent-rgb),.3);border-radius:11px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
 .profileBadgeLink svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.profileBadgeLink:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 </style>
 <link rel="stylesheet" href="my-lab-preview.css">
@@ -916,16 +917,17 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--accent-rgb),.19),tr
   <div class="menuSheet" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
     <div class="menuHead"><h2 id="menuTitle">Settings &amp; Lab Menu</h2><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
     <section class="menuSection" aria-labelledby="menuProfileHeading">
-    <h3 class="menuEyebrow" id="menuProfileHeading">Personal profile</h3>
+    <div class="profileSectionHead"><h3 class="menuEyebrow" id="menuProfileHeading">Personal profile</h3></div>
     <div class="profileCard">
       <div class="profileHello">Lab Rat <b id="profileName">—</b></div>
-      <div class="profileSub" id="profileSummary">Your ratings stay attached to your invite code.</div>
+      <div class="profileSub" id="profileSummary" hidden></div>
       <div class="profileStats">
-        <div class="profileStat"><b id="profileStrains">0</b><span>strains tried</span></div>
+        <div class="profileStat"><b id="profileStrains">0</b><span>strains</span></div>
         <div class="profileStat"><b id="profileSessions">0</b><span>sessions</span></div>
-        <div class="profileStat"><b id="profileRating">—</b><span>avg overall</span></div>
+        <div class="profileStat"><b id="profileRating">—</b><span>avg rating</span></div>
       </div>
-      <div class="profileEffects" id="profileEffects"></div>
+      <div class="profileFeelingsLabel" id="profileFeelingsLabel">Favorite feelings</div>
+      <div class="profileEffects" id="profileEffects" aria-labelledby="profileFeelingsLabel"></div>
     </div>
     </section>
     <section class="menuSection" aria-labelledby="menuLabHeading">
@@ -3699,9 +3701,11 @@ function renderProfile(){
   document.getElementById('profileSessions').textContent=stats.num_sessions;
   document.getElementById('profileRating').textContent=profileRating==null?'—':`★ ${formatRating(profileRating)}`;
   const summary=document.getElementById('profileSummary');
-  summary.textContent=favorites.length?'Top picks: '+favorites.map(s=>s.name).join(' · '):stats.num_sessions?'Keep logging Overall ratings to build your top picks.':'Your first Blaze session will start your personal history.';
+  summary.textContent=favorites.length?'Top picks: '+favorites.map(s=>s.name).join(' · '):'';
+  summary.hidden=!favorites.length;
   const effects=document.getElementById('profileEffects');
   const top=Object.entries(stats.effects||{}).filter(([k])=>EFFECTS.includes(k)).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  document.getElementById('profileFeelingsLabel').hidden=!top.length;
   effects.replaceChildren(...top.map(([k])=>{const chip=document.createElement('span');chip.className='profileEffect';chip.textContent=EFFECT_ICON[k]+' '+effectLabel(k);return chip;}));
 }
 const RAT_IDENTITIES={
