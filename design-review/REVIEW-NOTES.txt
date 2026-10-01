@@ -38,3 +38,14 @@ No push, production deployment, schema change or backfill occurred.
 Before release, compare the current remote/live baseline, test the exact release
 artifact and record release/rollback identifiers. Local tests do not claim
 signed-in production or account-revocation acceptance.
+
+RELEASE CANDIDATE v2.6.0 — 1 October 2026
+User explicitly approved launch. Latest origin/main 813297c3059cb747c9b81d89d24603b867900682
+was merged, retaining automatic Notion/photo updates. This is the rollback baseline.
+Final profile has uniform accent headings, icon-only View badges at top right,
+Favorite feelings label and concise stats. Menu background is darker than sections.
+Achievement and Worker suites pass; inline scripts parse; card rating renderer
+is byte-for-byte identical to the production branch and tested with null, whole
+and decimal scores. Worker code and auth/data configuration are unchanged.
+Publication uses the existing main-branch GitHub Pages deployment.
+Signed-in live session writes are not part of this UI release verification.
