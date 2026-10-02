@@ -2,3 +2,7 @@
 .reviewToolbar{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;padding:12px 14px;background:var(--ink2);border-bottom:1px solid var(--line);color:var(--text);font:11px/1.5 'Space Grotesk',sans-serif}
 .reviewToolbar strong{margin-right:8px}.reviewToolbar button{min-height:36px;padding:6px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--panel);color:var(--text);font:inherit;cursor:pointer}.reviewToolbar button[aria-pressed=true]{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}
 .reviewToolbar small{color:var(--dim)}.reviewToolbar button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+.reviewToolbar select{max-width:100%;min-height:36px;padding:6px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--panel);color:var(--text);font:inherit}
+/* Keep palette comparisons immediate, without intermediate transition colors. */
+.weather-review *{transition:none!important}

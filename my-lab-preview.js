@@ -40,7 +40,6 @@
     'hybrid-specialist':[3,3],
     'rat-recruiter':[4,3]
   };
-  const badgeAssetIds=new Set([...Object.keys(confirmedBadgeSlots),...Object.keys(supplementalBadgeSlots)]);
 
   const badgeArt={
     rat:'<path d="M9 12C6 6 2 7 3 12c.4 2 2 3 4 3m16-3c3-6 7-5 6 0-.4 2-2 3-4 3M8 14c1-5 4-8 8-8s7 3 8 8l1 6c-1 6-5 9-9 9s-8-3-9-9l1-6Z"/><path d="m11 18 2 1m8-1-2 1m-5 4 2 1 2-1m-2 1v3M7 22l6 1m12-1-6 1"/>',
@@ -84,9 +83,17 @@
   function badgeColor(item){return confirmedBadgeColors[item.id]||item.color;}
   function coin(item){
     const progress=item.earned?100:Math.round((Number(item.progress)||0)*100);
-    // This source is the approved full sheet. Crop its original pixels in CSS.
-    if(item.id==='shared-specimen')return `<div class="badgeCoin badgeCoinArt" style="--coin:${badgeColor(item)};--progress:${progress}"><span class="badgeSprite badgeSheetCrop" aria-hidden="true"></span></div>`;
-    if(badgeAssetIds.has(item.id))return `<div class="badgeCoin badgeCoinArt" style="--coin:${badgeColor(item)};--progress:${progress}"><img class="badgeSprite" src="assets/badges/${item.id}.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>`;
+    // Use the approved sheets directly: some older individual PNGs contain bad crops.
+    const master=confirmedBadgeSlots[item.id],slot=master||supplementalBadgeSlots[item.id];
+    if(slot){
+      const [col,row]=slot;
+      const width=master?1448:1402,height=master?1086:1122,size=master?336:266;
+      const cx=(master?[194,545,897,1248]:[147,420,697,974,1249])[col];
+      const cy=(master?[184,518,852]:[147,410,674,939])[row];
+      const x=(cx-size/2)/(width-size)*100,y=(cy-size/2)/(height-size)*100;
+      const sheet=master?'slr-badge-master':'slr-badge-supplemental';
+      return `<div class="badgeCoin badgeCoinArt" style="--coin:${badgeColor(item)};--progress:${progress}"><span class="badgeSprite" style="background-image:url('assets/badges/${sheet}.png');background-size:${width/size*100}% ${height/size*100}%;background-position:${x}% ${y}%" aria-hidden="true"></span></div>`;
+    }
     return `<div class="badgeCoin" style="--coin:${badgeColor(item)};--progress:${progress}">${svgFor(item)}</div>`;
   }
   function normalizeContext(){
