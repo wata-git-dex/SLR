@@ -49,3 +49,21 @@ is byte-for-byte identical to the production branch and tested with null, whole
 and decimal scores. Worker code and auth/data configuration are unchanged.
 Publication uses the existing main-branch GitHub Pages deployment.
 Signed-in live session writes are not part of this UI release verification.
+
+RELEASE CANDIDATE v2.6.1 — 2 October 2026
+User approved classic controls and launch; glass experiment removed from review.
+Refined shared accents, monochrome alternate in-app icons, quieter shelf reminder,
+neutral menu/Lab surfaces, consistent Settings tint and corrected badge-sheet crops.
+Amber retains Pink & White. Existing card arrangement and rating renderer preserved.
+Approved embedded PNG bytes moved to three static assets without image changes.
+Startup document: 252452 bytes, zero embedded base64; size budget passes.
+Request change: three cacheable same-origin image assets replacing inline PNGs;
+Badge Case uses two existing sheets when opened instead of per-coin files.
+No new API reads, polls, timers or backend/auth changes. Existing refresh and
+write behavior retained. Worker and achievement regression suites pass; all
+inline scripts and My Lab JS parse. Narrow phone light theme and red menu,
+corrected badge grid, tablet and desktop layouts visually reviewed.
+Current owner: SLR 2.0 chat. Latest Notion sync merged before release.
+Rollback: origin/main 48ee709 (full SHA in release report).
+No production session/rating writes used for testing. Signed-in persistence and
+all lifecycle/network conditions are not independently re-certified by this UI release.
