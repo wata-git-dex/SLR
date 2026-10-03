@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="slr-ui slr-glass">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -664,6 +664,46 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 :root:not(.amber-light-theme) .dockBtn.blaze{background:rgba(var(--accent-rgb),.09);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.7)}
 /* Neutral dark menu/Lab surfaces; accent tint is shared by every section. */
 :root:not(.amber-light-theme) :is(.menuSheet,.labHub,.badgeDetail,.myLabPage){--ink:#08090b;--ink2:#101114;--panel:#151619;--panel2:#1b1c20;--line:#2b2d33;--line2:#3b3d44;--profile-end:16,17,20;--profile-stat:8,9,11;--header-rgb:8,9,11}
+
+/* Approved SLR glass navigation; content cards remain solid. */
+:root.slr-glass{--slr-glass:rgba(8,10,14,.72);--slr-glass-solid:#101217;--slr-glass-sheen:rgba(255,255,255,.055);--slr-glass-highlight:rgba(255,255,255,.18);--slr-glass-edge:rgba(var(--accent-rgb),.76)}
+:root.slr-glass.amber-light-theme{--slr-glass:rgba(255,248,252,.83);--slr-glass-solid:#fff8fc;--slr-glass-sheen:rgba(255,255,255,.46);--slr-glass-highlight:rgba(255,255,255,.85);--slr-glass-edge:rgba(var(--accent-rgb),.68)}
+:root.slr-glass :is(header,.menuSheet){background:linear-gradient(145deg,var(--slr-glass-sheen),transparent 48%),var(--slr-glass);border:1px solid var(--slr-glass-edge);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(0,0,0,.2),0 0 10px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(14px) saturate(1.12);backdrop-filter:blur(14px) saturate(1.12)}
+/* One glass housing; buttons retain the classic, flat accent outlines. */
+:root.slr-glass :is(.brandbox,.menuBtn,.headerToggle){background:rgba(var(--accent-rgb),.035);border-color:rgba(var(--accent-rgb),.82);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+:root.slr-glass .menuOverlay{background:rgba(0,0,0,.38)}
+:root.slr-glass .menuSection{background:linear-gradient(145deg,rgba(var(--accent-rgb),.06),transparent 70%),color-mix(in srgb,var(--slr-glass-solid) 48%,transparent);border-color:rgba(var(--accent-rgb),.22)}
+:root.slr-glass .menuSection :is(.menuItem,.menuDisclosure){background:color-mix(in srgb,var(--slr-glass-solid) 66%,transparent);border-color:rgba(var(--accent-rgb),.36);box-shadow:inset 3px 0 0 rgba(var(--accent-rgb),.65)}
+:root.slr-glass .menuSection .menuDisclosure>.menuItem{background:transparent;box-shadow:none}
+:root.slr-glass .menuItem:is(:hover,:focus-visible,[aria-expanded=true]){background:rgba(var(--accent-rgb),.10);box-shadow:inset 3px 0 0 var(--green);border-color:var(--green)}
+:root.slr-glass .menuHead{position:sticky;top:-18px;z-index:2;margin:-18px -18px 4px;padding:18px;background:var(--slr-glass-solid);border-bottom:1px solid rgba(var(--accent-rgb),.42);border-radius:20px 20px 0 0}
+:root.slr-glass .menuCopy b{color:var(--text)}
+:root.slr-glass .menuIcon{background:rgba(var(--accent-rgb),.10);color:var(--green)}
+:root.slr-glass .scoretoggle{border:1px solid rgba(var(--accent-rgb),.6);background:rgba(var(--accent-rgb),.04);border-radius:20px;padding:3px}
+:root.slr-glass .scoretoggle button{border-radius:16px;color:var(--text);border:1px solid transparent}
+:root.slr-glass .scoretoggle button.on{color:var(--green);background:rgba(var(--accent-rgb),.12);border-color:var(--green);box-shadow:inset 0 1px 0 var(--slr-glass-highlight)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root.slr-glass :is(header,.menuSheet){background:var(--slr-glass-solid)}}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){:root.slr-glass :is(header,.menuSheet){background:var(--slr-glass-solid);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){:root.slr-glass :is(header,.menuSheet,.menuItem,.scoretoggle button){transition:none;animation:none}}
+@media(forced-colors:active){:root.slr-glass :is(header,.menuSheet,.menuItem,.menuDisclosure,.scoretoggle){background:Canvas;border-color:CanvasText;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}:root.slr-glass .scoretoggle button.on{border-color:Highlight;color:Highlight}}
+
+/* Edge-to-edge header: no perimeter, only a restrained accent shadow below. */
+:root.slr-ui.slr-glass header{border:0;box-shadow:0 4px 14px rgba(var(--accent-rgb),.13),0 7px 18px rgba(0,0,0,.16)}
+:root.slr-ui.slr-glass.amber-light-theme header{box-shadow:0 4px 14px rgba(var(--accent-rgb),.10),0 7px 18px rgba(52,18,36,.06)}
+@media(prefers-contrast:more),(forced-colors:active){:root.slr-ui.slr-glass header{box-shadow:none;border:0;border-bottom:1px solid currentColor}}
+
+/* Floating actions share the header material; Blaze remains the primary action. */
+:root.slr-ui.slr-glass .actionDock{background:linear-gradient(145deg,var(--slr-glass-sheen),transparent 48%),var(--slr-glass);border:1px solid rgba(var(--accent-rgb),.32);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(0,0,0,.22),0 0 18px rgba(var(--accent-rgb),.13);-webkit-backdrop-filter:blur(14px) saturate(1.12);backdrop-filter:blur(14px) saturate(1.12)}
+:root.slr-ui.slr-glass .dockBtn{color:var(--text);background:transparent;font-size:9px;gap:3px}
+:root.slr-ui.slr-glass .dockBtn svg{color:var(--green)}
+:root.slr-ui.slr-glass .dockBtn.blaze,:root.slr-ui.slr-glass .dockBtn.active{color:var(--text);background:rgba(var(--accent-rgb),.12);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.65),inset 0 1px 0 var(--slr-glass-highlight)}
+:root.slr-ui.slr-glass .dockBtn:hover{background:rgba(var(--accent-rgb),.10)}
+:root.slr-ui.slr-glass.amber-light-theme .actionDock{border-color:rgba(var(--accent-rgb),.42);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(52,18,36,.10),0 0 16px rgba(var(--accent-rgb),.09)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root.slr-ui.slr-glass .actionDock{background:var(--slr-glass-solid)}}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){:root.slr-ui.slr-glass .actionDock{background:var(--slr-glass-solid);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){:root.slr-ui.slr-glass .dockBtn{transition:none;transform:none}}
+@media(forced-colors:active){:root.slr-ui.slr-glass .actionDock{background:Canvas;border-color:CanvasText;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}:root.slr-ui.slr-glass .dockBtn{color:ButtonText}:root.slr-ui.slr-glass .dockBtn svg{color:ButtonText}:root.slr-ui.slr-glass .dockBtn.blaze{outline:1px solid Highlight;box-shadow:none}}
+
 </style>
 <link rel="stylesheet" href="my-lab-preview.css">
 </head>
@@ -755,7 +795,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
     <div class="filterGroup"><div class="filterLabel">Country purchased</div><div class="filterChoices" id="filterCountryrow"></div></div>
     <div class="filterGroup"><div class="filterLabel">Brand</div><select id="brandFilter" class="filterSelect" onchange="filterBrand(this.value)"><option value="">All brands</option></select></div>
     <div class="filterGroup"><div class="filterLabel">Sort by</div><select id="sort" class="filterSelect">
-      <option value="smart">Best match</option><option value="score">Rating: high to low</option><option value="thc">THC: high to low</option><option value="recent">Recently bought</option><option value="az">A–Z</option>
+      <option value="smart">Best match</option><option value="score">Rating: high to low</option><option value="thc">THC: high to low</option><option value="recent" selected>Recently bought</option><option value="az">A–Z</option>
     </select></div>
   </div>
 </div>
@@ -859,7 +899,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 </div>
 
 <main>
-  <div class="shelfIntro" id="shelfIntro"><div class="shelfIntroCopy"><b id="shelfIntroTitle">Your shelf</b><span id="shelfIntroText"></span></div><button onclick="setScoreView('community')" id="shelfCommunityBtn">Explore Community</button></div>
+  <div class="shelfIntro" id="shelfIntro"><div class="shelfIntroCopy"><b id="shelfIntroTitle">Your shelf</b><span id="shelfIntroText"></span></div><button onclick="setScoreView(SCORE_VIEW==='community'?'mine':'community')" id="shelfCommunityBtn">See your strains</button></div>
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" style="display:none"></div>
   <div class="footnote">
@@ -1004,14 +1044,14 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.1';
+const APP_VERSION = 'v2.6.2';
 const LAB_NOTICE = {
-  id:'slr-v2.6.1', version:'Version 2.6.1', audience:'all',
-  title:'Your Lab, a little sharper.',
-  copy:'Classic controls, clearer accents and a cleaner Badge Case.',
+  id:'slr-v2.6.2', version:'Version 2.6.2', audience:'all',
+  title:'The whole Lab, first.',
+  copy:'Explore the community, then jump straight to your own strains.',
   items:[
-    ['◐','Your colors, refined','Brighter accents on dark surfaces, plus Pink & White for Amber.'],
-    ['◎','A clearer Badge Case','Corrected artwork and clearer unearned badges. Open them from your profile.'],
+    ['◐','Glass, with your accent','A softer header, menu and action bar in your chosen colors.'],
+    ['◎','Community first','Fresh visits show every community strain, recently bought first. Tap See your strains for your personal shelf.'],
     ['★','Your ratings stay put','Overall still appears as a star and number on your cards. Your saved sessions and ratings stay unchanged.']
   ]
 };
@@ -3078,7 +3118,8 @@ function sessionOverallRating(s){return sessionModernRated(s)?Number(s.OverallRa
 function mode(arr){ if(!arr.length)return null; const c={}; arr.forEach(x=>c[x]=(c[x]||0)+1); return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; }
 
 let CURRENT_MEMBER = '';
-let SCORE_VIEW = localStorage.getItem('slr_score_view') || 'mine';
+// Every fresh visit opens the shared catalog; the personal shelf is one tap away.
+let SCORE_VIEW = 'community';
 let CARD_VIEW = localStorage.getItem(CARD_VIEW_KEY)==='grid' ? 'grid' : 'row';
 function memberNames(s){
   const names=parseArr(s.Blazers).map(n=>String(n).trim()).filter(Boolean);
@@ -3163,7 +3204,7 @@ const COUNTRIES=[
 ];
 const SMART={loved:0,good:1,mixed:2,tried:3,untested:4,avoid:5};
 
-let shelf='all', ftype='all', fcountry='all', sortBy='smart', query='';
+let shelf='all', ftype='all', fcountry='all', sortBy='recent', query='';
 let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
@@ -3208,7 +3249,7 @@ function syncChips(){
   document.querySelectorAll('#shelfrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===shelf));
   document.querySelectorAll('#typerow .chip,#filterTyperow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===ftype));
   document.querySelectorAll('#filterCountryrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===fcountry));
-  const count=(shelf!=='all'?1:0)+(ftype!=='all'?1:0)+(fcountry!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='smart'?1:0);
+  const count=(shelf!=='all'?1:0)+(ftype!=='all'?1:0)+(fcountry!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='recent'?1:0);
   const filterBtn=document.getElementById('filterBtn');
   if(filterBtn){filterBtn.classList.toggle('active',count>0);document.getElementById('filterBadge').textContent=count;}
 }
@@ -3297,12 +3338,12 @@ function render(){
   const shTest=SHELVES.find(x=>x.id===shelf).test;
   const personalTotal=STRAINS.filter(s=>(s.mine?.num_sessions||0)>0).length;
   const shelfIntro=$('#shelfIntro');
-  shelfIntro.style.display=SCORE_VIEW==='mine'&&personalTotal>0?'flex':'none';
-  if(SCORE_VIEW==='mine'&&personalTotal>0){
-    $('#shelfIntroTitle').textContent=`${personalTotal} strain${personalTotal===1?'':'s'} in your shelf`;
-    $('#shelfIntroText').textContent='';
-    $('#shelfCommunityBtn').textContent='Community →';
-  }
+  shelfIntro.style.display='flex';
+  $('#shelfIntroTitle').textContent=SCORE_VIEW==='community'
+    ?`${STRAINS.length} strains in the community`
+    :`${personalTotal} strain${personalTotal===1?'':'s'} in your shelf`;
+  $('#shelfIntroText').textContent='';
+  $('#shelfCommunityBtn').textContent=SCORE_VIEW==='community'?'See your strains →':'See community →';
   let list=STRAINS.filter(s=>{
     if(SCORE_VIEW==='mine'&&(s.mine?.num_sessions||0)===0)return false;
     if(!shTest(s))return false;
@@ -3801,7 +3842,7 @@ function applyMemberAppIcon(){
   });
 }
 function setScoreView(view){
-  SCORE_VIEW=view; localStorage.setItem('slr_score_view',view);
+  SCORE_VIEW=view==='mine'?'mine':'community';
   STRAINS=process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
   applyMemberUi(); buildChips(); render();
   if(document.getElementById('scrim').classList.contains('show')) closeSheet();

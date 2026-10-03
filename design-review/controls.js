@@ -12,7 +12,25 @@
   select.addEventListener('change',()=>{const [,classes,icon]=themes[Number(select.value)];root.classList.remove(...new Set(themes.flatMap(([,c])=>c.split(' ').filter(Boolean))));if(classes)root.classList.add(...classes.split(' '));document.querySelectorAll('.brandimg,.emblem img,.myLabAvatar img').forEach(img=>{img.src=icon;});});
   toolbar.querySelector('small').textContent='Theme only · sample data · no live writes';
 
-  root.classList.add('weather-review');
+  root.classList.add('weather-review','slr-glass');
+  const material=document.createElement('button');
+  material.textContent='Glass navigation';material.setAttribute('aria-pressed','true');
+  material.addEventListener('click',()=>material.setAttribute('aria-pressed',String(root.classList.toggle('slr-glass'))));
+  toolbar.append(material);
+  // Bounded preview diagnostic: sample frame pacing after the first real scroll
+  // in each material. No production instrumentation or recurring timer.
+  const sampled=new Set();
+  document.addEventListener('scroll',()=>{
+    const mode=root.classList.contains('slr-glass')?'glass':'classic';
+    if(sampled.has(mode))return;sampled.add(mode);
+    const intervals=[];let previous;
+    const frame=now=>{
+      if(previous!==undefined)intervals.push(now-previous);previous=now;
+      if(intervals.length<60){requestAnimationFrame(frame);return;}
+      const sorted=[...intervals].sort((a,b)=>a-b);
+      toolbar.dataset[mode+'Frames']=JSON.stringify({frames:60,medianMs:sorted[30],p95Ms:sorted[57],over34Ms:intervals.filter(x=>x>34).length});
+    };requestAnimationFrame(frame);
+  },{passive:true,capture:true});
   // Allow inspection of forms, but never authentication, refresh, photo or data writes.
   document.addEventListener('click',event=>{
     const action=event.target.closest('#refreshBtn,#asSubmit,#photoSave,#logSubmitBtn,#icSubmit');

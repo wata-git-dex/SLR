@@ -19,7 +19,7 @@ def build_review():
     startup = 'showCheckingGate();refresh(true);'
     assert html.count(startup) == 1, 'Startup changed; review needs updating.'
     html = html.replace(startup, """
-CURRENT_MEMBER='Cyrus'; SCORE_VIEW='mine'; CARD_VIEW='row';
+CURRENT_MEMBER='Cyrus'; CARD_VIEW='row';
 STRAINS=process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
 applyMemberUi(); hideCodeGate(); buildChips(); render(); syncCardViewButton();
 document.getElementById('landing').style.display='none';
