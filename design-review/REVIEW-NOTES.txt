@@ -86,3 +86,8 @@ classic p95 8.7ms; uncontrolled desktop sample, not iPhone GPU/battery certifica
 No claim of complete device performance acceptance. No change to existing auth,
 write/offline/session behavior. Regression suites, script syntax and startup-size
 gate pass. Latest Notion sync merged. Rollback baseline recorded in release report.
+
+2026-10-03 — v2.6.3 approved follow-up
+Equal grid tracks and reserved footer space keep unrated/effects-only/rated card layouts consistent. Profile and Lab averages reuse existing rating color thresholds; no score calculations changed. Includes the approved glass action dock already shipped in v2.6.2 (accent border/icons, highlighted Blaze action, opaque accessibility fallbacks).
+Browser review: 64 sample cards at 1280px all 142.5px high; 320px all 132.5px; 768px all 142.5px. No page overflow at these widths; no grid info/footer overflow at 320px. Existing achievements and Worker tests pass. Startup HTML 258791 bytes; no embedded base64. No backend/network behavior changes. Physical device rendering not certified.
+Rollback: 70bac3d41627695fff06a0f4f455ffd2a4e13fb2.
