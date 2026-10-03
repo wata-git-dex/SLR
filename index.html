@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="slr-ui slr-glass">
+<html lang="en" class="slr-ui slr-glass slr-filled-selection">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -29,10 +29,17 @@
     if(palette==='purple')document.documentElement.classList.add('cyrus-purple-theme');
     if(palette==='amber')document.documentElement.classList.add('interface-amber-theme');
   }
-  if(isAmber){let palette='pink';try{palette=localStorage.getItem('slr_amber_palette')||'pink';}catch(e){}if(palette==='amber')document.documentElement.classList.add('interface-amber-theme');if(palette==='pink-light')document.documentElement.classList.add('amber-light-theme');}
+  if(isAmber){let palette='pink';try{palette=localStorage.getItem('slr_amber_palette')||'pink';}catch(e){}if(palette==='amber')document.documentElement.classList.add('interface-amber-theme');if(palette==='pink-light')document.documentElement.classList.add('slr-light');}
   if(isFelipe){let palette='green';try{palette=localStorage.getItem('slr_felipe_palette')||'green';}catch(e){}if(palette==='yellow')document.documentElement.classList.add('felipe-yellow-theme');}
   if(isPiero){let palette='red';try{palette=localStorage.getItem('slr_piero_palette')||'red';}catch(e){}if(palette==='purple')document.documentElement.classList.add('piero-purple-theme');}
-  document.documentElement.classList.remove('light-mode');
+  try{
+    const mode=localStorage.getItem('slr_appearance_mode:'+member);
+    if(mode==='light'||mode==='dark')document.documentElement.classList.toggle('slr-light',mode==='light');
+    const solid=localStorage.getItem('slr_appearance_material:'+member)==='solid';
+    document.documentElement.classList.toggle('slr-glass',!solid);
+    document.documentElement.classList.toggle('slr-no-glass',solid);
+    document.documentElement.classList.toggle('slr-filled-selection',localStorage.getItem('slr_appearance_selection:'+member)!=='black');
+  }catch(e){}
   if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
@@ -638,39 +645,39 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--accent-rgb),.29),tr
 :root.interface-amber-theme{--theme-floor:#492006;--theme-secondary:255,111,0;--theme-color:#ff9d00;--accent-rgb:255,157,0;--green:#ffbd45}
 :root.felipe-yellow-theme{--theme-floor:#35300a;--theme-secondary:255,183,0;--theme-color:#ffda00;--accent-rgb:255,218,0;--green:#ffe45c}
 body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.08),transparent 55%),linear-gradient(165deg,#0d1215,#080b0f 75%);background-attachment:fixed}
-.amber-light-theme body{background:linear-gradient(155deg,#fff7fb,#fce7f1)}
+.slr-light body{background:linear-gradient(155deg,#fafafa,#edf0f2)}
 .brandicon{background:#030405;border:1px solid rgba(var(--accent-rgb),.4);box-sizing:border-box}
 #themeIconTint feFlood,#themeIconTintLight feFlood{flood-color:var(--theme-color)!important}
 :root .brandbox,:root .menuBtn,:root .headerToggle{box-shadow:none;background:var(--ink2);border-color:rgba(var(--accent-rgb),.55)}
 :root .dockBtn.blaze{background:rgba(var(--accent-rgb),.20);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.5);color:var(--green)}
 .menuIcon,.profileBadgeLink{background:rgba(var(--accent-rgb),.12)}
 .shelfIntro button{background:rgba(var(--accent-rgb),.10);border-color:rgba(var(--accent-rgb),.55)}
-:root.amber-light-theme{--ink:#fff7fb;--ink2:#fffafd;--panel:#ffffff;--panel2:#f6edf2;--line:#dcc8d2;--line2:#cab0bd;--text:#30212a;--dim:#68525f;--faint:#705b66;--green:#b90a55;--green-soft:#b90a55;--theme-color:#ff298b;--accent-rgb:209,20,104;--theme-floor:#fce7f1;--theme-secondary:255,171,208;--header-rgb:255,247,251;--profile-end:255,249,252;--profile-stat:238,219,228;--sativa:#805800;--hybrid:#18703c;--indica:#7139a8;--positive:#18703c;--positive-rgb:24,112,60;--red:#aa302b;--amber:#805800}
-.amber-light-theme .card{box-shadow:0 5px 15px rgba(94,28,59,.08)}
-.amber-light-theme .terppill{color:var(--text)!important}
-.amber-light-theme .thctext{color:var(--text)!important}
-.amber-light-theme .tag.type.Sativa{color:#805800!important}.amber-light-theme .tag.type.Hybrid{color:#18703c!important}.amber-light-theme .tag.type.Indica{color:#7139a8!important}
-.amber-light-theme .actionDock{background:rgba(255,247,251,.96)}
-.amber-light-theme .brandicon{background:#fff8fc;border-color:rgba(var(--accent-rgb),.38)}
+:root.slr-light{--ink:#f6f7f8;--ink2:#ffffff;--panel:#ffffff;--panel2:#edf0f2;--line:#ccd0d5;--line2:#a5adb6;--text:#20242b;--dim:#495360;--faint:#596472;--green:#08734f;--green-soft:#08734f;--theme-floor:#fce7f1;--theme-secondary:255,171,208;--header-rgb:248,249,250;--profile-end:248,249,250;--profile-stat:235,238,241;--sativa:#805800;--hybrid:#18703c;--indica:#7139a8;--positive:#18703c;--positive-rgb:24,112,60;--red:#aa302b;--amber:#805800}
+.slr-light .card{box-shadow:0 5px 15px rgba(94,28,59,.08)}
+.slr-light .terppill{color:var(--text)!important}
+.slr-light .thctext{color:var(--text)!important}
+.slr-light .tag.type.Sativa{color:#805800!important}.slr-light .tag.type.Hybrid{color:#18703c!important}.slr-light .tag.type.Indica{color:#7139a8!important}
+.slr-light .actionDock{background:rgba(255,247,251,.96)}
+.slr-light .brandicon{background:#fff8fc;border-color:rgba(var(--accent-rgb),.38)}
 /* A single strain-color edge defines the card; the name panel stays quiet. */
 .card{border-color:color-mix(in srgb,var(--typecol,var(--line2)) 52%,var(--line));box-shadow:0 8px 20px rgba(0,0,0,.23),0 0 9px color-mix(in srgb,var(--typecol,var(--line2)) 12%,transparent),inset 0 0 0 1px color-mix(in srgb,var(--typecol,var(--line2)) 7%,transparent)}
 .card .cnbox{border-left-width:1px;border-color:var(--line);background:color-mix(in srgb,var(--panel2) 70%,var(--panel))}
-.amber-light-theme .card{border-color:color-mix(in srgb,var(--typecol,var(--line2)) 40%,var(--line));box-shadow:0 5px 15px rgba(94,28,59,.10)}
+.slr-light .card{border-color:color-mix(in srgb,var(--typecol,var(--line2)) 40%,var(--line));box-shadow:0 5px 15px rgba(94,28,59,.10)}
 /* Quiet shelf reminder; neon belongs to navigation, not large surfaces. */
 .shelfIntro{padding:0 2px;margin-bottom:10px;gap:8px;flex-direction:row;align-items:center;border:0;border-radius:0;background:none}
 .shelfIntroCopy b{font:400 11px/1.45 'Space Mono',monospace;color:var(--dim)}
 .shelfIntroCopy span:empty{display:none}
 .shelfIntro button{align-self:center;min-height:36px;padding:6px 2px;border:0;border-radius:0;background:none;color:var(--green);font:500 11px/1.4 'Space Grotesk',sans-serif}
 .shelfIntro button:hover{text-decoration:underline;text-underline-offset:3px}
-:root:not(.amber-light-theme) .brandbox,:root:not(.amber-light-theme) .menuBtn,:root:not(.amber-light-theme) .headerToggle{background:#0b1014;border-color:rgba(var(--accent-rgb),.8)}
-:root:not(.amber-light-theme) .actionDock{background:rgba(9,13,18,.96);border-color:rgba(var(--accent-rgb),.65)}
-:root:not(.amber-light-theme) .dockBtn.blaze{background:rgba(var(--accent-rgb),.09);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.7)}
+:root:not(.slr-light) .brandbox,:root:not(.slr-light) .menuBtn,:root:not(.slr-light) .headerToggle{background:#0b1014;border-color:rgba(var(--accent-rgb),.8)}
+:root:not(.slr-light) .actionDock{background:rgba(9,13,18,.96);border-color:rgba(var(--accent-rgb),.65)}
+:root:not(.slr-light) .dockBtn.blaze{background:rgba(var(--accent-rgb),.09);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.7)}
 /* Neutral dark menu/Lab surfaces; accent tint is shared by every section. */
-:root:not(.amber-light-theme) :is(.menuSheet,.labHub,.badgeDetail,.myLabPage){--ink:#08090b;--ink2:#101114;--panel:#151619;--panel2:#1b1c20;--line:#2b2d33;--line2:#3b3d44;--profile-end:16,17,20;--profile-stat:8,9,11;--header-rgb:8,9,11}
+:root:not(.slr-light) :is(.menuSheet,.labHub,.badgeDetail,.myLabPage){--ink:#08090b;--ink2:#101114;--panel:#151619;--panel2:#1b1c20;--line:#2b2d33;--line2:#3b3d44;--profile-end:16,17,20;--profile-stat:8,9,11;--header-rgb:8,9,11}
 
 /* Approved SLR glass navigation; content cards remain solid. */
 :root.slr-glass{--slr-glass:rgba(8,10,14,.72);--slr-glass-solid:#101217;--slr-glass-sheen:rgba(255,255,255,.055);--slr-glass-highlight:rgba(255,255,255,.18);--slr-glass-edge:rgba(var(--accent-rgb),.76)}
-:root.slr-glass.amber-light-theme{--slr-glass:rgba(255,248,252,.83);--slr-glass-solid:#fff8fc;--slr-glass-sheen:rgba(255,255,255,.46);--slr-glass-highlight:rgba(255,255,255,.85);--slr-glass-edge:rgba(var(--accent-rgb),.68)}
+:root.slr-glass.slr-light{--slr-glass:rgba(255,248,252,.83);--slr-glass-solid:#fff8fc;--slr-glass-sheen:rgba(255,255,255,.46);--slr-glass-highlight:rgba(255,255,255,.85);--slr-glass-edge:rgba(var(--accent-rgb),.68)}
 :root.slr-glass :is(header,.menuSheet){background:linear-gradient(145deg,var(--slr-glass-sheen),transparent 48%),var(--slr-glass);border:1px solid var(--slr-glass-edge);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(0,0,0,.2),0 0 10px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(14px) saturate(1.12);backdrop-filter:blur(14px) saturate(1.12)}
 /* One glass housing; buttons retain the classic, flat accent outlines. */
 :root.slr-glass :is(.brandbox,.menuBtn,.headerToggle){background:rgba(var(--accent-rgb),.035);border-color:rgba(var(--accent-rgb),.82);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
@@ -692,7 +699,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 
 /* Edge-to-edge header: no perimeter, only a restrained accent shadow below. */
 :root.slr-ui.slr-glass header{border:0;box-shadow:0 4px 14px rgba(var(--accent-rgb),.13),0 7px 18px rgba(0,0,0,.16)}
-:root.slr-ui.slr-glass.amber-light-theme header{box-shadow:0 4px 14px rgba(var(--accent-rgb),.10),0 7px 18px rgba(52,18,36,.06)}
+:root.slr-ui.slr-glass.slr-light header{box-shadow:0 4px 14px rgba(var(--accent-rgb),.10),0 7px 18px rgba(52,18,36,.06)}
 @media(prefers-contrast:more),(forced-colors:active){:root.slr-ui.slr-glass header{box-shadow:none;border:0;border-bottom:1px solid currentColor}}
 
 /* Floating actions share the header material; Blaze remains the primary action. */
@@ -701,11 +708,46 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 :root.slr-ui.slr-glass .dockBtn svg{color:var(--green)}
 :root.slr-ui.slr-glass .dockBtn.blaze,:root.slr-ui.slr-glass .dockBtn.active{color:var(--text);background:rgba(var(--accent-rgb),.12);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.65),inset 0 1px 0 var(--slr-glass-highlight)}
 :root.slr-ui.slr-glass .dockBtn:hover{background:rgba(var(--accent-rgb),.10)}
-:root.slr-ui.slr-glass.amber-light-theme .actionDock{border-color:rgba(var(--accent-rgb),.42);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(52,18,36,.10),0 0 16px rgba(var(--accent-rgb),.09)}
+:root.slr-ui.slr-glass.slr-light .actionDock{border-color:rgba(var(--accent-rgb),.42);box-shadow:inset 0 1px 0 var(--slr-glass-highlight),0 8px 24px rgba(52,18,36,.10),0 0 16px rgba(var(--accent-rgb),.09)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root.slr-ui.slr-glass .actionDock{background:var(--slr-glass-solid)}}
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more){:root.slr-ui.slr-glass .actionDock{background:var(--slr-glass-solid);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){:root.slr-ui.slr-glass .dockBtn{transition:none;transform:none}}
 @media(forced-colors:active){:root.slr-ui.slr-glass .actionDock{background:Canvas;border-color:CanvasText;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}:root.slr-ui.slr-glass .dockBtn{color:ButtonText}:root.slr-ui.slr-glass .dockBtn svg{color:ButtonText}:root.slr-ui.slr-glass .dockBtn.blaze{outline:1px solid Highlight;box-shadow:none}}
+
+
+/* Navigation selection preference does not turn action buttons into tabs. */
+:root.slr-ui :is(.scoretoggle button.on,.labTab.on){background:#030303;color:var(--selection-accent);border-color:var(--selection-accent);box-shadow:none}
+:root.slr-ui.slr-filled-selection :is(.scoretoggle button.on,.labTab.on){background:var(--selection-accent);color:#050607;border-color:var(--selection-accent);box-shadow:none}
+/* Independent mode/material, and the October 3 glass action-bar comparison. */
+:root.slr-light.amber-theme{--green:#b90a55;--green-soft:#b90a55}
+:root.slr-light.piero-theme{--green:#bd142d;--green-soft:#bd142d}
+:root.slr-light.cyrus-blue-theme{--green:#006eab;--green-soft:#006eab}
+:root.slr-light.cyrus-purple-theme,:root.slr-light.piero-purple-theme{--green:#7923b8;--green-soft:#7923b8}
+:root.slr-light.interface-amber-theme,:root.slr-light.felipe-yellow-theme{--green:#8a5100;--green-soft:#8a5100}
+.appearanceLabel{margin:14px 12px 0;font:600 11px 'Space Grotesk',sans-serif;color:var(--dim)}
+.selectionSample{display:inline-block;width:20px;height:13px;margin-right:6px;border-radius:8px;border:1px solid var(--selection-accent);vertical-align:middle}.selectionSample.black{background:#030303}.selectionSample.accent{background:var(--selection-accent)}
+.appearanceChoices{display:flex;flex-wrap:wrap;gap:6px;margin:10px 12px}
+.appearanceChoices button{min-height:44px;padding:8px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--panel);color:var(--text);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
+.appearanceChoices button[aria-pressed=true]{border-color:var(--green);color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+:root.slr-ui .actionDock{grid-template-columns:repeat(3,minmax(0,1fr));padding:5px;gap:3px;border:1px solid var(--green);border-radius:30px;box-sizing:border-box}
+:root.slr-ui.slr-glass .actionDock{background:linear-gradient(145deg,rgba(255,255,255,.08),transparent 65%),rgba(18,18,18,.48);border-color:var(--green);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:inset 0 1px 0 #ffffff25,0 8px 24px #0003}
+:root.slr-ui.slr-glass.slr-light .actionDock{background:linear-gradient(145deg,rgba(255,255,255,.08),transparent 65%),rgba(18,18,18,.72)}
+:root.slr-ui .dockBtn{min-width:0;height:48px;box-sizing:border-box;gap:4px;font:600 10px 'Space Grotesk',sans-serif;color:var(--text);border-radius:24px}
+:root.slr-ui.slr-glass .dockBtn{color:#f5f5f5;background:transparent}
+:root.slr-ui .dockBtn svg,:root.slr-ui.slr-glass .dockBtn svg{width:22px;height:22px;padding:0;color:inherit}
+:root.slr-ui .dockBtn.blaze,:root.slr-ui.slr-glass .dockBtn.blaze{background:var(--selection-accent);color:#050607;box-shadow:none}
+:root{--selection-accent:#57f2ae;--slr-solid:#101217}:root.slr-light{--slr-solid:#fff}
+:root.amber-theme{--selection-accent:#ff69ad}:root.piero-theme{--selection-accent:#ff646f}:root.cyrus-blue-theme{--selection-accent:#49baff}:root.cyrus-purple-theme,:root.piero-purple-theme{--selection-accent:#c078ff}:root.interface-amber-theme{--selection-accent:#ffbd45}:root.felipe-theme{--selection-accent:#55ed9c}:root.felipe-yellow-theme{--selection-accent:#ffe45c}
+:root.slr-ui.slr-filled-selection .actionDock{border-color:var(--selection-accent)}
+:root.slr-ui.slr-filled-selection .dockBtn.blaze{background:var(--selection-accent);color:#050607;box-shadow:none}
+:root.slr-ui .dockBtn:focus-visible{outline:2px solid var(--selection-accent);outline-offset:1px}
+:root.slr-ui.slr-no-glass :is(header,.menuSheet,.actionDock,.dockSearch,.labHubHead,.headerControls,.scoretoggle){background:var(--slr-solid);backdrop-filter:none;-webkit-backdrop-filter:none}
+:root.slr-ui.slr-no-glass :is(.scrim,.blazeOverlay){backdrop-filter:none;-webkit-backdrop-filter:none}
+:root.slr-ui.slr-no-glass header{border:0;box-shadow:0 4px 14px rgba(var(--accent-rgb),.13)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root.slr-ui.slr-glass .actionDock,:root.slr-ui.slr-glass.slr-light .actionDock{background:#1b1b1b}}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){:root.slr-ui.slr-glass .actionDock,:root.slr-ui.slr-glass.slr-light .actionDock{background:#1b1b1b;backdrop-filter:none;-webkit-backdrop-filter:none}:root.slr-ui :is(.scrim,.blazeOverlay,.dockSearch,.labHubHead){backdrop-filter:none;-webkit-backdrop-filter:none}}
+@media(prefers-reduced-motion:reduce){:root.slr-ui .dockBtn{transition:none;transform:none}}
+@media(forced-colors:active){:root.slr-ui .actionDock,:root.slr-ui.slr-glass.slr-light .actionDock{background:Canvas;border-color:CanvasText;backdrop-filter:none;-webkit-backdrop-filter:none}:root.slr-ui .dockBtn,:root.slr-ui.slr-glass .dockBtn,:root.slr-ui.slr-filled-selection .dockBtn.blaze{color:ButtonText;background:ButtonFace}:root.slr-ui .dockBtn.blaze{outline:1px solid Highlight}}
 
 </style>
 <link rel="stylesheet" href="my-lab-preview.css">
@@ -954,9 +996,12 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
     <h3 class="menuEyebrow" id="menuSettingsHeading">Settings &amp; More</h3>
     <div class="menuList">
       <div class="menuDisclosure">
-        <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor" stroke="none"/></svg></span><span class="menuCopy"><b>Accent color</b><span>Choose your account’s interface color</span></span><span class="menuArrow">⌄</span></button>
+        <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor" stroke="none"/></svg></span><span class="menuCopy"><b>Appearance</b><span>Mode, accent and menu style</span></span><span class="menuArrow">⌄</span></button>
         <div class="appearancePanel" id="appearancePanel">
-          <div class="cyrusPalette" id="cyrusPalette">
+          <div class="appearanceLabel">Mode</div><div class="appearanceChoices" role="group" aria-label="Color mode"><button type="button" data-appearance-mode="dark">Dark</button><button type="button" data-appearance-mode="light">Light</button></div>
+          <div class="appearanceLabel">Menu material</div><div class="appearanceChoices" role="group" aria-label="Surface material"><button type="button" data-appearance-material="glass">Glass</button><button type="button" data-appearance-material="solid">Solid</button></div>
+          <div class="appearanceLabel">Selected navigation</div><div class="appearanceChoices" role="group" aria-label="Selected navigation button"><button type="button" data-appearance-selection="black"><i class="selectionSample black"></i>Black</button><button type="button" data-appearance-selection="accent"><i class="selectionSample accent"></i>Accent color</button></div>
+          <div class="cyrusPalette" id="cyrusPalette"><div class="appearanceLabel">Accent</div>
             <div class="memberPaletteSet" data-palette-member="cyrus" role="group" aria-label="Cyrus interface color">
               <button class="cyrusPaletteBtn" data-member-palette="green"><i class="paletteDot green"></i>Green</button>
               <button class="cyrusPaletteBtn" data-member-palette="blue"><i class="paletteDot blue"></i>Blue</button>
@@ -964,7 +1009,6 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
               <button class="cyrusPaletteBtn" data-member-palette="amber"><i class="paletteDot amber"></i>Amber</button>
             </div>
             <div class="memberPaletteSet" data-palette-member="amber" role="group" aria-label="Amber interface color">
-              <button class="cyrusPaletteBtn" data-member-palette="pink-light"><i class="paletteDot pink"></i>Pink & White</button>
               <button class="cyrusPaletteBtn" data-member-palette="pink"><i class="paletteDot pink"></i>Pink</button>
               <button class="cyrusPaletteBtn" data-member-palette="amber"><i class="paletteDot amber"></i>Amber</button>
             </div>
@@ -1047,14 +1091,14 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.3';
+const APP_VERSION = 'v2.6.4';
 const LAB_NOTICE = {
-  id:'slr-v2.6.3', version:'Version 2.6.3', audience:'all',
-  title:'A tidier Lab.',
-  copy:'Consistent cards, clearer ratings and the latest action bar.',
+  id:'slr-v2.6.4', version:'Version 2.6.4', audience:'all',
+  title:'Your Lab, your look.',
+  copy:'Brighter actions and independent appearance choices.',
   items:[
-    ['◐','Glass, with your accent','A softer header, menu and action bar in your chosen colors.'],
-    ['◎','An even grid','Cards stay the same height, including strains without a rating.'],
+    ['◐','Choose your look','Light or Dark, Glass or Solid, with your account’s accent colors.'],
+    ['◎','Clearer controls','A translucent action bar with a bright Blaze button. Choose black or accent-filled selections in Appearance.'],
     ['★','Ratings in color','Profile averages now use the same rating colors as strain cards.']
   ]
 };
@@ -3663,7 +3707,7 @@ function applyMemberTheme(){
   const member=CURRENT_MEMBER.trim().toLowerCase();
   const palette=memberPalette();
   document.documentElement.classList.toggle('amber-theme',member==='amber');
-  document.documentElement.classList.toggle('amber-light-theme',member==='amber'&&palette==='pink-light');
+
   document.documentElement.classList.toggle('felipe-theme',member==='felipe carvalho');
   document.documentElement.classList.toggle('piero-theme',member==='piero');
   document.documentElement.classList.toggle('cyrus-blue-theme',member==='cyrus'&&palette==='blue');
@@ -3671,6 +3715,7 @@ function applyMemberTheme(){
   document.documentElement.classList.toggle('interface-amber-theme',(member==='cyrus'||member==='amber')&&palette==='amber');
   document.documentElement.classList.toggle('felipe-yellow-theme',member==='felipe carvalho'&&palette==='yellow');
   document.documentElement.classList.toggle('piero-purple-theme',member==='piero'&&palette==='purple');
+  applyAppearance();
 }
 function memberPalette(){
   const member=CURRENT_MEMBER.trim().toLowerCase(),config=MEMBER_PALETTES[member];
@@ -3680,9 +3725,9 @@ function memberPalette(){
 function syncMemberPalette(){
   const control=document.getElementById('cyrusPalette');
   const member=CURRENT_MEMBER.trim().toLowerCase(),hasPalette=Boolean(MEMBER_PALETTES[member]);
-  if(control){control.classList.toggle('show',hasPalette);control.closest('.menuDisclosure').hidden=!hasPalette;}
+  if(control){control.classList.toggle('show',hasPalette);control.closest('.menuDisclosure').hidden=false;}
   document.querySelectorAll('[data-palette-member]').forEach(group=>group.classList.toggle('show',hasPalette&&group.dataset.paletteMember===member));
-  const active=memberPalette();
+  const active=memberPalette()==='pink-light'?'pink':memberPalette();
   document.querySelectorAll('[data-member-palette]').forEach(button=>{
     const on=hasPalette&&button.closest('[data-palette-member]')?.dataset.paletteMember===member&&button.dataset.memberPalette===active;
     button.classList.toggle('on',on);
@@ -3692,14 +3737,31 @@ function syncMemberPalette(){
 function setMemberPalette(palette){
   const member=CURRENT_MEMBER.trim().toLowerCase(),config=MEMBER_PALETTES[member];
   if(!config||!config.options.includes(palette))return;
-  try{localStorage.setItem(config.key,palette);}catch(e){}
+  try{if(!appearancePreference('mode'))localStorage.setItem('slr_appearance_mode:'+member,document.documentElement.classList.contains('slr-light')?'light':'dark');localStorage.setItem(config.key,palette);}catch(e){}
   applyMemberTheme();
   syncMemberPalette();
   setColorMode();
 }
+function appearancePreference(kind){
+  try{return localStorage.getItem('slr_appearance_'+kind+':'+CURRENT_MEMBER.trim().toLowerCase());}catch(e){return null;}
+}
+function applyAppearance(){
+  const root=document.documentElement,mode=appearancePreference('mode');
+  const light=mode==='light'||(mode!=='dark'&&memberPalette()==='pink-light');
+  const solid=appearancePreference('material')==='solid';
+  root.classList.toggle('slr-light',light);root.classList.toggle('slr-glass',!solid);root.classList.toggle('slr-no-glass',solid);
+  const filled=appearancePreference('selection')!=='black';root.classList.toggle('slr-filled-selection',filled);
+  document.querySelectorAll('[data-appearance-selection]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.appearanceSelection==='accent')===filled)));
+  document.querySelectorAll('[data-appearance-mode]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.appearanceMode==='light')===light)));
+  document.querySelectorAll('[data-appearance-material]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.appearanceMaterial==='solid')===solid)));
+  setColorMode();
+}
+function setAppearancePreference(kind,value){
+  if(!(kind==='mode'?['light','dark']:kind==='material'?['glass','solid']:kind==='selection'?['black','accent']:[]).includes(value))return;
+  try{localStorage.setItem('slr_appearance_'+kind+':'+CURRENT_MEMBER.trim().toLowerCase(),value);}catch(e){}
+  applyAppearance();
+}
 function setColorMode(){
-  document.documentElement.classList.remove('light-mode');
-  try{localStorage.setItem('slr_color_mode','dark');}catch(e){}
   requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();});
 }
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
@@ -4498,6 +4560,9 @@ document.getElementById('menuTheLab').addEventListener('click',()=>openTheLab('c
 document.getElementById('labDockBtn').addEventListener('click',()=>openTheLab('tests'));
 document.getElementById('labHubClose').addEventListener('click',closeTheLab);
 document.querySelectorAll('[data-lab-tab]').forEach(button=>button.addEventListener('click',()=>setLabTab(button.dataset.labTab)));
+document.querySelectorAll('[data-appearance-selection]').forEach(b=>b.addEventListener('click',()=>setAppearancePreference('selection',b.dataset.appearanceSelection)));
+document.querySelectorAll('[data-appearance-mode]').forEach(b=>b.addEventListener('click',()=>setAppearancePreference('mode',b.dataset.appearanceMode)));
+document.querySelectorAll('[data-appearance-material]').forEach(b=>b.addEventListener('click',()=>setAppearancePreference('material',b.dataset.appearanceMaterial)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
 document.getElementById('menuRatings').addEventListener('click',openRatingsInfo);
 
