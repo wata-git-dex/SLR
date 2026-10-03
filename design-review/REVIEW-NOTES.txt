@@ -67,3 +67,22 @@ Current owner: SLR 2.0 chat. Latest Notion sync merged before release.
 Rollback: origin/main 48ee709 (full SHA in release report).
 No production session/rating writes used for testing. Signed-in persistence and
 all lifecycle/network conditions are not independently re-certified by this UI release.
+
+RELEASE CANDIDATE v2.6.2 — 3 October 2026
+User approved launch for all SLR account themes. Borderless glass header with
+soft accent shadow; glass menu and floating action housing; classic inner
+controls and unchanged strain cards. Light/dark, reduced transparency/motion,
+high contrast and unsupported-blur fallback rules included. CSS-only material;
+no production animation loops, API reads, polls or backend changes added.
+Fresh visits start in Community using the existing Recently bought ordering
+(recorded purchase date, missing dates last). See your strains / See community
+switches between existing scoring scopes. Personal data/rating aggregation unchanged.
+Browser checks: all 11 palettes at 320px, zero horizontal overflow and zero top
+header border; light-mode bar visually checked; personal/community switch verified;
+768x1024 and 1024x768 layouts have no horizontal overflow. Prior desktop preview
+reviewed by user. Preview frame sampling is bounded to 60 frames per mode and
+not included in production. Earlier glass sample p95 40.8ms (3 frames >34ms),
+classic p95 8.7ms; uncontrolled desktop sample, not iPhone GPU/battery certification.
+No claim of complete device performance acceptance. No change to existing auth,
+write/offline/session behavior. Regression suites, script syntax and startup-size
+gate pass. Latest Notion sync merged. Rollback baseline recorded in release report.
