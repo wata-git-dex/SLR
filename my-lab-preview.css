@@ -27,3 +27,10 @@
 
 /* Keep hidden/unearned art readable but distinct from earned color coins. */
 .badgeItem.locked .badgeCoinArt .badgeSprite,.badgeRow.locked .badgeCoinArt .badgeSprite,.badgeItem.secret .badgeCoinArt .badgeSprite,.badgeRow.secret .badgeCoinArt .badgeSprite{filter:grayscale(1) brightness(.62)}
+
+/* One personal profile, with history and badges contained within it. */
+.myLabHistoryNote{margin:16px 0 0;color:var(--dim);font:10px/1.6 'Space Mono',monospace}
+.myLabIdentity .badgeCase{margin-top:16px;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;box-shadow:none}
+.myLabIdentity .badgeCaseToggle{padding:14px 0 0;gap:10px}.myLabIdentity .badgeCaseIcon{width:34px;height:34px;border:0;background:transparent}.myLabIdentity .badgeCaseCopy strong{font-size:14px}
+.myLabIdentity .badgeCaseBody .badgeCaseInner{padding-top:14px}.myLabIdentity .badgeGrid{padding:8px 0 16px}
+.myLabIdentityTop{flex-wrap:wrap}.myLabName{min-width:90px}.myLabLevel{margin-left:auto}.myLabProgressMeta{flex-wrap:wrap;gap:6px}.myLabAvatar{width:48px;height:48px;border-radius:14px;box-shadow:none}

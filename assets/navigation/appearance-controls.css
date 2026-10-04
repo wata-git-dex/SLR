@@ -1,0 +1,46 @@
+/* Shared four-part Appearance controls. Host material adapters remain opt-in. */
+.wata-drawer .wata-appearance-controls :is(.wata-mode-options,.wata-material-options,.wata-selection-options){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.wata-drawer .wata-mode-options:has([data-wata-mode="auto"]){grid-template-columns:repeat(3,minmax(0,1fr))}
+.wata-drawer .wata-appearance-controls :is(.wata-mode-options,.wata-material-options,.wata-selection-options)>button{position:relative;box-sizing:border-box;min-width:0;min-height:68px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid var(--wd-line);border-radius:11px;background:transparent;color:var(--wd-text);font-family:inherit;font-size:12px;font-weight:600;line-height:1.35;cursor:pointer}
+.wata-drawer .wata-appearance-controls .wata-mode-preview{height:22px;max-width:100%;margin:0}
+.wata-drawer .wata-mode-preview.auto{background:linear-gradient(90deg,#f5f5f5 50%,#151515 50%)}
+.wata-drawer .wata-accent-options>button{min-height:58px}
+.wata-drawer .wata-setting-label:not(:first-child){margin-top:16px}
+.wata-drawer :is(.wata-material-options,.wata-selection-options)>button[aria-pressed="true"]{outline:2px solid var(--wd-focus);outline-offset:1px}
+.wata-drawer :is(.wata-material-options,.wata-selection-options)>button>b{position:absolute;right:6px;top:4px;font-size:12px}
+.wata-material-preview{width:48px;height:22px;box-sizing:border-box;border:1px solid var(--wd-focus);border-radius:6px;background:var(--wf-surface,var(--panel,#161616))}
+.wata-material-preview.glass{background:linear-gradient(135deg,#ffffff66,transparent),repeating-linear-gradient(135deg,transparent 0 7px,#8293a650 7px 9px)}
+.wata-selection-preview{display:grid;place-items:center;width:48px;height:22px;border:1px solid var(--wd-line);border-radius:6px;background:#030303;color:var(--wf-bright,#39d5f4)}
+.wata-selection-preview.accent{background:var(--wf-bright,#39d5f4);color:#030303}
+/* Hosts mark navigation destinations explicitly. Never target action/accordion states. */
+html [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]){background:#030303!important;color:var(--wf-bright,#39d5f4)!important}
+html[data-wata-menu-selection="accent"] [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]){background:var(--wf-bright,#39d5f4)!important;color:#030303!important}
+html[data-wata-menu-material="solid"] [data-wata-menu-surface]{background:var(--wata-menu-solid,var(--wf-surface,#161616))!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){html [data-wata-menu-surface]{background:var(--wata-menu-solid,var(--wf-surface,#161616))!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){html [data-wata-menu-surface]{background:var(--wata-menu-solid,var(--wf-surface,#161616))!important}}
+@media(prefers-reduced-motion:reduce){html [data-wata-menu-surface],.wata-appearance-controls *{animation:none!important;transition:none!important}}
+@media(forced-colors:active){html [data-wata-menu-surface]{background:Canvas!important;border-color:CanvasText!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}html[data-wata-menu-selection] [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]){background:Highlight!important;color:HighlightText!important}.wata-drawer .wata-appearance-controls button[aria-pressed="true"]{outline:2px solid Highlight}.wata-selection-preview{border-color:CanvasText}}
+
+/* Let the drawer body own scrolling, not a legacy two-group inner panel. */
+.wata-drawer :has(>.wata-appearance-controls){max-height:none;overflow:visible}
+
+/* Keep fixed-theme samples fixed even under host span overrides. */
+.wata-drawer .wata-appearance-controls .wata-selection-preview.black{background:#030303!important;color:var(--wf-bright,#39d5f4)!important}
+.wata-drawer .wata-appearance-controls .wata-selection-preview.accent{background:var(--wf-bright,#39d5f4)!important;color:#030303!important}
+/* Reflective navigation material. Hosts opt in; forms/content remain untouched. */
+[data-wata-glass-housing]{position:relative;isolation:isolate;border:1px solid transparent;--wata-nav-bright:var(--wf-bright,#39d5f4);background:linear-gradient(145deg,#ffffff12,transparent 65%),rgba(18,18,18,.64);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:inset 0 1px 2px #ffffff12,0 8px 24px #0003}
+[data-wata-glass-housing]:after{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1.25px;pointer-events:none;z-index:4;background:conic-gradient(from var(--wata-rim-angle,0deg),#ffffff70,#ffffff14 16%,color-mix(in srgb,var(--wata-nav-bright) 18%,transparent) 29%,#ffffff10 39%,#ffffff60 51%,#ffffff12 67%,#ffffff14 89%,#ffffff70);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude}
+.wata-glass-nav{touch-action:pinch-zoom}
+.wata-glass-nav [data-wata-menu-nav]:focus-visible,.wata-drawer .wata-appearance-controls button:focus-visible{outline:2px solid var(--wd-focus,var(--wf-bright,#39d5f4));outline-offset:-3px}
+.wata-glass-nav [data-wata-menu-nav]{position:relative;z-index:2;box-sizing:border-box;min-width:0;user-select:none;-webkit-user-select:none;color:#f5f5f5}
+html .wata-glass-nav [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]),html[data-wata-menu-selection="accent"] .wata-glass-nav [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]){background:transparent!important}
+.wata-glass-lens{position:absolute;left:0;top:0;z-index:1;pointer-events:none;box-sizing:border-box;border:1px solid transparent;border-radius:var(--wata-nav-radius,24px);background:#030303;transition:transform 280ms cubic-bezier(.2,.85,.25,1.1),width 200ms,height 200ms,background 160ms,box-shadow 160ms}
+html[data-wata-menu-selection="accent"] .wata-glass-lens{background:var(--wata-nav-bright)}
+.wata-glass-held .wata-glass-lens{background:linear-gradient(125deg,#ffffff2b,transparent 45%),rgba(20,28,30,.35)!important;backdrop-filter:blur(7px) saturate(1.5);-webkit-backdrop-filter:blur(7px) saturate(1.5);box-shadow:inset 0 1px 2px #ffffff88,inset 1px 0 1px #ffffff33,inset 0 -1px 2px #ffffff55,0 6px 16px #0005;transition:transform 60ms linear,background 150ms,box-shadow 150ms}
+html .wata-glass-held [data-wata-menu-nav]{color:#f5f5f5!important}
+html .wata-glass-held [data-wata-nav-preview]{color:var(--wata-nav-bright)!important}
+html[data-wata-menu-material="solid"] [data-wata-glass-housing]{--wata-menu-solid:#1b1b1b;border-color:var(--wata-nav-bright)}
+html[data-wata-menu-material="solid"] [data-wata-glass-housing]:after{display:none}
+@media(prefers-reduced-motion:reduce){.wata-glass-lens{transition:none!important}}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){[data-wata-glass-housing]{--wata-menu-solid:#1b1b1b;border-color:currentColor}[data-wata-glass-housing]:after{display:none}}
+@media(forced-colors:active){[data-wata-glass-housing]:after{display:none}.wata-glass-lens{background:Highlight!important}html .wata-glass-nav [data-wata-menu-nav]{color:CanvasText!important}html .wata-glass-nav [data-wata-menu-nav]:is([aria-current="page"],[aria-selected="true"],[aria-pressed="true"]){color:HighlightText!important}}
