@@ -16,11 +16,11 @@
     {id:'guinea-pig',name:'Guinea Pig',description:'Became the first Rat to rate a strain.',category:'community',xp:25,metric:'firstRatings',threshold:1,art:'guineaPig',color:'#f16a78'},
     {id:'shared-specimen',name:'Shared Specimen',description:'Rated a strain another Rat has rated.',category:'community',xp:20,metric:'sharedRatings',threshold:1,art:'sharedLeaf',color:'#ff719d'},
     {id:'brand-hopper',name:'Brand Hopper',description:'Rated strains from 5 different brands.',category:'discovery',xp:25,metric:'ratedBrands',threshold:5,art:'labels',color:'#ffb13b'},
-    {id:'complete-observation',name:'Complete Observation',description:'Logged 10 Sessions with an Overall rating and an Effect or Side Effect.',category:'quality',xp:35,metric:'completeSessions',threshold:10,art:'clipboard',color:'#4cd19b'},
+    {id:'complete-observation',repeatable:true,name:'Complete Observation',description:'Logged 10 Sessions with an Overall rating and an Effect or Side Effect.',category:'quality',xp:35,metric:'completeSessions',threshold:10,art:'clipboard',color:'#4cd19b'},
     {id:'couch-culture',name:'Couch Culture',description:'Strongly reported Couch-Locked in 3 Sessions.',category:'effects',xp:20,metric:'couchLockedStrong',threshold:3,art:'couchRat',color:'#9c7ae8'},
-    {id:'high-voltage',name:'High Voltage',description:'Tried 5 different Sativa strains.',category:'types',xp:25,metric:'sativaStrains',threshold:5,art:'boltLeaf',color:'#f4be32'},
-    {id:'dreamwalker',name:'Dreamwalker',description:'Tried 5 different Indica strains.',category:'types',xp:25,metric:'indicaStrains',threshold:5,art:'moonLeaf',color:'#9178ef'},
-    {id:'best-of-both',name:'Best of Both',description:'Tried 5 different Hybrid strains.',category:'types',xp:25,metric:'hybridStrains',threshold:5,art:'splitLeaf',color:'#4bd47d'},
+    {id:'high-voltage',repeatable:true,name:'High Voltage',description:'Tried 5 different Sativa strains.',category:'types',xp:25,metric:'sativaStrains',threshold:5,art:'boltLeaf',color:'#f4be32'},
+    {id:'dreamwalker',repeatable:true,name:'Dreamwalker',description:'Tried 5 different Indica strains.',category:'types',xp:25,metric:'indicaStrains',threshold:5,art:'moonLeaf',color:'#9178ef'},
+    {id:'best-of-both',repeatable:true,name:'Best of Both',description:'Tried 5 different Hybrid strains.',category:'types',xp:25,metric:'hybridStrains',threshold:5,art:'splitLeaf',color:'#4bd47d'},
     {id:'super-dosed',name:'Super Dosed',description:'Tried a batch with at least 35% THC.',category:'discovery',xp:20,metric:'superDosed',threshold:1,art:'highGauge',color:'#ff604d'},
     {id:'deep-archive',name:'Deep Archive',description:'Tried 50 different strains.',category:'strains',xp:75,metric:'strains',threshold:50,art:'archive',color:'#25c9a2'},
     {id:'century-study',name:'Century Study',description:'Logged 100 Sessions.',category:'sessions',xp:100,metric:'sessions',threshold:100,art:'century',color:'#ef5378'},
@@ -128,10 +128,14 @@
       const value=Number(metrics[definition.metric]||0);
       const unavailable=Boolean(definition.unavailable||definition.disabled);
       const earned=!unavailable&&value>=definition.threshold;
-      return {...definition,value,earned,unavailable,progress:unavailable?0:Math.min(1,value/definition.threshold)};
+      const rank=unavailable?0:definition.repeatable?Math.floor(value/definition.threshold):Number(earned);
+      const nextThreshold=definition.repeatable?(rank+1)*definition.threshold:definition.threshold;
+      const earnedXp=rank*definition.xp;
+      return {...definition,value,earned,unavailable,rank,nextThreshold,earnedXp,
+        progress:unavailable?0:definition.repeatable?(value%definition.threshold)/definition.threshold:Math.min(1,value/definition.threshold)};
     });
     const activityXp=sessionCount*10+strains.size*5;
-    const achievementXp=achievements.filter(item=>item.earned).reduce((sum,item)=>sum+item.xp,0);
+    const achievementXp=achievements.filter(item=>item.earned).reduce((sum,item)=>sum+item.earnedXp,0);
     const totalXp=activityXp+achievementXp;
     return {member,metrics,activityXp,achievementXp,totalXp,level:levelForXp(totalXp),achievements,earned:achievements.filter(item=>item.earned)};
   }

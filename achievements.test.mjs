@@ -56,3 +56,26 @@ assert.equal(engine.levelForXp(2700).level,20);
 assert.equal(engine.levelForXp(7200).level,50);
 
 console.log('achievement engine tests passed');
+
+// Historical records determine ranks, without incrementing a stored XP counter.
+for(const [type,id] of [['Sativa','high-voltage'],['Indica','dreamwalker'],['Hybrid','best-of-both']]){
+ for(const count of [0,4,5,7,10,15,30]){
+  const history=Array.from({length:count},(_,i)=>({id:`rank-${i}`,strainId:`strain-${i}`,members:['Cyrus'],type,overall:4,effects:{Focused:1},terpenes:['A']}));
+  const context={sessions:history,trackedTerpenes:['A']};
+  const progress=engine.calculateMember(context,'Cyrus');
+  const badge=progress.achievements.find(b=>b.id===id);
+  assert.equal(badge.rank,Math.floor(count/5));
+  assert.equal(badge.earnedXp,Math.floor(count/5)*25);
+  assert.equal(badge.nextThreshold,(Math.floor(count/5)+1)*5);
+  assert.equal(progress.achievements.filter(b=>b.id===id).length,1);
+  assert.deepEqual(engine.calculateMember(context,'Cyrus'),progress,'refresh cannot award XP twice');
+  if(count){
+   const repeated=engine.calculateMember({...context,sessions:[...history,{...history[0],id:'repeat',overall:5}]},'Cyrus');
+   assert.equal(repeated.achievements.find(b=>b.id===id).earnedXp,badge.earnedXp,'repeat strain does not raise type rank');
+   const full=progress.achievements.find(b=>b.id==='full-spectrum');
+   assert.equal(full.earnedXp,50,'Full Spectrum remains one-time');
+  }
+  assert.equal(engine.calculateMember(context,'Amber').achievementXp,0,'history remains member scoped');
+  assert.equal(progress.achievements.find(b=>b.id==='complete-observation').earnedXp,Math.floor(count/10)*35);
+ }
+}

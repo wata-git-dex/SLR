@@ -81,6 +81,12 @@
   }
   const confirmedBadgeColors={'five-deep':'#edb82d','lab-regular':'#ef6470','five-star-find':'#f06eda','variety-pack':'#a865ed','guinea-pig':'#e6d733','shared-specimen':'#2ed6b0','lab-contributor':'#ff9f37'};
   function badgeColor(item){return confirmedBadgeColors[item.id]||item.color;}
+  function rankLabel(rank){
+    if(rank>20)return String(rank);
+    return 'X'.repeat(Math.floor(rank/10))+['','I','II','III','IV','V','VI','VII','VIII','IX'][rank%10];
+  }
+  function badgeName(item){return item.name+(item.repeatable&&item.rank?' '+rankLabel(item.rank):'');}
+  function rankProgress(item){return `${item.value} / ${item.nextThreshold} toward Rank ${rankLabel(item.rank+1)}`;}
   function coin(item){
     const progress=item.earned?100:Math.round((Number(item.progress)||0)*100);
     // Use the approved sheets directly: some older individual PNGs contain bad crops.
@@ -160,17 +166,17 @@
     const ordered=orderedAchievements(result.achievements);
     const badgeButtons=ordered.map(item=>{
       const state=item.earned?'earned':item.secret?'secret':'locked';
-      const accessible=item.secret&&!item.earned?'Hidden achievement':item.name;
-      const progress=item.earned?'':item.unavailable?'<span class="badgeItemMeta">Not tracked</span>':item.secret?'<span class="badgeItemMeta">Secret</span>':`<span class="badgeItemMeta">${Math.min(item.value,item.threshold)} / ${item.threshold}</span>`;
-      return `<button class="badgeItem ${state}" data-badge-id="${item.id}" aria-label="${safeHtml(accessible)}">${coin(item)}<span class="badgeName">${safeHtml(item.secret&&!item.earned?'Unknown':item.name)}</span>${progress}</button>`;
+      const accessible=item.secret&&!item.earned?'Hidden achievement':badgeName(item);
+      const progress=item.repeatable?`<span class="badgeItemMeta">${rankProgress(item)}</span>`:item.earned?'':item.unavailable?'<span class="badgeItemMeta">Not tracked</span>':item.secret?'<span class="badgeItemMeta">Secret</span>':`<span class="badgeItemMeta">${Math.min(item.value,item.threshold)} / ${item.threshold}</span>`;
+      return `<button class="badgeItem ${state}" data-badge-id="${item.id}" aria-label="${safeHtml(accessible)}">${coin(item)}<span class="badgeName">${safeHtml(item.secret&&!item.earned?'Unknown':badgeName(item))}</span>${progress}</button>`;
     }).join('');
     const badgeRows=ordered.map(item=>{
       const hidden=item.secret&&!item.earned;
       const state=item.earned?'earned':item.secret?'secret':'locked';
-      const name=hidden?'Unknown Specimen':item.name;
+      const name=hidden?'Unknown Specimen':badgeName(item);
       const description=hidden?'A hidden Lab discovery.':item.description;
-      const status=item.earned?`Earned · +${item.xp} XP`:item.unavailable?'Not tracked yet':hidden?'Secret':`${Math.min(item.value,item.threshold)} / ${item.threshold}`;
-      const meter=!item.earned&&!item.unavailable&&!hidden?`<span class="badgeRowMeter"><i style="width:${Math.round(item.progress*100)}%"></i></span>`:'';
+      const status=item.repeatable?`${rankProgress(item)} · ${item.earnedXp} XP earned`:item.earned?`Earned · +${item.xp} XP`:item.unavailable?'Not tracked yet':hidden?'Secret':`${Math.min(item.value,item.threshold)} / ${item.threshold}`;
+      const meter=(!item.earned||item.repeatable)&&!item.unavailable&&!hidden?`<span class="badgeRowMeter"><i style="width:${Math.round(item.progress*100)}%"></i></span>`:'';
       return `<button class="badgeRow ${state}" data-badge-id="${item.id}">${coin(item)}<span class="badgeRowCopy"><b>${safeHtml(name)}</b><small>${safeHtml(description)}</small>${meter}</span><span class="badgeRowStatus">${safeHtml(status)}</span><span class="badgeRowArrow">›</span></button>`;
     }).join('');
     document.getElementById('myLabBody').innerHTML=`<section class="myLabIdentity"><div class="myLabIdentityTop"><div class="myLabAvatar"><img src="${avatar}" alt=""></div><div class="myLabName"><small>Active Lab Rat</small><h3>${safeHtml(displayName(CURRENT_MEMBER))}</h3></div><div class="myLabLevel"><b>Level ${level.level}</b><span>${safeHtml(level.title)}</span></div></div><div class="myLabProgressMeta"><span><b>${result.totalXp.toLocaleString()} XP</b> · ${result.activityXp} activity + ${result.achievementXp} badges</span><span>${level.needed} to Level ${level.level+1}</span></div><div class="myLabProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(level.progress*100)}"><i style="width:${Math.round(level.progress*100)}%"></i></div><div class="myLabStats"><div class="myLabStat"><b>${result.metrics.strains}</b><span>Strains</span></div><div class="myLabStat"><b>${result.metrics.sessions}</b><span>Sessions</span></div><div class="myLabStat"><b>${earned}</b><span>Badges</span></div></div><p class="myLabHistoryNote">Progress updates from your saved sessions. Ratings-based badges use recorded Overall ratings.</p><section class="badgeCase" id="badgeCase"><button class="badgeCaseToggle" id="badgeCaseToggle" aria-expanded="false"><span class="badgeCaseIcon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="14" r="10"/><path d="M10 23 8 30l8-4 8 4-2-7M16 8l1.8 3.7 4.1.6-3 2.9.7 4.1-3.6-2-3.6 2 .7-4.1-3-2.9 4.1-.6Z"/></svg></span><span class="badgeCaseCopy"><strong>See badges</strong><small>${earned} earned · view your collection</small></span><span class="badgeCaseArrow">⌄</span></button><div class="badgeCaseBody"><div class="badgeCaseInner"><div class="badgeViewSwitch" role="group" aria-label="Badge view"><button data-badge-view="collection" class="${badgeView==='collection'?'active':''}">Collection</button><button data-badge-view="checklist" class="${badgeView==='checklist'?'active':''}">Checklist</button></div><div class="badgeViewPanel ${badgeView==='collection'?'active':''}" data-badge-panel="collection"><div class="badgeGrid">${badgeButtons}</div></div><div class="badgeViewPanel ${badgeView==='checklist'?'active':''}" data-badge-panel="checklist"><div class="badgeList">${badgeRows}</div></div></div></div></section></section>`;
@@ -184,11 +190,11 @@
     if(!item)return;
     const hidden=item.secret&&!item.earned;
     const state=item.earned?'Earned':item.unavailable?'Not available yet':hidden?'Secret specimen':'Still testing';
-    const copy=hidden?'The Lab is keeping this one under wraps.':item.description;
-    const progress=item.unavailable?(item.unavailableReason||'Not available yet.'):item.earned?'Unlocked':`${Math.min(item.value,item.threshold)} of ${item.threshold} complete`;
-    const meter=!item.earned&&!item.unavailable&&!hidden?`<div class="badgeDetailMeter"><i style="width:${Math.round(item.progress*100)}%"></i></div>`:'';
-    const name=hidden?'Unknown Specimen':item.name;
-    document.getElementById('badgeDetail').innerHTML=`<button class="badgeDetailX" data-close-badge aria-label="Close badge detail">✕</button><div class="badgeFlipCard" id="badgeFlipCard" role="button" tabindex="0" aria-label="Flip ${safeHtml(name)} badge" style="--coin:${badgeColor(item)}"><div class="badgeFlipFace badgeFlipFront">${coin(item)}<h3>${safeHtml(name)}</h3><span>Specimen badge</span></div><div class="badgeFlipFace badgeFlipBack"><div class="badgeBackLabel">${safeHtml(state)}</div><h3>${safeHtml(name)}</h3><p>${safeHtml(copy)}</p>${meter}<div class="badgeDetailProgress">${safeHtml(progress)}</div><div class="badgeXp">+${item.xp} XP</div></div></div>`;
+    const copy=hidden?'The Lab is keeping this one under wraps.':item.description+(item.repeatable?` Each additional ${item.threshold} earns another rank and +${item.xp} XP.`:'');
+    const progress=item.unavailable?(item.unavailableReason||'Not available yet.'):item.repeatable?rankProgress(item):item.earned?'Unlocked':`${Math.min(item.value,item.threshold)} of ${item.threshold} complete`;
+    const meter=(!item.earned||item.repeatable)&&!item.unavailable&&!hidden?`<div class="badgeDetailMeter"><i style="width:${Math.round(item.progress*100)}%"></i></div>`:'';
+    const name=hidden?'Unknown Specimen':badgeName(item);
+    document.getElementById('badgeDetail').innerHTML=`<button class="badgeDetailX" data-close-badge aria-label="Close badge detail">✕</button><div class="badgeFlipCard" id="badgeFlipCard" role="button" tabindex="0" aria-label="Flip ${safeHtml(name)} badge" style="--coin:${badgeColor(item)}"><div class="badgeFlipFace badgeFlipFront">${coin(item)}<h3>${safeHtml(name)}</h3><span>Specimen badge</span></div><div class="badgeFlipFace badgeFlipBack"><div class="badgeBackLabel">${safeHtml(state)}</div><h3>${safeHtml(name)}</h3><p>${safeHtml(copy)}</p>${meter}<div class="badgeDetailProgress">${safeHtml(progress)}</div><div class="badgeXp">${item.repeatable?`${item.earnedXp} XP earned · +${item.xp} next rank`:`+${item.xp} XP`}</div></div></div>`;
     const overlay=document.getElementById('badgeDetailOverlay'),card=document.getElementById('badgeFlipCard');overlay.classList.add('show');
     const flip=()=>card.classList.toggle('flipped');card.addEventListener('click',flip);card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();flip();}});
   }
