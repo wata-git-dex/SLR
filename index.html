@@ -792,6 +792,27 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 @media(prefers-reduced-transparency:reduce),(prefers-contrast:more),(forced-colors:active){:root.slr-ui.slr-glass :is(.dockGroup,.labTabs)::after{display:none}}
 
 </style>
+<style>
+/* Full-height Lab menu with one destination and a collapsible personal profile. */
+:root.slr-ui .menuSheet .menuHead{isolation:isolate;overflow:hidden;border-radius:0;background:linear-gradient(90deg,rgba(var(--accent-rgb),.10),transparent 42%,rgba(var(--accent-rgb),.06)),var(--ink);box-shadow:0 5px 22px rgba(var(--accent-rgb),.08)}
+.menuHead::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 27px,rgba(var(--accent-rgb),.055) 28px 29px)}
+.menuHead::after{content:'';position:absolute;right:72px;top:0;bottom:0;width:14px;z-index:-1;pointer-events:none;border-left:1px solid rgba(var(--accent-rgb),.22);background:repeating-linear-gradient(45deg,rgba(var(--accent-rgb),.13) 0 5px,transparent 5px 12px)}
+:root.slr-ui #actionDock .dockGroup,:root.slr-ui #actionDock #blazeFab{box-shadow:inset 0 1px 0 #ffffff20,0 6px 22px #0004,0 0 18px rgba(var(--accent-rgb),.20)}
+@media(forced-colors:active){.menuHead::before,.menuHead::after{display:none}:root.slr-ui #actionDock .dockGroup,:root.slr-ui #actionDock #blazeFab{box-shadow:none}}
+
+:root.slr-ui .menuSheet{width:min(520px,100%);background:var(--ink);border-left:1px solid var(--line);box-shadow:-16px 0 48px #0005}
+:root.slr-ui .menuSheet .menuHead{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.profileToggle{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:64px;padding:0 34px 0 0;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.profileToggle .profileHello{margin:0}.profileChevron{position:absolute;right:8px;top:50%;color:var(--green);transform:translateY(-50%)}
+.profileToggle[aria-expanded="false"] .profileChevron{transform:translateY(-50%) rotate(-90deg)}
+.profileToggle:focus-visible{outline:2px solid var(--green);outline-offset:5px;border-radius:6px}
+#profileDetails[hidden]{display:none}.profileAchievements{margin-top:16px;display:flex;justify-content:flex-start}
+:root.slr-ui .profileAchievements .profileBadgeLink{flex:0 0 auto;white-space:nowrap;width:auto;min-height:44px;padding:9px 12px;gap:8px;display:flex;font:600 12px 'Space Grotesk',sans-serif}
+.emblem{background:#050607;box-shadow:0 14px 40px #0006,0 0 36px rgba(var(--accent-rgb),.20)}
+.emblem img[src*="cyrus-app-icon-v2"],.brandimg[src*="cyrus-app-icon-v2"]{clip-path:inset(5% round 16%);transform:scale(1.06)}
+.emblem::after{box-shadow:none;pointer-events:none}.brandicon{box-shadow:none;background:#050607}
+@media(max-width:600px){:root.slr-ui .menuSheet{width:100%;border:0;padding-left:max(20px,var(--safe-l));padding-right:max(20px,var(--safe-r))}}
+</style>
 <link rel="stylesheet" href="my-lab-preview.css">
 <link rel="stylesheet" href="assets/navigation/appearance-controls.css">
 <style>:root{--wf-bright:var(--selection-accent);--wd-focus:var(--selection-accent)}:root.slr-ui .wata-glass-nav .labTab{box-shadow:none}:root.slr-ui :is(.dockBtn,#blazeFab):focus-visible{outline:2px solid var(--selection-accent);outline-offset:3px}</style>
@@ -1019,9 +1040,8 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
   <div class="menuSheet" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
     <div class="menuHead"><h2 id="menuTitle">Settings &amp; Lab Menu</h2><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
     <section class="menuSection" aria-labelledby="menuProfileHeading">
-    <div class="profileSectionHead"><h3 class="menuEyebrow" id="menuProfileHeading">Personal profile</h3></div>
-    <div class="profileCard">
-      <div class="profileHello">Lab Rat <b id="profileName">—</b></div>
+    <div class="profileSectionHead"><button class="profileToggle" id="profileToggle" aria-expanded="true" aria-controls="profileDetails"><span class="menuEyebrow" id="menuProfileHeading">Rat profile</span><span class="profileHello">Lab Rat <b id="profileName">—</b></span><span class="profileChevron" aria-hidden="true">⌄</span></button></div>
+    <div class="profileCard" id="profileDetails">
       <div class="profileSub" id="profileSummary" hidden></div>
       <div class="profileStats">
         <div class="profileStat"><b id="profileStrains">0</b><span>strains</span></div>
@@ -1035,7 +1055,7 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
     <section class="menuSection" aria-labelledby="menuLabHeading">
     <h3 class="menuEyebrow" id="menuLabHeading">The Lab</h3>
     <div class="menuList" id="menuLabList">
-    <button class="menuItem" id="menuTheLab"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6m-5 0v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M8 14h8"/><circle cx="10" cy="17" r=".6"/><circle cx="14" cy="18" r=".6"/></svg></span><span class="menuCopy"><b>Enter The Lab</b><span>Crew, taste maps and shared Lab Tests</span></span><span class="menuArrow">›</span></button>
+    <button class="menuItem" id="menuTheLab"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6m-5 0v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M8 14h8"/><circle cx="10" cy="17" r=".6"/><circle cx="14" cy="18" r=".6"/></svg></span><span class="menuCopy"><b>Enter The Lab</b><span>Community, taste maps, Lab Tests and your progress</span></span><span class="menuArrow">›</span></button>
     </div>
     </section>
     <section class="menuSection" aria-labelledby="menuSettingsHeading">
@@ -1136,15 +1156,15 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.6';
+const APP_VERSION = 'v2.6.7';
 const LAB_NOTICE = {
-  id:'slr-v2.6.6', version:'Version 2.6.6', audience:'all',
-  title:'Your badges keep growing.',
-  copy:'Earn new ranks without adding duplicate badges.',
+  id:'slr-v2.6.7', version:'Version 2.6.7', audience:'all',
+  title:'Welcome to your Lab menu.',
+  copy:'A clearer profile and a little more Lab character.',
   items:[
-    ['★','Evolving badges','High Voltage, Dreamwalker and Best of Both earn another rank and 25 XP every five different strains.'],
-    ['◎','Complete observations','Every ten Sessions with an Overall rating and an Effect or Side Effect earn another rank and 35 XP.'],
-    ['↗','History counts','Existing records count toward your ranks. See progress and earned XP in your Badge Case.']
+    ['◎','Your Rat profile','Collapse your personal stats, or open achievements from your profile.'],
+    ['↗','One way into the Lab','A full-screen phone menu with one Enter the Lab entry for community and personal progress.'],
+    ['◐','Refined accents','A lab-panel header, soft action glows and a lighter Cyrus icon.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3993,7 +4013,8 @@ function applyMemberAppIcon(){
   if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-180.png':isPiero?'piero-app-icon-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
   document.querySelectorAll('.emblem img,.brandimg').forEach(img=>{
     if(!img.dataset.defaultSrc) img.dataset.defaultSrc=img.getAttribute('src');
-    img.src=isAmber?'amber-app-icon-512.png':isCyrus?'cyrus-app-icon-v2-512.png?v=3':isFelipe?'felipe-app-icon-512.png':isPiero?'piero-app-icon-512.png':img.dataset.defaultSrc;
+    img.onerror=()=>{img.onerror=null;img.src=img.dataset.defaultSrc;};
+    img.src=isAmber?'amber-app-icon-512.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-512.png':isPiero?'piero-app-icon-512.png':img.dataset.defaultSrc;
   });
 }
 function setScoreView(view){
@@ -4639,6 +4660,7 @@ function setNoticeOpen(open){
 let menuReturnFocus=null;
 function openMenu(){menuReturnFocus=document.activeElement;closeDockSearch();renderProfile();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true');document.querySelector('.menuClose').focus();}
 function closeMenu(){setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false');if(menuReturnFocus?.isConnected)menuReturnFocus.focus();}
+document.getElementById('profileToggle').addEventListener('click',e=>{const button=e.currentTarget,open=button.getAttribute('aria-expanded')!=='true';button.setAttribute('aria-expanded',String(open));document.getElementById('profileDetails').hidden=!open;});
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
 document.getElementById('menuOverlay').addEventListener('click',e=>{if(e.target.id==='menuOverlay')closeMenu();});
