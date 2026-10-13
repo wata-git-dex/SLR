@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0d120e">
+<meta name="theme-color" content="#000000">
 <title>Stoned Lab Rats</title>
 <link rel="icon" href="slr-original-631039b0cf5b.png">
 <link rel="apple-touch-icon" href="slr-original-4e66d187311f.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Stoned Lab Rats">
 <script>
 (()=>{
@@ -816,6 +816,61 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 <link rel="stylesheet" href="my-lab-preview.css">
 <link rel="stylesheet" href="assets/navigation/appearance-controls.css">
 <style>:root{--wf-bright:var(--selection-accent);--wd-focus:var(--selection-accent)}:root.slr-ui .wata-glass-nav .labTab{box-shadow:none}:root.slr-ui :is(.dockBtn,#blazeFab):focus-visible{outline:2px solid var(--selection-accent);outline-offset:3px}</style>
+<style>
+html.slr-ui{background:#000}
+body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#000;z-index:10000;pointer-events:none}
+:root.slr-ui .menuSheet{overflow-x:hidden}
+/* Settings lead; profile and community Lab are secondary destinations. */
+.menuDestinations{display:grid;gap:16px;margin:18px 0}
+.menuDestinations>.menuSection{margin:0;min-width:0;padding:16px}
+.profileDestinationLink{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:0 0 14px;border:0;background:none;text-align:left;color:var(--text);font:inherit;cursor:pointer}
+.profileDestinationLink .menuEyebrow{display:block;margin-bottom:8px}
+.profileDestinationLink .profileHello{display:block;margin:0;font-size:16px}
+.profileGo{font-size:12px;white-space:nowrap;color:var(--green)}
+.menuDestinations .profileStats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.menuDestinations .profileSub,.menuDestinations .profileFeelingsLabel,.menuDestinations .profileEffects{display:none}
+.menuDestinations .profileAchievements{margin-top:12px}
+.menuDestinations>.labDestination{padding:0;border:0;border-radius:4px;background:transparent;box-shadow:none}
+:root.slr-ui .labDestination #menuTheLab{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;gap:22px;min-height:190px;padding:18px 22px;border:1px solid rgba(var(--accent-rgb),.5);border-radius:4px;background:var(--ink);box-shadow:inset 5px 0 0 rgba(var(--accent-rgb),.14),inset -5px 0 0 rgba(var(--accent-rgb),.14),0 5px 24px #0003;text-align:left}
+#menuTheLab::before,#menuTheLab::after{content:'';position:absolute;z-index:-1;top:8px;bottom:8px;width:calc(50% - 10px);pointer-events:none;background:linear-gradient(145deg,var(--panel2),var(--ink));border:1px solid rgba(var(--accent-rgb),.18);transition:transform .25s ease}
+#menuTheLab::before{left:8px;border-right:2px solid rgba(var(--accent-rgb),.5)}
+#menuTheLab::after{right:8px;border-left:2px solid rgba(var(--accent-rgb),.5)}
+.labEntranceLabel{font:500 10px 'Space Mono',monospace;letter-spacing:2px;color:var(--green);display:flex;align-items:center;gap:8px}
+.labEntranceLabel::before{content:'';height:5px;width:5px;border-radius:50%;background:currentColor;box-shadow:0 0 8px rgba(var(--accent-rgb),.5)}
+.labEntranceTitle{align-self:flex-start;font:700 24px/1.1 'Space Grotesk',sans-serif;letter-spacing:-.6px;color:var(--text);background:var(--ink);padding:5px 9px;margin-left:-9px}
+.labEntranceFoot{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--ink);padding:6px 9px;margin:0 -9px;font:400 10px/1.5 'Space Mono',monospace;color:var(--muted)}
+.labEntranceFoot>span:first-child{max-width:220px}
+.labEntranceArrow{color:var(--green);font:400 26px/1 sans-serif}
+:root.slr-ui .labDestination #menuTheLab:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+@media(hover:hover){#menuTheLab:hover::before{transform:translateX(-5px)}#menuTheLab:hover::after{transform:translateX(5px)}}
+.menuDestinations>.profileDestination{position:relative;padding:18px;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:3px 16px 16px 3px;background:linear-gradient(115deg,rgba(var(--accent-rgb),.07),transparent 65%),var(--panel);box-shadow:none}
+.profileIdentity{display:flex;align-items:center;gap:12px;min-width:0}
+.profilePortrait{display:block;flex:0 0 42px;width:42px;height:42px;border-radius:8px;overflow:hidden;background:var(--ink)}
+.profileDestinationLink .menuEyebrow{font-size:9px;letter-spacing:1.5px}
+.profileDestinationLink .profileHello{font-size:15px}
+.menuDestinations .profileDestination .profileStats{gap:0;border-top:1px solid var(--line);padding-top:14px;margin-top:0}
+.menuDestinations .profileDestination .profileStat{background:none;border:0;border-radius:0;box-shadow:none;padding:2px 6px}
+.menuDestinations .profileDestination .profileStat+.profileStat{border-left:1px solid var(--line)}
+.menuDestinations .profileDestination .profileAchievements{border-top:1px dashed var(--line);padding-top:12px;margin-top:16px}
+:root.slr-ui .profileDestination .profileBadgeLink{border:0;background:none;padding:0;min-height:36px;color:var(--green)}
+@media(max-width:350px){.profileIdentity{gap:8px}.profilePortrait{flex-basis:32px;width:32px;height:32px}.profileDestinationLink{flex-wrap:wrap}.profileGo{margin-left:auto}}
+@media(prefers-reduced-motion:reduce){#menuTheLab::before,#menuTheLab::after{transition:none;transform:none!important}}
+@media(forced-colors:active){#menuTheLab::before,#menuTheLab::after{display:none}:root.slr-ui .labDestination #menuTheLab,.menuDestinations>.profileDestination{border:1px solid ButtonText;background:Canvas}.labEntranceTitle,.labEntranceFoot{background:Canvas;color:CanvasText}}
+:root.slr-ui .menuSheet .menuHead{background:linear-gradient(145deg,var(--slr-glass-sheen),transparent 48%),var(--slr-glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 8px 24px rgba(var(--accent-rgb),.10);border:0}
+.menuHead::before,.menuHead::after{display:none}
+.menuBrand{flex:1;min-width:0}.menuBrandIcon{flex:0 0 38px;width:38px;height:38px}
+.menuBrand>span{font:700 18px 'Space Grotesk',sans-serif;color:var(--text)}
+.menuBrand>span>b{color:var(--green)}
+:root.slr-ui .menuBrand h2{font-size:12px;font-weight:500;color:var(--muted);margin:4px 0 0}
+:root.slr-ui .labTab{border:0}
+:root.slr-ui:not(.slr-filled-selection) #blazeFab{background:#030303;color:var(--selection-accent);border:1px solid var(--selection-accent)}
+@media(forced-colors:active){:root.slr-ui:not(.slr-filled-selection) #blazeFab{background:ButtonFace;color:ButtonText;border-color:ButtonText}}
+.appearancePair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.appearancePair .appearanceChoices{display:grid;grid-template-columns:1fr 1fr}.appearancePair button{min-width:0;padding:9px 3px}
+:root.slr-ui .labHub{background:linear-gradient(90deg,transparent 49.8%,rgba(var(--accent-rgb),.045) 50%,transparent 50.2%),repeating-linear-gradient(0deg,transparent 0 79px,rgba(var(--accent-rgb),.035) 80px),var(--ink)}
+:root.slr-ui .labHubClose{color:var(--green);border:1px solid rgba(var(--accent-rgb),.25)}
+:root.slr-ui .labHubHead{border-bottom:1px solid rgba(var(--accent-rgb),.35)}
+.myLabStats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+</style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
   <img id="lightboxImg" src="" alt="">
@@ -1038,35 +1093,16 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 
 <div class="menuOverlay" id="menuOverlay">
   <div class="menuSheet" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
-    <div class="menuHead"><h2 id="menuTitle">Settings &amp; Lab Menu</h2><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
-    <section class="menuSection" aria-labelledby="menuProfileHeading">
-    <div class="profileSectionHead"><button class="profileToggle" id="profileToggle" aria-expanded="true" aria-controls="profileDetails"><span class="menuEyebrow" id="menuProfileHeading">Rat profile</span><span class="profileHello">Lab Rat <b id="profileName">—</b></span><span class="profileChevron" aria-hidden="true">⌄</span></button></div>
-    <div class="profileCard" id="profileDetails">
-      <div class="profileSub" id="profileSummary" hidden></div>
-      <div class="profileStats">
-        <div class="profileStat"><b id="profileStrains">0</b><span>strains</span></div>
-        <div class="profileStat"><b id="profileSessions">0</b><span>sessions</span></div>
-        <div class="profileStat"><b id="profileRating">—</b><span>avg rating</span></div>
-      </div>
-      <div class="profileFeelingsLabel" id="profileFeelingsLabel">Favorite feelings</div>
-      <div class="profileEffects" id="profileEffects" aria-labelledby="profileFeelingsLabel"></div>
-    </div>
-    </section>
-    <section class="menuSection" aria-labelledby="menuLabHeading">
-    <h3 class="menuEyebrow" id="menuLabHeading">The Lab</h3>
-    <div class="menuList" id="menuLabList">
-    <button class="menuItem" id="menuTheLab"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6m-5 0v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3M8 14h8"/><circle cx="10" cy="17" r=".6"/><circle cx="14" cy="18" r=".6"/></svg></span><span class="menuCopy"><b>Enter The Lab</b><span>Community, taste maps, Lab Tests and your progress</span></span><span class="menuArrow">›</span></button>
-    </div>
-    </section>
+    <div class="menuHead"><span class="brandicon menuBrandIcon"><img class="brandimg" src="slr-original-631039b0cf5b.png" alt=""></span><div class="menuBrand"><span><b>Stoned</b> Lab Rats</span><h2 id="menuTitle">Settings</h2></div><button class="menuClose" id="menuClose" aria-label="Close menu">✕</button></div>
     <section class="menuSection" aria-labelledby="menuSettingsHeading">
     <h3 class="menuEyebrow" id="menuSettingsHeading">Settings &amp; More</h3>
     <div class="menuList">
       <div class="menuDisclosure">
         <button class="menuItem appearanceToggle" id="appearanceToggle" aria-expanded="false" aria-controls="appearancePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor" stroke="none"/></svg></span><span class="menuCopy"><b>Appearance</b><span>Mode, accent and menu style</span></span><span class="menuArrow">⌄</span></button>
         <div class="appearancePanel" id="appearancePanel">
-          <div class="appearanceLabel">Mode</div><div class="appearanceChoices" role="group" aria-label="Color mode"><button type="button" data-appearance-mode="dark">Dark</button><button type="button" data-appearance-mode="light">Light</button></div>
-          <div class="appearanceLabel">Menu material</div><div class="appearanceChoices" role="group" aria-label="Surface material"><button type="button" data-appearance-material="glass">Glass</button><button type="button" data-appearance-material="solid">Solid</button></div>
-          <div class="appearanceLabel">Selected navigation</div><div class="appearanceChoices" role="group" aria-label="Selected navigation button"><button type="button" data-appearance-selection="black"><i class="selectionSample black"></i>Black</button><button type="button" data-appearance-selection="accent"><i class="selectionSample accent"></i>Accent color</button></div>
+<div class="appearancePair"><div>          <div class="appearanceLabel">Mode</div><div class="appearanceChoices" role="group" aria-label="Color mode"><button type="button" data-appearance-mode="dark">Dark</button><button type="button" data-appearance-mode="light">Light</button></div>
+</div><div>          <div class="appearanceLabel">Menu material</div><div class="appearanceChoices" role="group" aria-label="Surface material"><button type="button" data-appearance-material="glass">Glass</button><button type="button" data-appearance-material="solid">Solid</button></div>
+</div></div>          <div class="appearanceLabel">Selected navigation</div><div class="appearanceChoices" role="group" aria-label="Selected navigation button"><button type="button" data-appearance-selection="black"><i class="selectionSample black"></i>Black</button><button type="button" data-appearance-selection="accent"><i class="selectionSample accent"></i>Accent color</button></div>
           <div class="cyrusPalette" id="cyrusPalette"><div class="appearanceLabel">Accent</div>
             <div class="memberPaletteSet" data-palette-member="cyrus" role="group" aria-label="Cyrus interface color">
               <button class="cyrusPaletteBtn" data-member-palette="green"><i class="paletteDot green"></i>Green</button>
@@ -1094,10 +1130,28 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
         <div class="noticePanel" id="noticePanel"><div class="noticeVersion" id="menuNoticeVersion">Version 2.0.2</div><div class="noticeSummary" id="menuNoticeSummary"></div></div>
       </div>
       <button class="menuItem" id="menuRatings"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
-      <button class="menuItem" id="menuVisualGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="m10 8 5 4-5 4Z"/><path d="M10 19h4"/></svg></span><span class="menuCopy"><b>Quick guide</b><span>The screenshot-first version to share with friends</span></span><span class="menuArrow">›</span></button>
-      <button class="menuItem" id="menuFullGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15M6 8h3m6 0h3M6 12h3m6 0h3"/></svg></span><span class="menuCopy"><b>Full guide</b><span>Deeper instructions and the complete vocabulary</span></span><span class="menuArrow">›</span></button>
+      <button class="menuItem" id="menuVisualGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="m10 8 5 4-5 4Z"/><path d="M10 19h4"/></svg></span><span class="menuCopy"><b>Quick guide</b><span>Find your way around SLR</span></span><span class="menuArrow">›</span></button>
+      <button class="menuItem" id="menuFullGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15M6 8h3m6 0h3M6 12h3m6 0h3"/></svg></span><span class="menuCopy"><b>Full guide</b><span>Strains, sessions, ratings and achievements</span></span><span class="menuArrow">›</span></button>
     </div>
     </section>
+    <div class="menuDestinations">
+    <section class="menuSection labDestination" aria-labelledby="menuLabHeading">
+      <button class="menuItem" id="menuTheLab"><span class="labEntranceLabel" id="menuLabHeading">The Lab</span><span class="labEntranceTitle">Enter the Lab</span><span class="labEntranceFoot"><span>Community stats, results &amp; Lab Tests</span><span class="labEntranceArrow" aria-hidden="true">→</span></span></button>
+    </section>
+    <section class="menuSection profileDestination" aria-labelledby="menuProfileHeading">
+      <button class="profileDestinationLink" id="profileToggle"><span class="profileIdentity"><span class="profilePortrait"><img class="brandimg" src="slr-original-631039b0cf5b.png" alt=""></span><span><span class="menuEyebrow" id="menuProfileHeading">Rat profile</span><span class="profileHello">Lab Rat <b id="profileName">—</b></span></span></span><span class="profileGo">My Lab →</span></button>
+    <div class="profileCard" id="profileDetails">
+      <div class="profileSub" id="profileSummary" hidden></div>
+      <div class="profileStats">
+        <div class="profileStat"><b id="profileStrains">0</b><span>strains</span></div>
+        <div class="profileStat"><b id="profileSessions">0</b><span>sessions</span></div>
+        <div class="profileStat"><b id="profileRating">—</b><span>avg rating</span></div>
+      </div>
+      <div class="profileFeelingsLabel" id="profileFeelingsLabel">Favorite feelings</div>
+      <div class="profileEffects" id="profileEffects" aria-labelledby="profileFeelingsLabel"></div>
+    </div>
+    </section>
+</div>
     <div class="menuFoot">SLR <span id="menuVersion"></span> · Saltyview Productions</div>
   </div>
 </div>
@@ -1116,12 +1170,12 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
         <div class="labPulse" id="labPulse"></div>
       </div>
       <div class="labTabs" role="tablist" aria-label="The Lab views">
-        <button class="labTab on" data-lab-tab="crew" role="tab" aria-selected="true">Meet the Rats</button>
-        <button class="labTab" data-lab-tab="taste" role="tab" aria-selected="false">Taste Map</button>
+        <button class="labTab on" data-lab-tab="crew" role="tab" aria-selected="true">Lab Stats</button>
+        <button class="labTab" data-lab-tab="taste" role="tab" aria-selected="false">Results</button>
         <button class="labTab" data-lab-tab="tests" role="tab" aria-selected="false">Lab Tests</button>
       </div>
-      <div class="labPanel on" data-lab-panel="crew"><div class="labSectionHead"><h3>Meet the Rats</h3></div><div class="ratGrid" id="ratGrid"></div><div class="labFormula">Lab XP = 10 per Session + 5 per distinct strain. It measures activity, not who has better taste.</div></div>
-      <div class="labPanel" data-lab-panel="taste"><div class="labSectionHead"><h3>Shared taste map</h3><span>What the crew keeps reporting.</span></div><div class="intelGrid" id="tasteGrid"></div></div>
+      <div class="labPanel on" data-lab-panel="crew"><div class="labSectionHead"><h3>Lab Rats</h3></div><div class="ratGrid" id="ratGrid"></div><div class="labFormula">Lab XP = 10 per Session + 5 per distinct strain. It measures activity, not who has better taste.</div></div>
+      <div class="labPanel" data-lab-panel="taste"><div class="labSectionHead"><h3>Community Results</h3><span>What the crew keeps reporting.</span></div><div class="intelGrid" id="tasteGrid"></div></div>
       <div class="labPanel" data-lab-panel="tests"><div class="labSectionHead"><h3>Lab Tests</h3><span>Every Session, newest first.</span></div><div class="labTestBoard" id="labTestBoard"></div></div>
     </div>
   </section>
@@ -1144,6 +1198,8 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity.</p><div class="effectDefs">
       <div class="effectDef"><span class="emoji">😴</span><b>Sleepy</b><span>Drowsy or ready for sleep.</span></div><div class="effectDef"><span class="emoji">😰</span><b>Anxious</b><span>Worried, tense or uncomfortable.</span></div><div class="effectDef"><span class="emoji">👀</span><b>Paranoid</b><span>Suspicious, unsafe-feeling or spiraling thoughts.</span></div><div class="effectDef"><span class="emoji">😶‍🌫️</span><b>Washed</b><span>Foggy, depleted, cooked or not useful.</span></div><div class="effectDef"><span class="emoji">💤</span><b>KO’d</b><span>Unexpectedly put to sleep or fully out.</span></div><div class="effectDef"><span class="emoji">💫</span><b>Dizzy</b><span>Lightheaded, spinning or unsteady.</span></div><div class="effectDef"><span class="emoji">🤕</span><b>Headache</b><span>Head pain or pressure.</span></div>
     </div></div>
+    <div class="infoBlock"><h3>Missing and historical ratings</h3><p>A dash means no Overall rating has been recorded. Effects are never converted into stars. Updating an older session’s Rating field in Notion updates its score after refresh; it does not move the strain ahead of newer purchases.</p></div>
+    <div class="infoBlock"><h3>Your average</h3><p>Your profile and My Lab show the average of your rated sessions. Unrated sessions are excluded. Strain cards average the sessions for that strain.</p></div>
     <div class="infoBlock"><h3>Lab Results</h3><p>Longer bars mean an Effect or Side Effect was reported more consistently or more strongly. Green = Effects. Red = Side Effects.</p></div>
     <div class="infoVersion">SLR <span id="infoVersion"></span> · Saltyview Productions</div>
   </div>
@@ -1156,15 +1212,15 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.7';
+const APP_VERSION = 'v2.6.8';
 const LAB_NOTICE = {
-  id:'slr-v2.6.7', version:'Version 2.6.7', audience:'all',
-  title:'Welcome to your Lab menu.',
-  copy:'A clearer profile and a little more Lab character.',
+  id:'slr-v2.6.8', version:'Version 2.6.8', audience:'all',
+  title:'A clearer way around the Lab.',
+  copy:'Strains, community results and personal progress, with clearer places for each.',
   items:[
-    ['◎','Your Rat profile','Collapse your personal stats, or open achievements from your profile.'],
-    ['↗','One way into the Lab','A full-screen phone menu with one Enter the Lab entry for community and personal progress.'],
-    ['◐','Refined accents','A lab-panel header, soft action glows and a lighter Cyrus icon.']
+    ['◎','Settings and your profile','Settings first, with direct access to My Lab and the community Lab.'],
+    ['↗','Lab Rats and Results','Clearer Lab navigation, plus a separate Badges card in My Lab.'],
+    ['◐','Updated guides','Quick guide, full guide and ratings help now match the current app.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3871,7 +3927,7 @@ function setAppearancePreference(kind,value){
   applyAppearance();
 }
 function setColorMode(){
-  requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();});
+  requestAnimationFrame(()=>{const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content='#000000';});
 }
 function effectLabel(k){return k==='CouchLocked'?'Couch-Locked':k==='KnockedOut'?"KO'd":k;}
 function displayName(name){return String(name||'').trim().split(/\s+/)[0]||'—';}
@@ -3881,8 +3937,7 @@ function renderProfile(){
   const stats=aggregateSessions(mineSessions);
   const tried=STRAINS.filter(s=>s.mine&&s.mine.num_sessions>0);
   const favorites=tried.filter(s=>s.mine.score!=null).sort((a,b)=>b.mine.score-a.mine.score).slice(0,3);
-  const displayedRatings=STRAINS.map(s=>s.mine?.score).filter(v=>v!=null);
-  const profileRating=displayedRatings.length?displayedRatings.reduce((a,b)=>a+b,0)/displayedRatings.length:null;
+  const profileRating=stats.score;
   document.getElementById('profileName').textContent=displayName(name);
   document.getElementById('profileStrains').textContent=tried.length;
   document.getElementById('profileSessions').textContent=stats.num_sessions;
@@ -4660,7 +4715,7 @@ function setNoticeOpen(open){
 let menuReturnFocus=null;
 function openMenu(){menuReturnFocus=document.activeElement;closeDockSearch();renderProfile();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true');document.querySelector('.menuClose').focus();}
 function closeMenu(){setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false');if(menuReturnFocus?.isConnected)menuReturnFocus.focus();}
-document.getElementById('profileToggle').addEventListener('click',e=>{const button=e.currentTarget,open=button.getAttribute('aria-expanded')!=='true';button.setAttribute('aria-expanded',String(open));document.getElementById('profileDetails').hidden=!open;});
+
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
 document.getElementById('menuOverlay').addEventListener('click',e=>{if(e.target.id==='menuOverlay')closeMenu();});
@@ -4698,8 +4753,8 @@ function openReference(title,type,url){
   document.body.style.overflow='hidden';
 }
 function closeReference(){document.getElementById('referenceOverlay').classList.remove('show');document.getElementById('referenceBody').replaceChildren();document.body.style.overflow=menuIsOpen()?'hidden':'';}
-document.getElementById('menuVisualGuide').addEventListener('click',()=>openReference('60-second visual guide','image','guides/SLR-v1.1-Friend-Guide.png'));
-document.getElementById('menuFullGuide').addEventListener('click',()=>openReference('Full beta guide','pdf','guides/SLR-v1.1-Beta-Guide.pdf'));
+document.getElementById('menuVisualGuide').addEventListener('click',()=>openReference('Quick guide','html','guides/quick.html'));
+document.getElementById('menuFullGuide').addEventListener('click',()=>openReference('Full guide','html','guides/full.html'));
 document.getElementById('referenceClose').addEventListener('click',closeReference);
 document.getElementById('referenceOverlay').addEventListener('click',e=>{if(e.target.id==='referenceOverlay')closeReference();});
 function setDockSearch(open){const panel=document.getElementById('dockSearch');panel.classList.toggle('show',open);const button=document.getElementById('dockSearchBtn');button.classList.toggle('active',open);button.setAttribute('aria-expanded',String(open));if(open)requestAnimationFrame(()=>document.getElementById('q').focus());}

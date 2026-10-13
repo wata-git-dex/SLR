@@ -175,7 +175,7 @@ export default {
           Date:      dateStart(p, "Date") || p.created_time || null,
           Batch:     relation(p, "\uD83C\uDF3E Batches"),
           Blazers:   multiSelect(p, "Blazers"),
-          OverallRating: number(p, "Overall Rating"),
+          OverallRating: sessionRating(p),
           Euphoric:   select(p, "Euphoric"),
           Creative:  select(p, "Creative"),
           Focused:   select(p, "Focused"),
@@ -330,7 +330,7 @@ async function createSession(data, token, memberName) {
     "Dizzy":      { select: { name: sideEffect(data.Dizzy) } },
     "Headache":   { select: { name: sideEffect(data.Headache) } },
   };
-  if (overall != null) properties["Overall Rating"] = { number: overall };
+  if (overall != null) properties["Rating"] = { number: overall };
 
   const r = await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
@@ -370,7 +370,7 @@ async function updateHistoricalSessionRating(data, token) {
       "Notion-Version": NOTION_VERSION,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ properties: { "Overall Rating": { number: overall } } }),
+    body: JSON.stringify({ properties: { "Rating": { number: overall } } }),
   });
   if (!response.ok) {
     throw new Error("Notion historical rating update " + response.status + ": " + (await response.text()).slice(0, 200));
@@ -414,6 +414,11 @@ function title(p, n)       { const v = prop(p,n); return v?.title?.map(t=>t.plai
 function richText(p, n)    { const v = prop(p,n); return v?.rich_text?.map(t=>t.plain_text).join("") ?? ""; }
 function select(p, n)      { const v = prop(p,n); return v?.select?.name ?? null; }
 function multiSelect(p, n) { const v = prop(p,n); return v?.multi_select?.map(o=>o.name) ?? []; }
+// Notion renamed the numeric property to Rating; keep the API's OverallRating contract.
+// Prefer the current property even when blank, so an intentional clear stays unrated.
+function sessionRating(p) {
+  return number(p, Object.prototype.hasOwnProperty.call(p.properties || {}, "Rating") ? "Rating" : "Overall Rating");
+}
 function number(p, n)      { const v = prop(p,n); return v?.number ?? null; }
 function dateStart(p, n)   { const v = prop(p,n); return v?.date?.start ?? null; }
 function relation(p, n)    { const v = prop(p,n); return v?.relation?.map(r=>idToUrl(r.id)) ?? []; }

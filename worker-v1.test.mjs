@@ -22,8 +22,8 @@ globalThis.fetch=async (url,opts={})=>{
   ]});
   if(u.includes(`/data_sources/${DS.strains}/query`)) return Response.json({results:[{id:pageId,properties:{Name:titleProp('Test Strain'),Photo:{files:existingPhoto?[{type:'file',name:'strain.jpg',file:{url:'https://files.example/strain.jpg'}}]:[]},Batches:{relation:[{id:batchId}]}}}]});
   if(u.includes(`/data_sources/${DS.batches}/query`)) return Response.json({results:[{id:batchId,properties:{Batch:titleProp('Test Batch'),Brand:{select:{name:'Maven'}},Type:{select:{name:'Hybrid'}},Country:{select:{name:'🇩🇪'}},'THC %':{number:.25},Terpenes:{relation:[{id:terpId}]},'Terpenes (ms)':{multi_select:[]},Strains:{relation:[{id:pageId}]},'Purchase Date':{date:{start:'2026-08-21'}}}}]});
-  if(includeSessionMeta && u.includes(`/data_sources/${DS.sessions}/query`)) return Response.json({results:[{id:sessionId,created_time:'2026-09-27T08:30:00.000Z',properties:{'🌾 Batches':{relation:[{id:batchId}]},Blazers:{multi_select:[{name:'Cyrus'},{name:'Amber'}]},'Overall Rating':{number:null},Motivated:{select:{name:'🟢🟢'}}}}]});
-  if(u.includes(`/data_sources/${DS.sessions}/query`)) return Response.json({results:[{properties:{'🌾 Batches':{relation:[{id:batchId}]},Blazers:{multi_select:[{name:'Cyrus'}]},'Overall Rating':{number:5},Euphoric:{select:{name:'🟢🟢'}},Focused:{select:{name:'-' }},Creative:{select:{name:'🟢'}},Social:{select:{name:'-'}},Giggly:{select:{name:'-'}},Energized:{select:{name:'🟢'}},Relaxed:{select:{name:'🟢🟢'}},'Couch-Locked':{select:{name:'🟢'}},Sleepy:{select:{name:'🟢🟢'}},Hungry:{select:{name:'-' }},Anxious:{select:{name:'-'}},Paranoid:{select:{name:'-'}},Washed:{select:{name:'-'}},"KO'd":{select:{name:'-'}},Dizzy:{select:{name:'-'}},Headache:{select:{name:'-'}}}}]});
+  if(includeSessionMeta && u.includes(`/data_sources/${DS.sessions}/query`)) return Response.json({results:[{id:sessionId,created_time:'2026-09-27T08:30:00.000Z',properties:{'🌾 Batches':{relation:[{id:batchId}]},Blazers:{multi_select:[{name:'Cyrus'},{name:'Amber'}]},'Rating':{number:null},Motivated:{select:{name:'🟢🟢'}}}}]});
+  if(u.includes(`/data_sources/${DS.sessions}/query`)) return Response.json({results:[{properties:{'🌾 Batches':{relation:[{id:batchId}]},Blazers:{multi_select:[{name:'Cyrus'}]},'Rating':{number:5},Euphoric:{select:{name:'🟢🟢'}},Focused:{select:{name:'-' }},Creative:{select:{name:'🟢'}},Social:{select:{name:'-'}},Giggly:{select:{name:'-'}},Energized:{select:{name:'🟢'}},Relaxed:{select:{name:'🟢🟢'}},'Couch-Locked':{select:{name:'🟢'}},Sleepy:{select:{name:'🟢🟢'}},Hungry:{select:{name:'-' }},Anxious:{select:{name:'-'}},Paranoid:{select:{name:'-'}},Washed:{select:{name:'-'}},"KO'd":{select:{name:'-'}},Dizzy:{select:{name:'-'}},Headache:{select:{name:'-'}}}}]});
   if(u.includes(`/data_sources/${DS.terpenes}/query`)) return Response.json({results:[{id:terpId,properties:{Name:titleProp('Limonene')}}]});
   if(u.endsWith('/v1/file_uploads')) return Response.json({id:'upload-1'});
   if(u.endsWith('/v1/file_uploads/upload-1/send')) return Response.json({id:'upload-1',status:'uploaded'});
@@ -59,7 +59,7 @@ calls.length=0;
 const sessionRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'TEST-CODE',batchUrl:'https://app.notion.com/22222222222222222222222222222222',OverallRating:4,Relaxed:'🟢🟢',Sleepy:'🟢🟢',Anxious:'🔴🔴'})}),env);
 assert.equal(sessionRes.status,200);
 const sessionWrite=JSON.parse(calls.find(c=>c.url.endsWith('/v1/pages')).opts.body);
-assert.equal(sessionWrite.properties['Overall Rating'].number,4);
+assert.equal(sessionWrite.properties['Rating'].number,4);
 assert.equal(sessionWrite.properties.Sleepy.select.name,'🟢🟢');
 assert.equal(sessionWrite.properties.Anxious.select.name,'🔴🔴');
 
@@ -75,7 +75,7 @@ const historicalData=await historicalRes.json();
 assert.deepEqual(historicalData.Blazers,['Cyrus','Amber']);
 assert.equal(historicalData.OverallRating,4);
 const historicalPatch=JSON.parse(calls.find(c=>c.url.endsWith(`/v1/pages/${sessionId}`)).opts.body);
-assert.equal(historicalPatch.properties['Overall Rating'].number,4);
+assert.equal(historicalPatch.properties['Rating'].number,4);
 assert.equal(calls.filter(c=>c.url.endsWith('/v1/pages')&&c.opts.method==='POST').length,0);
 
 const amberHistoricalRes=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:'historical-rating',code:'AMBER-CODE',sessionUrl:'https://app.notion.com/55555555555555555555555555555555',OverallRating:4})}),env);

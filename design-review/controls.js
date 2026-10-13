@@ -18,7 +18,7 @@
   material.addEventListener('click',()=>{const glass=root.classList.toggle('slr-glass');root.classList.toggle('slr-no-glass',!glass);material.setAttribute('aria-pressed',String(glass));});
   toolbar.append(material);
   const mode=document.createElement('button');mode.textContent='Light mode';mode.setAttribute('aria-pressed',String(root.classList.contains('slr-light')));mode.addEventListener('click',()=>mode.setAttribute('aria-pressed',String(root.classList.toggle('slr-light'))));toolbar.append(mode);
-  const selection=document.createElement('button');selection.textContent=root.classList.contains('slr-filled-selection')?'Try black button':'Try accent button';selection.addEventListener('click',()=>{const filled=root.classList.toggle('slr-filled-selection');selection.textContent=filled?'Try black button':'Try accent button';});toolbar.append(selection);
+  const selection=document.createElement('button');selection.textContent=root.classList.contains('slr-filled-selection')?'Try black button':'Try accent button';selection.addEventListener('click',()=>{const filled=!root.classList.contains('slr-filled-selection');setAppearancePreference('selection',filled?'accent':'black');selection.textContent=filled?'Try black button':'Try accent button';});toolbar.append(selection);
   // Bounded preview diagnostic: sample frame pacing after the first real scroll
   // in each material. No production instrumentation or recurring timer.
   const sampled=new Set();
