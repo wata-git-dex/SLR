@@ -832,7 +832,7 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
     <div class="landing-version">SLR <span id="landingVersion"></span></div>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Oct 12</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Oct 13</div>
   </div>
 </div>
 <header>
@@ -3365,7 +3365,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Oct 12');   // baked snapshot date (set at build time)
+setUpdated('Oct 13');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
