@@ -1,12 +1,15 @@
 """Serve a read-only, loopback-only design review made from the current source.
 
 No authentication changes are made to index.html. The generated review uses its
-existing baked snapshot. CSP blocks every API call; POST is unsupported. Only
+existing baked snapshot or an explicitly supplied local snapshot. The latter
+is kept outside the repository and never includes invite codes. CSP blocks every API call; POST is unsupported. Only
 public UI assets are served, never Worker code, Git files or arbitrary files.
 """
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import mimetypes
+import json
+import os
 import re
 from urllib.parse import urlsplit, unquote
 
@@ -18,7 +21,12 @@ def build_review():
     html = (APP / 'index.html').read_text()
     startup = 'showCheckingGate();refresh(true);'
     assert html.count(startup) == 1, 'Startup changed; review needs updating.'
-    html = html.replace(startup, """
+    snapshot = {}
+    if os.environ.get('SLR_REVIEW_SNAPSHOT'):
+        snapshot = json.loads(Path(os.environ['SLR_REVIEW_SNAPSHOT']).read_text())
+    injected = ''.join(f'RAW_{key.upper()}='+json.dumps(value).replace('<', '\\u003c')+';\n' for key,value in snapshot.items() if key in ('sessions','members'))
+    injected += 'document.documentElement.dataset.reviewSnapshot='+json.dumps('14 Oct 2026' if snapshot else 'sample')+';'
+    html = html.replace(startup, injected + """
 CURRENT_MEMBER='Cyrus'; CARD_VIEW='row';
 STRAINS=process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
 applyMemberUi(); hideCodeGate(); buildChips(); render(); syncCardViewButton();

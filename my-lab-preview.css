@@ -34,3 +34,7 @@
 .myLabIdentity .badgeCaseToggle{padding:14px 0 0;gap:10px}.myLabIdentity .badgeCaseIcon{width:34px;height:34px;border:0;background:transparent}.myLabIdentity .badgeCaseCopy strong{font-size:14px}
 .myLabIdentity .badgeCaseBody .badgeCaseInner{padding-top:14px}.myLabIdentity .badgeGrid{padding:8px 0 16px}
 .myLabIdentityTop{flex-wrap:wrap}.myLabName{min-width:90px}.myLabLevel{margin-left:auto}.myLabProgressMeta{flex-wrap:wrap;gap:6px}.myLabAvatar{width:48px;height:48px;border-radius:14px;box-shadow:none}
+
+.profileTasteRows{display:grid;gap:8px;margin-top:16px}.profileTasteRow{padding:12px;border:1px solid rgba(var(--accent-rgb),.22);border-radius:10px;background:var(--ink)}.profileTasteRow h4{margin:0 0 8px;color:var(--green);font:600 9px 'Space Mono',monospace;text-transform:uppercase;letter-spacing:.06em}.profileTasteRow .ratPill{--rat-a:var(--green)}.badgeCase{border-color:rgba(var(--accent-rgb),.4)}
+
+#badgeCase{scroll-margin-top:calc(var(--safe-t) + 100px)}
