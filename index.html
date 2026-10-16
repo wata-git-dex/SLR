@@ -86,8 +86,12 @@
 .asTerpToggle{width:100%;padding:11px 12px;background:var(--panel);border:1px solid var(--line2);border-radius:10px;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:13px;text-align:left;cursor:pointer}
 .asTerpToggle.on{border-color:var(--green-soft);color:var(--green);background:rgba(var(--accent-rgb),.08)}
 .terpPicker{display:none;flex-wrap:wrap;gap:7px;margin-top:8px}.terpPicker.show{display:flex}
-.terpChoice{padding:7px 10px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);color:var(--dim);font:11px 'Space Mono',monospace;cursor:pointer}
-.terpChoice.on{border-color:var(--green);color:var(--green);background:rgba(var(--accent-rgb),.1)}
+.terpChoice{--terp-color:#93a08e;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--terp-color) 50%,var(--line));background:color-mix(in srgb,var(--terp-color) 9%,var(--panel));color:var(--terp-color);font:11px 'Space Mono',monospace;cursor:pointer}
+.terpChoice::before{content:'';width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--terp-color)}
+.terpChoice.on{border-color:var(--terp-color);background:color-mix(in srgb,var(--terp-color) 22%,var(--panel));box-shadow:inset 0 0 0 1px var(--terp-color)}
+.terpChoice:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+.slr-light .terpChoice{color:color-mix(in srgb,var(--terp-color) 50%,#111)}
+@media(forced-colors:active){.terpChoice{color:ButtonText;background:ButtonFace;border-color:ButtonText}.terpChoice.on{outline:2px solid Highlight}.terpChoice::before{background:ButtonText}}
 .photoPick{display:flex;align-items:center;gap:12px;padding:10px;background:var(--panel);border:1px solid var(--line2);border-radius:12px}
 .photoPreview{width:62px;height:62px;border-radius:10px;overflow:hidden;background:var(--panel2);display:grid;place-items:center;flex:0 0 auto;color:var(--faint);font-size:23px}
 .photoPreview img{width:100%;height:100%;object-fit:cover;display:block}
@@ -102,7 +106,7 @@
 
 /* ---- compact main action dock ---- */
 .actionDock{position:fixed;left:50%;bottom:calc(var(--safe-b) + 2px);z-index:345;width:min(310px,calc(100vw - var(--safe-l) - var(--safe-r) - 28px));display:none;grid-template-columns:repeat(3,1fr);gap:3px;padding:4px;border:1px solid rgba(var(--accent-rgb),.44);border-radius:26px;background:linear-gradient(128deg,rgba(255,255,255,.07),transparent 24%,rgba(var(--accent-rgb),.08) 58%,transparent),rgba(var(--header-rgb),.76);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -1px 0 rgba(var(--accent-rgb),.08),0 10px 28px rgba(0,0,0,.42),0 0 20px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(22px) saturate(1.18);backdrop-filter:blur(22px) saturate(1.18);transform:translateX(-50%)}
-body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-open .actionDock{display:none}body.lab-open main{padding-bottom:calc(var(--safe-b) + 98px)}
+body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-open .actionDock{display:none}body.lab-open main{padding-bottom:calc(var(--phone-dock-bottom) + 80px)}
 .dockBtn{min-width:0;height:46px;border:0;border-radius:21px;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font:700 8px 'Space Mono',monospace;transition:.15s}
 .dockBtn svg{width:18px;height:18px;padding:2px;border-radius:50%;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.dockBtn.blaze{color:var(--green);background:rgba(var(--accent-rgb),.12);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.24),0 0 12px rgba(var(--accent-rgb),.10)}.dockBtn.blaze svg{width:20px;height:20px;fill:currentColor;stroke:none}.dockBtn:active{transform:scale(.95)}.dockBtn.active{background:rgba(var(--accent-rgb),.13);color:var(--green)}
 .dockSearch{position:absolute;right:0;top:calc(100% + 7px);z-index:344;width:min(350px,calc(100vw - var(--safe-l) - var(--safe-r) - 28px));display:none;padding:7px;border:1px solid rgba(var(--accent-rgb),.38);border-radius:16px;background:rgba(var(--header-rgb),.96);box-shadow:0 10px 28px rgba(0,0,0,.42);backdrop-filter:blur(20px)}.dockSearch.show{display:block}body.detail-open .dockSearch,body.add-open .dockSearch{display:none}
@@ -163,6 +167,7 @@ body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-ope
   --r:16px;
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
+  --phone-dock-bottom:max(20px,calc(var(--safe-b) + 8px));
   --safe-l:env(safe-area-inset-left,0px);
   --safe-r:env(safe-area-inset-right,0px);
 }
@@ -759,7 +764,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 :root.slr-ui .labTestScore,:root.slr-ui .ratingPanel .ratingValue{color:var(--text)}
 :root.slr-ui .labHubMark{color:var(--selection-accent)}
 /* This outer row is only positioning: the two housings are separate. */
-:root.slr-ui #actionDock{width:min(480px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));grid-template-columns:none;align-items:center;justify-content:space-between;gap:20px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;bottom:calc(var(--safe-b) + 12px)}
+:root.slr-ui #actionDock{width:min(480px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));grid-template-columns:none;align-items:center;justify-content:space-between;gap:20px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;bottom:var(--phone-dock-bottom)}
 body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-open #actionDock{display:none}
 :root.slr-ui .dockGroup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:190px;max-width:calc(100% - 84px);padding:5px;border-radius:32px;border:1px solid rgba(var(--accent-rgb),.65);background:var(--slr-solid);pointer-events:auto;box-shadow:0 6px 22px #0003}
 :root.slr-ui .dockGroup .dockBtn{height:50px;background:transparent;color:var(--text)}
@@ -771,8 +776,8 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 :root.slr-ui .menuSheet{width:min(440px,calc(100% - 24px));max-width:none;height:100dvh;max-height:100dvh;border-radius:0;padding:calc(var(--safe-t) + 16px) 16px calc(var(--safe-b) + 24px);border-top:0;border-right:0;border-bottom:0;overscroll-behavior:contain;animation:drawerEnter .18s ease-out}
 @keyframes drawerEnter{from{transform:translateX(100%)}to{transform:translateX(0)}}
 :root.slr-ui .menuHead h2{font-size:17px}
-:root.slr-ui .labHub{padding-bottom:calc(var(--safe-b) + 116px);scroll-padding-bottom:110px}
-:root.slr-ui .labTabs{position:fixed;z-index:5;left:50%;bottom:calc(var(--safe-b) + 12px);transform:translateX(-50%);width:min(520px,calc(100% - var(--safe-l) - var(--safe-r) - 32px));box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:0;padding:5px;border:1px solid var(--green);border-radius:30px;background:var(--slr-solid)}
+:root.slr-ui .labHub{padding-bottom:calc(var(--phone-dock-bottom) + 80px);scroll-padding-bottom:calc(var(--phone-dock-bottom) + 80px)}
+:root.slr-ui .labTabs{position:fixed;z-index:5;left:50%;bottom:var(--phone-dock-bottom);transform:translateX(-50%);width:min(520px,calc(100% - var(--safe-l) - var(--safe-r) - 32px));box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:0;padding:5px;border:1px solid var(--green);border-radius:30px;background:var(--slr-solid)}
 :root.slr-ui .labTab{min-height:48px;padding:7px 3px;border-radius:24px;font:600 11px/1.2 'Space Grotesk',sans-serif;overflow-wrap:anywhere}
 :root.slr-ui .labTab.on{color:var(--selection-accent);background:#030303}
 :root.slr-ui.slr-filled-selection .labTab.on{color:#050607;background:var(--selection-accent)}
@@ -1047,7 +1052,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
     <div class="asLbl">Know the terps?</div>
     <button class="asTerpToggle" id="asTerpToggle" type="button">Optional — tap if yes</button>
-    <div class="terpPicker" id="asTerpPicker"></div>
+    <div class="terpPicker" id="asTerpPicker" role="group" aria-label="Terpenes"></div>
 
     <div class="asLbl">Photo <span style="text-transform:none;letter-spacing:0">(optional)</span></div>
     <div class="photoPick">
@@ -1250,15 +1255,14 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.9';
+const APP_VERSION = 'v2.6.10';
 const LAB_NOTICE = {
-  id:'slr-v2.6.9', version:'Version 2.6.9', audience:'all',
-  title:'Your Lab, refined.',
-  copy:'A full-screen menu, matching Lab doors and a clearer profile.',
+  id:'slr-v2.6.10', version:'Version 2.6.10', audience:'all',
+  title:'Small refinements for your next session.',
+  copy:'Clearer terpene choices and consistent bottom-bar spacing.',
   items:[
-    ['◎','Lab Settings and your profile','A full-screen menu and an ID card with direct profile and achievement access.'],
-    ['◇','Open your achievements','Badges start expanded. Member details and community Results are easier to read.'],
-    ['≡','Find answers faster','Quick and full guides now have icons and clickable contents, including XP and ratings.']
+    ['●','Terpene colors','Add Strain now shows each terpene in its matching color, with a checkmark when selected.'],
+    ['↧','Phone navigation','The bottom action bar and Lab tabs use the same spacing above your phone’s safe area.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -4574,8 +4578,11 @@ function renderTerpPicker(){
   picker.classList.toggle('show',AS.showTerps);
   toggle.classList.toggle('on',AS.showTerps);
   toggle.textContent=AS.showTerps?'Yes — select any you know':'Optional — tap if yes';
-  picker.innerHTML=RAW_TERPENES.slice().sort((a,b)=>a.Name.localeCompare(b.Name)).map(t=>'<button type="button" class="terpChoice '+(AS.terpUrls.includes(t.url)?'on':'')+'" data-url="'+t.url+'">'+t.Name+'</button>').join('');
-  picker.querySelectorAll('.terpChoice').forEach(btn=>btn.addEventListener('click',()=>{const url=btn.dataset.url;AS.terpUrls=AS.terpUrls.includes(url)?AS.terpUrls.filter(x=>x!==url):AS.terpUrls.concat(url);renderTerpPicker();}));
+  picker.innerHTML=RAW_TERPENES.slice().sort((a,b)=>a.Name.localeCompare(b.Name)).map(t=>{
+    const selected=AS.terpUrls.includes(t.url);
+    return `<button type="button" class="terpChoice${selected?' on':''}" style="--terp-color:${terpColor(t.Name)}" data-url="${safeHtml(t.url)}" aria-pressed="${selected}">${safeHtml(t.Name)}${selected?'<span aria-hidden="true">✓</span>':''}</button>`;
+  }).join('');
+  picker.querySelectorAll('.terpChoice').forEach(btn=>btn.addEventListener('click',()=>{const url=btn.dataset.url;AS.terpUrls=AS.terpUrls.includes(url)?AS.terpUrls.filter(x=>x!==url):AS.terpUrls.concat(url);renderTerpPicker();Array.from(picker.querySelectorAll('.terpChoice')).find(next=>next.dataset.url===url)?.focus({preventScroll:true});}));
 }
 document.getElementById('asTerpToggle').addEventListener('click',()=>{AS.showTerps=!AS.showTerps;if(!AS.showTerps)AS.terpUrls=[];renderTerpPicker();});
 document.getElementById('asPhotoChoose').addEventListener('click',()=>document.getElementById('asPhotoInput').click());

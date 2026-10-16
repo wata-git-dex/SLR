@@ -24,7 +24,7 @@ def build_review():
     snapshot = {}
     if os.environ.get('SLR_REVIEW_SNAPSHOT'):
         snapshot = json.loads(Path(os.environ['SLR_REVIEW_SNAPSHOT']).read_text())
-    injected = ''.join(f'RAW_{key.upper()}='+json.dumps(value).replace('<', '\\u003c')+';\n' for key,value in snapshot.items() if key in ('sessions','members'))
+    injected = ''.join(f'RAW_{key.upper()}='+json.dumps(value).replace('<', '\\u003c')+';\n' for key,value in snapshot.items() if key in ('sessions','members','terpenes'))
     injected += 'document.documentElement.dataset.reviewSnapshot='+json.dumps('14 Oct 2026' if snapshot else 'sample')+';'
     html = html.replace(startup, injected + """
 CURRENT_MEMBER='Cyrus'; CARD_VIEW='row';
