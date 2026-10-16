@@ -88,10 +88,11 @@
 .terpPicker{display:none;flex-wrap:wrap;gap:7px;margin-top:8px}.terpPicker.show{display:flex}
 .terpChoice{--terp-color:#93a08e;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--terp-color) 50%,var(--line));background:color-mix(in srgb,var(--terp-color) 9%,var(--panel));color:var(--terp-color);font:11px 'Space Mono',monospace;cursor:pointer}
 .terpChoice::before{content:'';width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--terp-color)}
-.terpChoice.on{border-color:var(--terp-color);background:color-mix(in srgb,var(--terp-color) 22%,var(--panel));box-shadow:inset 0 0 0 1px var(--terp-color)}
+.terpChoice.on,.slr-light .terpChoice.on{border-color:var(--terp-color);background:var(--terp-color);color:#101214;box-shadow:none}
+.terpChoice.on::before{background:currentColor;opacity:.55}
 .terpChoice:focus-visible{outline:2px solid var(--text);outline-offset:3px}
 .slr-light .terpChoice{color:color-mix(in srgb,var(--terp-color) 50%,#111)}
-@media(forced-colors:active){.terpChoice{color:ButtonText;background:ButtonFace;border-color:ButtonText}.terpChoice.on{outline:2px solid Highlight}.terpChoice::before{background:ButtonText}}
+@media(forced-colors:active){.terpChoice{color:ButtonText;background:ButtonFace;border-color:ButtonText}.terpChoice.on,.slr-light .terpChoice.on{color:HighlightText;background:Highlight;border-color:Highlight;outline:2px solid Highlight}.terpChoice::before{background:currentColor}}
 .photoPick{display:flex;align-items:center;gap:12px;padding:10px;background:var(--panel);border:1px solid var(--line2);border-radius:12px}
 .photoPreview{width:62px;height:62px;border-radius:10px;overflow:hidden;background:var(--panel2);display:grid;place-items:center;flex:0 0 auto;color:var(--faint);font-size:23px}
 .photoPreview img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1255,13 +1256,13 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.10';
+const APP_VERSION = 'v2.6.11';
 const LAB_NOTICE = {
   id:'slr-v2.6.10', version:'Version 2.6.10', audience:'all',
   title:'Small refinements for your next session.',
   copy:'Clearer terpene choices and consistent bottom-bar spacing.',
   items:[
-    ['●','Terpene colors','Add Strain now shows each terpene in its matching color, with a checkmark when selected.'],
+    ['●','Terpene colors','Add Strain now shows each terpene in its matching color, with a solid fill when selected.'],
     ['↧','Phone navigation','The bottom action bar and Lab tabs use the same spacing above your phone’s safe area.']
   ]
 };
@@ -4602,7 +4603,7 @@ function renderTerpPicker(){
   toggle.textContent=AS.showTerps?'Yes — select any you know':'Optional — tap if yes';
   picker.innerHTML=RAW_TERPENES.slice().sort((a,b)=>a.Name.localeCompare(b.Name)).map(t=>{
     const selected=AS.terpUrls.includes(t.url);
-    return `<button type="button" class="terpChoice${selected?' on':''}" style="--terp-color:${terpColor(t.Name)}" data-url="${safeHtml(t.url)}" aria-pressed="${selected}">${safeHtml(t.Name)}${selected?'<span aria-hidden="true">✓</span>':''}</button>`;
+    return `<button type="button" class="terpChoice${selected?' on':''}" style="--terp-color:${terpColor(t.Name)}" data-url="${safeHtml(t.url)}" aria-pressed="${selected}">${safeHtml(t.Name)}</button>`;
   }).join('');
   picker.querySelectorAll('.terpChoice').forEach(btn=>btn.addEventListener('click',()=>{const url=btn.dataset.url;AS.terpUrls=AS.terpUrls.includes(url)?AS.terpUrls.filter(x=>x!==url):AS.terpUrls.concat(url);renderTerpPicker();Array.from(picker.querySelectorAll('.terpChoice')).find(next=>next.dataset.url===url)?.focus({preventScroll:true});}));
 }
