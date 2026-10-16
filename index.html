@@ -107,7 +107,7 @@
 
 /* ---- compact main action dock ---- */
 .actionDock{position:fixed;left:50%;bottom:calc(var(--safe-b) + 2px);z-index:345;width:min(310px,calc(100vw - var(--safe-l) - var(--safe-r) - 28px));display:none;grid-template-columns:repeat(3,1fr);gap:3px;padding:4px;border:1px solid rgba(var(--accent-rgb),.44);border-radius:26px;background:linear-gradient(128deg,rgba(255,255,255,.07),transparent 24%,rgba(var(--accent-rgb),.08) 58%,transparent),rgba(var(--header-rgb),.76);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 -1px 0 rgba(var(--accent-rgb),.08),0 10px 28px rgba(0,0,0,.42),0 0 20px rgba(var(--accent-rgb),.10);-webkit-backdrop-filter:blur(22px) saturate(1.18);backdrop-filter:blur(22px) saturate(1.18);transform:translateX(-50%)}
-body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-open .actionDock{display:none}body.lab-open main{padding-bottom:calc(var(--phone-dock-bottom) + 80px)}
+body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-open .actionDock{display:none}body.lab-open main{padding-bottom:var(--phone-dock-clearance)}
 .dockBtn{min-width:0;height:46px;border:0;border-radius:21px;background:transparent;color:var(--dim);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font:700 8px 'Space Mono',monospace;transition:.15s}
 .dockBtn svg{width:18px;height:18px;padding:2px;border-radius:50%;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.dockBtn.blaze{color:var(--green);background:rgba(var(--accent-rgb),.12);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.24),0 0 12px rgba(var(--accent-rgb),.10)}.dockBtn.blaze svg{width:20px;height:20px;fill:currentColor;stroke:none}.dockBtn:active{transform:scale(.95)}.dockBtn.active{background:rgba(var(--accent-rgb),.13);color:var(--green)}
 .dockSearch{position:absolute;right:0;top:calc(100% + 7px);z-index:344;width:min(350px,calc(100vw - var(--safe-l) - var(--safe-r) - 28px));display:none;padding:7px;border:1px solid rgba(var(--accent-rgb),.38);border-radius:16px;background:rgba(var(--header-rgb),.96);box-shadow:0 10px 28px rgba(0,0,0,.42);backdrop-filter:blur(20px)}.dockSearch.show{display:block}body.detail-open .dockSearch,body.add-open .dockSearch{display:none}
@@ -168,7 +168,9 @@ body.lab-open .actionDock{display:grid}body.detail-open .actionDock,body.add-ope
   --r:16px;
   --safe-t:env(safe-area-inset-top,0px);
   --safe-b:env(safe-area-inset-bottom,0px);
-  --phone-dock-bottom:max(20px,calc(var(--safe-b) + 8px));
+  /* Let the rounded housing enter the safe area by 8px; its content is inset further. */
+  --phone-dock-bottom:max(12px,calc(var(--safe-b) - 8px));
+  --phone-dock-clearance:calc(var(--phone-dock-bottom) + 80px);
   --safe-l:env(safe-area-inset-left,0px);
   --safe-r:env(safe-area-inset-right,0px);
 }
@@ -587,6 +589,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
   padding:11px 16px;border-radius:12px;font-family:'Space Mono',monospace;font-size:12px;
   opacity:0;pointer-events:none;transition:.25s;max-width:88vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Feedback stays above the same bottom controls on the feed and every Lab view. */
+body.lab-open:not(.detail-open):not(.add-open) .toast{bottom:var(--phone-dock-clearance);z-index:500}
 .toast.err{border-color:rgba(228,106,84,.5);color:#f0a99a}
 .toast.ok{border-color:rgba(99,211,116,.5);color:#a6e6ad}
   /* ---- Log Session form ---- */
@@ -765,9 +769,9 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 :root.slr-ui .labTestScore,:root.slr-ui .ratingPanel .ratingValue{color:var(--text)}
 :root.slr-ui .labHubMark{color:var(--selection-accent)}
 /* This outer row is only positioning: the two housings are separate. */
-:root.slr-ui #actionDock{width:min(480px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));grid-template-columns:none;align-items:center;justify-content:space-between;gap:20px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;bottom:var(--phone-dock-bottom)}
+:root.slr-ui #actionDock{width:min(400px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));grid-template-columns:none;align-items:center;justify-content:space-between;gap:16px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;bottom:var(--phone-dock-bottom)}
 body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-open #actionDock{display:none}
-:root.slr-ui .dockGroup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:190px;max-width:calc(100% - 84px);padding:5px;border-radius:32px;border:1px solid rgba(var(--accent-rgb),.65);background:var(--slr-solid);pointer-events:auto;box-shadow:0 6px 22px #0003}
+:root.slr-ui .dockGroup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:1;min-width:0;padding:5px;border-radius:32px;border:1px solid rgba(var(--accent-rgb),.65);background:var(--slr-solid);pointer-events:auto;box-shadow:0 6px 22px #0003}
 :root.slr-ui .dockGroup .dockBtn{height:50px;background:transparent;color:var(--text)}
 :root.slr-ui #blazeFab{width:64px;height:64px;flex:0 0 64px;border-radius:50%;pointer-events:auto;background:var(--selection-accent);color:#050607;box-shadow:0 6px 22px #0003}
 :root.slr-ui.slr-glass .dockGroup,:root.slr-ui.slr-glass .labTabs{background:linear-gradient(145deg,#ffffff14,transparent 65%),rgba(18,18,18,.52);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:inset 0 1px 0 #ffffff25,0 8px 24px #0003}
@@ -777,7 +781,7 @@ body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-ope
 :root.slr-ui .menuSheet{width:min(440px,calc(100% - 24px));max-width:none;height:100dvh;max-height:100dvh;border-radius:0;padding:calc(var(--safe-t) + 16px) 16px calc(var(--safe-b) + 24px);border-top:0;border-right:0;border-bottom:0;overscroll-behavior:contain;animation:drawerEnter .18s ease-out}
 @keyframes drawerEnter{from{transform:translateX(100%)}to{transform:translateX(0)}}
 :root.slr-ui .menuHead h2{font-size:17px}
-:root.slr-ui .labHub{padding-bottom:calc(var(--phone-dock-bottom) + 80px);scroll-padding-bottom:calc(var(--phone-dock-bottom) + 80px)}
+:root.slr-ui .labHub{padding-bottom:var(--phone-dock-clearance);scroll-padding-bottom:var(--phone-dock-clearance)}
 :root.slr-ui .labTabs{position:fixed;z-index:5;left:50%;bottom:var(--phone-dock-bottom);transform:translateX(-50%);width:min(520px,calc(100% - var(--safe-l) - var(--safe-r) - 32px));box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;margin:0;padding:5px;border:1px solid var(--green);border-radius:30px;background:var(--slr-solid)}
 :root.slr-ui .labTab{min-height:48px;padding:7px 3px;border-radius:24px;font:600 11px/1.2 'Space Grotesk',sans-serif;overflow-wrap:anywhere}
 :root.slr-ui .labTab.on{color:var(--selection-accent);background:#030303}
@@ -1256,7 +1260,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.11';
+const APP_VERSION = 'v2.6.12';
 const LAB_NOTICE = {
   id:'slr-v2.6.10', version:'Version 2.6.10', audience:'all',
   title:'Small refinements for your next session.',
