@@ -514,8 +514,8 @@ async function createStrainAndBatch(data, token, clean, memberName) {
   const whoIn      = clean(memberName);
 
   if (!strainName) throw new Error("Strain name is required");
-  if (!["Sativa", "Hybrid", "Indica"].includes(typeIn)) {
-    throw new Error("Type must be Sativa, Hybrid or Indica");
+  if (!["Sativa", "Hybrid-S", "Hybrid", "Hybrid-I", "Indica"].includes(typeIn)) {
+    throw new Error("Type must be Sativa, Hybrid-S, Hybrid, Hybrid-I or Indica");
   }
 
   // THC: user types 29 (meaning 29%). Notion stores it as a DECIMAL (0.29).

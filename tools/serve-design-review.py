@@ -56,7 +56,7 @@ class Handler(BaseHTTPRequestHandler):
         else:
             relative = path.lstrip('/')
             file = (APP / relative).resolve()
-            allowed = (relative.startswith(('assets/badges/', 'assets/navigation/', 'images/', 'guides/'))
+            allowed = (relative.startswith(('assets/badges/', 'assets/navigation/', 'assets/icons/', 'images/', 'guides/'))
                        or re.fullmatch(r'[a-z0-9-]+\.png', relative))
             if not allowed or not file.is_relative_to(APP) or not file.is_file():
                 self.send_error(404)

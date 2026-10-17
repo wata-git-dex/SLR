@@ -41,7 +41,7 @@
     document.documentElement.classList.toggle('slr-no-glass',solid);
     document.documentElement.classList.toggle('slr-filled-selection',localStorage.getItem('slr_appearance_selection:'+member)!=='black');
   }catch(e){}
-  if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
+  if(icon&&(isAmber||isCyrus||isFelipe||isPiero)) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v3-180.png':isFelipe?'felipe-app-icon-180.png':'piero-app-icon-180.png';
   const manifest=document.createElement('link');
   manifest.id='appManifest';
   manifest.rel='manifest';
@@ -684,7 +684,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 :root:not(.slr-light) .actionDock{background:rgba(9,13,18,.96);border-color:rgba(var(--accent-rgb),.65)}
 :root:not(.slr-light) .dockBtn.blaze{background:rgba(var(--accent-rgb),.09);box-shadow:inset 0 0 0 1px rgba(var(--accent-rgb),.7)}
 /* Neutral dark menu/Lab surfaces; accent tint is shared by every section. */
-:root:not(.slr-light) :is(.menuSheet,.labHub,.badgeDetail,.myLabPage,.infoSheet,.referenceSheet){--ink:#08090b;--ink2:#101114;--panel:#151619;--panel2:#1b1c20;--line:#2b2d33;--line2:#3b3d44;--profile-end:16,17,20;--profile-stat:8,9,11;--header-rgb:8,9,11}
+:root:not(.slr-light) :is(.menuSheet,.labHub,.badgeDetail,.myLabPage,.infoSheet,.referenceSheet,.achievementNoticeCard){--ink:#08090b;--ink2:#101114;--panel:#151619;--panel2:#1b1c20;--line:#2b2d33;--line2:#3b3d44;--profile-end:16,17,20;--profile-stat:8,9,11;--header-rgb:8,9,11}
 
 /* Approved SLR glass navigation; content cards remain solid. */
 :root.slr-glass{--slr-glass:rgba(8,10,14,.72);--slr-glass-solid:#101217;--slr-glass-sheen:rgba(255,255,255,.055);--slr-glass-highlight:rgba(255,255,255,.18);--slr-glass-edge:rgba(var(--accent-rgb),.76)}
@@ -771,7 +771,7 @@ body{background:radial-gradient(ellipse at 95% 0%,rgba(var(--theme-secondary),.0
 /* This outer row is only positioning: the two housings are separate. */
 :root.slr-ui #actionDock{width:min(400px,calc(100vw - var(--safe-l) - var(--safe-r) - 32px));grid-template-columns:none;align-items:center;justify-content:space-between;gap:16px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none;bottom:var(--phone-dock-bottom)}
 body.lab-open #actionDock{display:flex}body.detail-open #actionDock,body.add-open #actionDock{display:none}
-:root.slr-ui .dockGroup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:1;min-width:0;padding:5px;border-radius:32px;border:1px solid rgba(var(--accent-rgb),.65);background:var(--slr-solid);pointer-events:auto;box-shadow:0 6px 22px #0003}
+:root.slr-ui .dockGroup{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex:1;min-width:0;padding:5px;border-radius:32px;border:1px solid rgba(var(--accent-rgb),.65);background:var(--slr-solid);pointer-events:auto;box-shadow:0 6px 22px #0003}
 :root.slr-ui .dockGroup .dockBtn{height:50px;background:transparent;color:var(--text)}
 :root.slr-ui #blazeFab{width:64px;height:64px;flex:0 0 64px;border-radius:50%;pointer-events:auto;background:var(--selection-accent);color:#050607;box-shadow:0 6px 22px #0003}
 :root.slr-ui.slr-glass .dockGroup,:root.slr-ui.slr-glass .labTabs{background:linear-gradient(145deg,#ffffff14,transparent 65%),rgba(18,18,18,.52);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:inset 0 1px 0 #ffffff25,0 8px 24px #0003}
@@ -918,6 +918,22 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 :root.slr-ui .profileDestination .profileBadgeLink svg{width:19px;height:19px}
 :root.slr-ui .profileDestination .profileBadgeLink:focus-visible{outline:2px solid var(--dim);outline-offset:3px}
 @media(max-width:440px){.menuDestinations .profileDestination .profileCard{grid-template-columns:1fr}}
+
+/* Five recorded types, with three shared collection families. */
+.asTypes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.asType{--type-ink:var(--hybrid);--type-fill:var(--hybrid);appearance:none;min-width:0;min-height:44px;padding:8px 2px;border:1px solid color-mix(in srgb,var(--type-ink) 50%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--type-ink) 10%,var(--panel));color:var(--type-ink);font:600 clamp(11px,2.8vw,12px)/1.2 'Space Grotesk',sans-serif;text-align:center;white-space:nowrap;cursor:pointer}
+.asType[data-type="Sativa"]{--type-ink:var(--sativa);--type-fill:var(--sativa)}
+.asType[data-type="Hybrid-S"]{--type-fill:linear-gradient(110deg,var(--sativa),var(--hybrid))}
+.asType[data-type="Hybrid-I"]{--type-fill:linear-gradient(110deg,var(--hybrid),var(--indica))}
+.asType[data-type="Indica"]{--type-ink:var(--indica);--type-fill:var(--indica)}
+.asType.on{background:var(--type-fill);color:#101214;border-color:var(--type-ink);box-shadow:inset 0 1px 0 #ffffff40}
+@media(max-width:300px){.asTypes{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:240px){.asTypes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.asType:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+:root.slr-light .asType:not(.on){color:color-mix(in srgb,var(--type-ink) 48%,#101214)}
+:root.slr-light.slr-no-glass .dockRatMark{background:var(--text)}
+.dockRatMark{display:block;width:24px;height:24px;background:#fff;mask:url('assets/icons/rat-mark.svg') center/contain no-repeat;-webkit-mask:url('assets/icons/rat-mark.svg') center/contain no-repeat}
+@media(forced-colors:active){.dockRatMark{background:ButtonText}.asType.on{outline:2px solid Highlight;background:Highlight;color:HighlightText}}
 </style>
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
@@ -981,6 +997,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <nav class="actionDock" id="actionDock" aria-label="Main actions">
   <div class="dockGroup">
   <button class="dockBtn" id="labDockBtn" aria-label="Open The Lab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v5l-5 9a2.5 2.5 0 0 0 2.2 3.7h9.6A2.5 2.5 0 0 0 19 17l-5-9V3M8 14h8M9.5 17h.01M14.5 18h.01"/></svg><span>Lab</span></button>
+  <button class="dockBtn" id="profileDockBtn" aria-label="Open your profile"><span class="dockRatMark" aria-hidden="true"></span><span>Profile</span></button>
   <button class="dockBtn" id="addStrainBtn" aria-label="Add new strain"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Add Strain</span></button>
   </div>
   <button class="dockBtn blaze" id="blazeFab" aria-label="Blaze"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3.001 2.48ZM12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z" clip-rule="evenodd"/></svg><span>Blaze</span></button>
@@ -1035,11 +1052,14 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
            style="display:none;margin-top:8px" autocomplete="off" spellcheck="false">
 
     <div class="asLbl">Type</div>
-    <div class="asTypes">
-      <div class="asType" data-type="Sativa">Sativa</div>
-      <div class="asType" data-type="Hybrid">Hybrid</div>
-      <div class="asType" data-type="Indica">Indica</div>
+    <div class="asTypes" role="group" aria-label="Strain type">
+      <button type="button" class="asType" data-type="Sativa" aria-pressed="false">Sativa</button>
+      <button type="button" class="asType" data-type="Hybrid-S" aria-pressed="false" title="Sativa-leaning hybrid">Hybrid-S</button>
+      <button type="button" class="asType" data-type="Hybrid" aria-pressed="false">Hybrid</button>
+      <button type="button" class="asType" data-type="Hybrid-I" aria-pressed="false" title="Indica-leaning hybrid">Hybrid-I</button>
+      <button type="button" class="asType" data-type="Indica" aria-pressed="false">Indica</button>
     </div>
+    <div class="asHint">Hybrid-S leans Sativa · Hybrid-I leans Indica. Both stay in the Hybrid filter.</div>
 
     <div class="asLbl">THC %</div>
     <input class="asInput" id="asTHC" type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 29">
@@ -1260,14 +1280,15 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.12';
+const APP_VERSION = 'v2.6.13';
 const LAB_NOTICE = {
-  id:'slr-v2.6.10', version:'Version 2.6.10', audience:'all',
-  title:'Small refinements for your next session.',
-  copy:'Clearer terpene choices and consistent bottom-bar spacing.',
+  id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
+  title:'A little more Lab.',
+  copy:'Your profile is closer, and achievements have their moment.',
   items:[
-    ['●','Terpene colors','Add Strain now shows each terpene in its matching color, with a solid fill when selected.'],
-    ['↧','Phone navigation','The bottom action bar and Lab tabs use the same spacing above your phone’s safe area.']
+    ['◎','Profile shortcut','The white rat opens your profile, progress and badge collection.'],
+    ['◇','Achievement announcements','New badges and ranks appear after your saved session is confirmed.'],
+    ['●','Hybrid details','Record Hybrid-S or Hybrid-I. Both keep green cards and stay under the Hybrid filter.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3481,6 +3502,8 @@ function process(strains,batches,sessions){
     const brands=[]; bs.forEach(b=>{if(b.Brand&&!brands.includes(b.Brand))brands.push(b.Brand);});
     const countries=[]; bs.forEach(b=>{if(b.Country&&!countries.includes(b.Country))countries.push(b.Country);});
     const types=bs.map(b=>b.Type).filter(Boolean);
+    const family=mode(types.map(type=>SLRAchievements.typeFamily(type)).filter(Boolean));
+    const typeLabel=mode(types.filter(type=>SLRAchievements.typeFamily(type)===family));
     const thc=bs.map(b=>b.THC).filter(x=>x!=null);
     const tcount={}; bs.forEach(b=>(b.Terps||[]).forEach(t=>tcount[t]=(tcount[t]||0)+1));
     const dates=bs.map(b=>b.Date).filter(Boolean);
@@ -3491,7 +3514,7 @@ function process(strains,batches,sessions){
     const verdict=verdictFor(shown);
  out.push({
   name:st.Name, url:st.url, photo:st.photo||null, has_image:Boolean(st.has_image||st.photo),
-      type:mode(types), brands, countries,
+      type:family, typeLabel, brands, countries,
       thc_avg: thc.length?Math.round(thc.reduce((sum,value)=>sum+value,0)/thc.length*1000)/10:null,
       thc_min: thc.length?Math.round(Math.min.apply(null,thc)*1000)/10:null,
       thc_max: thc.length?Math.round(Math.max.apply(null,thc)*1000)/10:null,
@@ -3672,7 +3695,7 @@ function render(){
     if(ftype!=='all'&&s.type!==ftype)return false;
     if(fcountry!=='all'&&!(s.countries||[]).includes(fcountry))return false;
    if(activeBrand && !(s.brands||[]).includes(activeBrand))return false;
-    if(query){const hay=(s.name+' '+(s.brands||[]).join(' ')+' '+(s.terpenes||[]).join(' ')+' '+(s.type||'')).toLowerCase();if(!hay.includes(query))return false;}
+    if(query){const hay=(s.name+' '+(s.brands||[]).join(' ')+' '+(s.terpenes||[]).join(' ')+' '+(s.typeLabel||s.type||'')).toLowerCase();if(!hay.includes(query))return false;}
     return true;
   });
   list=sortList(list);
@@ -3713,7 +3736,7 @@ function gridCardEl(s){
   const c=document.createElement('div');
   c.className='card gridCard t-'+(s.type||'x');
   const thc=thcLabel(s),brand=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
-  const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
+  const typeTag=s.type?`<span class="tag type ${s.type}">${safeHtml(s.typeLabel||s.type)}</span>`:'';
   const thcText=thc?`<span class="thctext" style="color:${typeHex(s.type)}">THC ${thc}</span>`:'';
   const dots=s.terpenes&&s.terpenes.length?s.terpenes.slice(0,6).map(t=>{const color=terpColor(t);return `<span class="terpDot" style="color:${color};background:${color}" title="${t}" aria-label="${t}"></span>`;}).join(''):'<span class="terpDotsEmpty">No terpenes logged</span>';
   const effects=cardEffects(s,5).map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
@@ -3732,7 +3755,7 @@ function cardEl(s){
   if(te.length) strip=te.map(e=>`<span class="efficon ${e.pos?'pos':'neg'}" title="${e.k}">${EFFECT_ICON[e.k]||'•'}</span>`).join('');
   let terps=''; if(s.terpenes&&s.terpenes.length) terps=`<div class="terps">${s.terpenes.slice(0,6).map(t=>{const c=terpColor(t);return `<span class="terppill" title="${t}" aria-label="${t}" style="color:${c};border-color:${hexA(c,.4)};background:${hexA(c,.1)}">${terpAbbr(t)}</span>`;}).join('')}</div>`; else terps=`<div class="terps emptyTerps"><span class="noterp">no terpenes logged</span></div>`;
   const brandInline=(s.brands&&s.brands[0])?`${s.brands[0]}${s.brands.length>1?' +'+(s.brands.length-1):''}`:'Unknown brand';
-  const typeTag=s.type?`<span class="tag type ${s.type}">${s.type}</span>`:'';
+  const typeTag=s.type?`<span class="tag type ${s.type}">${safeHtml(s.typeLabel||s.type)}</span>`:'';
   const th=typeHex(s.type);
   const thcTxt=thc?`<span class="thctext" style="color:${th}">THC ${thc}</span>`:'';
   const emptyRating=sc!=null?'No effects logged':SCORE_VIEW==='community'?'No community rating yet':'No rating from you yet';
@@ -3808,7 +3831,7 @@ let html=`
  
   // Compact chemistry row: Type and THC stay concise while Terpenes use the remaining width.
 html+=`<div class="sect detailChemistry"><div class="detailChemistryGrid"><div class="statgrid two detailChemistryStats">
-    <div class="stat typeStat"><div class="k">Type</div><span class="chip typechip ${tcode}">${s.type||'—'}</span></div>
+    <div class="stat typeStat"><div class="k">Type</div><span class="chip typechip ${tcode}">${safeHtml(s.typeLabel||s.type||'—')}</span></div>
     <div class="stat"><div class="k">THC</div><div class="v" style="color:${typeHex(s.type)};margin-top:4px">${thc||'—'}</div></div>
   </div><div class="detailTerpenes"><h3>Terpenes</h3>`;
   if(s.terpenes&&s.terpenes.length){
@@ -4097,7 +4120,7 @@ function memberLabStats(name){
   const topRated=Object.entries(byStrain).map(([strain,items])=>({strain,stats:aggregateSessions(items)})).filter(item=>item.stats.score!=null).sort((a,b)=>b.stats.score-a.stats.score||b.stats.num_sessions-a.stats.num_sessions).slice(0,3);
   const stats=aggregateSessions(sessions);
   const topEffects=Object.entries(stats.effects||{}).filter(([effect])=>EFFECTS.includes(effect)).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([effect])=>effect);
-  return {name,sessions:sessions.length,strains:distinct.size,points:sessions.length*10+distinct.size*5,average:stats.score==null?null:formatRating(stats.score),favoriteType:mode(rows.map(row=>row.batch.Type).filter(Boolean)),favoriteBrand:mode(rows.map(row=>row.batch.Brand).filter(Boolean)),mostLogged,topRated,topEffects};
+  return {name,sessions:sessions.length,strains:distinct.size,points:sessions.length*10+distinct.size*5,average:stats.score==null?null:formatRating(stats.score),favoriteType:mode(rows.map(row=>SLRAchievements.typeFamily(row.batch.Type)).filter(Boolean)),favoriteBrand:mode(rows.map(row=>row.batch.Brand).filter(Boolean)),mostLogged,topRated,topEffects};
 }
 function ratColors(name){
   const known=RAT_IDENTITIES[name.toLowerCase()];if(known)return known;
@@ -4106,7 +4129,7 @@ function ratColors(name){
 }
 function memberIconFor(name){
   const member=name.toLowerCase();
-  return member==='amber'?'amber-app-icon-180.png':(member==='felipe'||member==='felipe carvalho')?'felipe-app-icon-180.png':member==='piero'?'piero-app-icon-180.png':'cyrus-app-icon-v2-180.png?v=3';
+  return member==='amber'?'amber-app-icon-180.png':(member==='felipe'||member==='felipe carvalho')?'felipe-app-icon-180.png':member==='piero'?'piero-app-icon-180.png':'cyrus-app-icon-v3-180.png';
 }
 function labSvg(kind,cls='labPulseIcon'){
   if(kind==='rat')return `<svg class="${cls}" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 12C7 5 2 6 2 11c0 3 2 5 5 5m15-4c3-7 8-6 8-1 0 3-2 5-5 5M8 14c.6-5 4-8 8-8s7.4 3 8 8l2 7c-1 6-5 9-10 9S7 27 6 21l2-7Z"/><path d="m11 17 2 2m8-2-2 2m-5 4 2 1 2-1m-2 1v3M5 22l7 1m15-1-7 1M5 26l7-2m15 2-7-2"/></svg>`;
@@ -4145,7 +4168,7 @@ function renderTasteMap(crew){
   const effectEntries=Object.entries(effects).filter(([effect,value])=>EFFECTS.includes(effect)&&value>0).sort((a,b)=>b[1]-a[1]);
   const typeColors={Sativa:'#e6b24c',Hybrid:'#63d374',Indica:'#a98bea'},brandColors=['#24c8ff','#f28a24','#f4478c','#63d374','#9466ff','#ffd21a'];
   const ratSignals=crew.map(rat=>{const colors=ratColors(rat.name),signals=[rat.favoriteType,...rat.topEffects.slice(0,2)].filter(Boolean);return `<div class="intelRow ratSnapshot" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><span class="ratNamePill">${safeHtml(displayName(rat.name))}</span><div class="ratPills">${signals.length?signals.map(value=>`<span class="ratPill">${EFFECTS.includes(value)?(EFFECT_ICON[value]||'')+' ':''}${safeHtml(effectLabel(value))}</span>`).join(''):'<span class="ratPill empty">First session pending</span>'}</div><b>${rat.sessions}</b></div>`;}).join('')||'<div class="labEmpty">No personal taste signals yet.</div>';
-  document.getElementById('tasteGrid').innerHTML=`<div class="intelCard"><h4>Favorite types</h4>${intelRows(countValues(rows.map(row=>row.batch.Type)),label=>typeColors[label]||'#63d374')}</div><div class="intelCard"><h4>Most-smoked brands</h4>${intelRows(countValues(rows.map(row=>row.batch.Brand)),(_,index)=>brandColors[index%brandColors.length])}</div><div class="intelCard"><h4>Strongest Effect signals</h4>${intelRows(effectEntries,()=> '#63d374',label=>(EFFECT_ICON[label]||'')+' '+effectLabel(label))}</div><div class="intelCard"><h4>Rat-by-rat snapshot</h4>${ratSignals}</div>`;
+  document.getElementById('tasteGrid').innerHTML=`<div class="intelCard"><h4>Favorite types</h4>${intelRows(countValues(rows.map(row=>SLRAchievements.typeFamily(row.batch.Type))),label=>typeColors[label]||'#63d374')}</div><div class="intelCard"><h4>Most-smoked brands</h4>${intelRows(countValues(rows.map(row=>row.batch.Brand)),(_,index)=>brandColors[index%brandColors.length])}</div><div class="intelCard"><h4>Strongest Effect signals</h4>${intelRows(effectEntries,()=> '#63d374',label=>(EFFECT_ICON[label]||'')+' '+effectLabel(label))}</div><div class="intelCard"><h4>Rat-by-rat snapshot</h4>${ratSignals}</div>`;
 }
 function labTestDate(row,index){
   const raw=row.session.Date||row.batch.Date;
@@ -4175,11 +4198,11 @@ function applyMemberAppIcon(){
   const manifest=document.getElementById('appManifest');
   if(manifest) manifest.setAttribute('href',isAmber?'manifest-amber.webmanifest':isCyrus?'manifest-cyrus-v2.webmanifest':isFelipe?'manifest-felipe.webmanifest':isPiero?'manifest-piero.webmanifest':'manifest.webmanifest');
   const icon=document.querySelector('link[rel="apple-touch-icon"]');
-  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-180.png':isPiero?'piero-app-icon-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
+  if(icon) icon.href=isAmber?'amber-app-icon-180.png':isCyrus?'cyrus-app-icon-v3-180.png':isFelipe?'felipe-app-icon-180.png':isPiero?'piero-app-icon-180.png':window.SLR_DEFAULT_APPLE_TOUCH_ICON;
   document.querySelectorAll('.emblem img,.brandimg').forEach(img=>{
     if(!img.dataset.defaultSrc) img.dataset.defaultSrc=img.getAttribute('src');
     img.onerror=()=>{img.onerror=null;img.src=img.dataset.defaultSrc;};
-    img.src=isAmber?'amber-app-icon-512.png':isCyrus?'cyrus-app-icon-v2-180.png?v=3':isFelipe?'felipe-app-icon-512.png':isPiero?'piero-app-icon-512.png':img.dataset.defaultSrc;
+    img.src=isAmber?'amber-app-icon-512.png':isCyrus?'cyrus-app-icon-v3-180.png':isFelipe?'felipe-app-icon-512.png':isPiero?'piero-app-icon-512.png':img.dataset.defaultSrc;
   });
 }
 function setScoreView(view){
@@ -4228,6 +4251,7 @@ try{
     setUpdated(now.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+now.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}));
     buildChips(); render();
     if(labHubIsOpen())renderTheLab();
+    window.SLRLabAchievements?.dataReady();
     toast((initial?'Welcome, '+displayName(CURRENT_MEMBER):'Updated — '+STRAINS.length+' strains'),'ok');
   }catch(err){
     if(initial){
@@ -4408,6 +4432,7 @@ async function submitSession() {
   const code = await ensureCode();
   if (!code) return;
 
+  const achievementCheckpoint=window.SLRLabAchievements?.snapshot();
   const btn = document.getElementById('logSubmitBtn');
   btn.disabled = true;
   btn.textContent = 'Logging…';
@@ -4450,6 +4475,7 @@ async function submitSession() {
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || 'Write failed');
 
+    window.SLRLabAchievements?.expectSave(achievementCheckpoint);
     // Success — collapse the form and show message
     toast('Thanks, enjoy the high 🌿', 'ok');
     const c = document.getElementById('logSessionContainer');
@@ -4604,8 +4630,13 @@ document.getElementById('photoOverlay').addEventListener('click',e=>{if(e.target
 const AS = { type:'', busy:false, terpUrls:[], showTerps:false, afterAdd:'', photo:null, previewUrl:'' };
 
 function asSubmitLabel(){return AS.afterAdd==='blaze'?'Add & continue to Blaze':'Add to the lab';}
+function clearStrainType(){
+  AS.type='';
+  document.querySelectorAll('.asType').forEach(button=>{button.classList.remove('on');button.setAttribute('aria-pressed','false');});
+}
 function asOpen(afterAdd=''){
   closeDockSearch();
+  clearStrainType();
   AS.afterAdd=afterAdd;
   const ov = document.getElementById('asOverlay');
   // build brand list from existing batches
@@ -4665,8 +4696,8 @@ document.getElementById('asBrand').addEventListener('change', e=>{
 // type buttons
 document.querySelectorAll('.asType').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.asType').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
+    document.querySelectorAll('.asType').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false');});
+    btn.classList.add('on');btn.setAttribute('aria-pressed','true');
     AS.type = btn.dataset.type;
   });
 });
@@ -4706,7 +4737,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
 
   if(!name){  st.textContent='Enter a strain name.'; return; }
   if(!brand){ st.textContent='Pick a brand (or choose Other).'; return; }
-  if(!AS.type){ st.textContent='Pick Sativa, Hybrid or Indica.'; return; }
+  if(!AS.type){ st.textContent='Pick a strain type.'; return; }
   if(!thc){   st.textContent='Enter the THC %.'; return; }
 
   const code = await ensureCode();
@@ -4763,7 +4794,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
     document.getElementById('asPhotoInput').value='';
     document.getElementById('asPhotoPreview').textContent='📷';
     document.getElementById('asPhotoName').textContent='No photo selected';
-    document.querySelectorAll('.asType').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('.asType').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false');});
     revokePreview(AS);AS.photo=null;AS.type=''; AS.terpUrls=[]; AS.showTerps=false; renderTerpPicker(); st.textContent='';
     if(photoWarning)toast('Strain was added, but its photo was not: '+photoWarning,'err');
     if(continueToBlaze&&added) openBlazeForStrain(added,brand,batchUrl);

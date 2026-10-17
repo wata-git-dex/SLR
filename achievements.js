@@ -68,7 +68,23 @@
   function hasExperienceRating(session){return validOverall(session.overall)!=null||Object.values({...session.effects,...session.sideEffects}).some(value=>intensity(value)>0);}
   function memberIn(session,member){return (session.members||[]).some(name=>key(name)===key(member));}
   function distinct(rows,field){return new Set(rows.map(row=>key(typeof field==='function'?field(row):row[field])).filter(Boolean));}
-  function countByType(rows,type){return distinct(rows.filter(row=>key(row.type)===key(type)),'strainId').size;}
+  function typeFamily(value){
+    const valueKey=key(value);
+    if(valueKey==='hybrid'||valueKey==='hybrid-s'||valueKey==='hybrid-i')return 'Hybrid';
+    if(valueKey==='sativa')return 'Sativa';
+    if(valueKey==='indica')return 'Indica';
+    return null;
+  }
+  function countByType(rows,type){return distinct(rows.filter(row=>typeFamily(row.type)===type),'strainId').size;}
+  // Compare confirmed save results only; startup history is a silent baseline.
+  function newlyEarned(before,after,seen={}){
+    if(!before||!after||key(before.member)!==key(after.member))return [];
+    const previous=new Map((before.achievements||[]).map(item=>[item.id,Number(item.rank)||0]));
+    return (after.achievements||[]).filter(item=>item.earned&&!item.unavailable).flatMap(item=>{
+      const floor=Math.max(previous.get(item.id)||0,Number(seen[item.id])||0);
+      return item.rank>floor?[{...item,newRanks:item.rank-floor,awardedXp:(item.rank-floor)*item.xp}]:[];
+    });
+  }
   function chronological(rows){return [...rows].sort((a,b)=>new Date(a.date||0)-new Date(b.date||0)||String(a.id||'').localeCompare(String(b.id||'')));}
   function firstRatingWins(allSessions,member){
     const firstByStrain=new Map();
@@ -96,7 +112,7 @@
     const rated=sessions.filter(hasExperienceRating);
     const strains=distinct(sessions,'strainId');
     const sessionCount=distinct(sessions,'id').size;
-    const ratedTypes=distinct(rated,'type');
+    const ratedTypes=distinct(rated,session=>typeFamily(session.type));
     const knownTypes=new Set(['sativa','hybrid','indica']);
     const trackedTerpenes=new Set((context?.trackedTerpenes||[]).map(key).filter(Boolean));
     const encountered=distinct(sessions,session=>session.terpenes||[]);
@@ -140,5 +156,5 @@
     return {member,metrics,activityXp,achievementXp,totalXp,level:levelForXp(totalXp),achievements,earned:achievements.filter(item=>item.earned)};
   }
 
-  root.SLRAchievements={version:'preview-2',definitions:DEFINITIONS,calculateMember,levelForXp,levelThreshold,levelTitle};
+  root.SLRAchievements={version:'preview-2',definitions:DEFINITIONS,typeFamily,newlyEarned,calculateMember,levelForXp,levelThreshold,levelTitle};
 })(typeof globalThis!=='undefined'?globalThis:window);

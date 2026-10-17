@@ -118,3 +118,11 @@ const existingGet=await worker.fetch(new Request('https://worker.test/?code=TEST
 assert.equal((await existingGet.json()).strains[0].photo,'https://files.example/strain.jpg');
 
 console.log('worker v1 tests passed');
+
+for(const type of ['Hybrid-S','Hybrid-I']){
+  calls.length=0;
+  const response=await worker.fetch(new Request('https://worker.test/',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind:'strain',code:'TEST-CODE',strainName:'Test Strain',brand:'Maven',type,thc:'25',country:'🇩🇪',terpUrls:[]})}),env);
+  assert.equal(response.status,200);
+  const batchWrite=calls.filter(c=>c.url.endsWith('/v1/pages')).map(c=>JSON.parse(c.opts.body)).find(body=>body.parent?.data_source_id===DS.batches);
+  assert.equal(batchWrite.properties.Type.select.name,type,'Persist the exact hybrid subtype to Notion');
+}

@@ -6,7 +6,7 @@
   toolbar.setAttribute('aria-label','Design comparison');
   toolbar.innerHTML='<strong>SLR · Design review</strong><small>Current card layout · saved snapshot · no live writes</small>';
   document.body.prepend(toolbar);
-  const themes=[['Cyrus · Green / Blue','','cyrus-app-icon-v2-512.png'],['Cyrus · Blue','cyrus-blue-theme','cyrus-app-icon-v2-512.png'],['Cyrus · Purple','cyrus-purple-theme','cyrus-app-icon-v2-512.png'],['Cyrus · Amber','interface-amber-theme','cyrus-app-icon-v2-512.png'],['Amber · Pink','amber-theme','amber-app-icon-512.png'],['Amber · Pink & White','amber-theme slr-light','amber-app-icon-512.png'],['Amber · Amber','amber-theme interface-amber-theme','amber-app-icon-512.png'],['Piero · Red','piero-theme','piero-app-icon-512.png'],['Piero · Purple','piero-theme piero-purple-theme','piero-app-icon-512.png'],['Felipe · Green','felipe-theme','felipe-app-icon-512.png'],['Felipe · Yellow','felipe-theme felipe-yellow-theme','felipe-app-icon-512.png']];
+  const themes=[['Cyrus · Green / Blue','','cyrus-app-icon-v3-512.png'],['Cyrus · Blue','cyrus-blue-theme','cyrus-app-icon-v3-512.png'],['Cyrus · Purple','cyrus-purple-theme','cyrus-app-icon-v3-512.png'],['Cyrus · Amber','interface-amber-theme','cyrus-app-icon-v3-512.png'],['Amber · Pink','amber-theme','amber-app-icon-512.png'],['Amber · Pink & White','amber-theme slr-light','amber-app-icon-512.png'],['Amber · Amber','amber-theme interface-amber-theme','amber-app-icon-512.png'],['Piero · Red','piero-theme','piero-app-icon-512.png'],['Piero · Purple','piero-theme piero-purple-theme','piero-app-icon-512.png'],['Felipe · Green','felipe-theme','felipe-app-icon-512.png'],['Felipe · Yellow','felipe-theme felipe-yellow-theme','felipe-app-icon-512.png']];
   const select=document.createElement('select');select.setAttribute('aria-label','Theme preview');
   themes.forEach(([label],i)=>{const option=document.createElement('option');option.value=i;option.textContent=label;select.append(option);});toolbar.append(select);
   select.addEventListener('change',()=>{const [label,classes,icon]=themes[Number(select.value)];CURRENT_MEMBER=label.split(' · ')[0];STRAINS=process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);render();renderProfile();renderTheLab();root.classList.remove(...new Set(themes.flatMap(([,c])=>c.split(' ').filter(Boolean))));if(classes)root.classList.add(...classes.split(' '));document.querySelectorAll('.brandimg,.emblem img,.myLabAvatar img').forEach(img=>{img.src=icon;});});
@@ -19,6 +19,11 @@
   toolbar.append(material);
   const mode=document.createElement('button');mode.textContent='Light mode';mode.setAttribute('aria-pressed',String(root.classList.contains('slr-light')));mode.addEventListener('click',()=>mode.setAttribute('aria-pressed',String(root.classList.toggle('slr-light'))));toolbar.append(mode);
   const selection=document.createElement('button');selection.textContent=root.classList.contains('slr-filled-selection')?'Try black button':'Try accent button';selection.addEventListener('click',()=>{const filled=!root.classList.contains('slr-filled-selection');setAppearancePreference('selection',filled?'accent':'black');selection.textContent=filled?'Try black button':'Try accent button';});toolbar.append(selection);
+  const announce=document.createElement('button');announce.textContent='Preview achievement';
+  announce.addEventListener('click',()=>{
+    const item=SLRAchievements.definitions.find(item=>item.id==='high-voltage');
+    SLRLabAchievements.show([{...item,earned:true,rank:2,value:10,nextThreshold:15,progress:0,newRanks:1,awardedXp:item.xp}],{preview:true});
+  });toolbar.append(announce);
   // Bounded preview diagnostic: sample frame pacing after the first real scroll
   // in each material. No production instrumentation or recurring timer.
   const sampled=new Set();

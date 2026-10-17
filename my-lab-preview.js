@@ -151,6 +151,7 @@
     const achievements=document.createElement('div');achievements.className='profileAchievements';badgeLink.insertAdjacentHTML('beforeend','<span>View achievements</span>');achievements.append(badgeLink);document.getElementById('profileDetails').append(achievements);
     badgeLink.addEventListener('click',()=>{openMyLab();document.getElementById('badgeCase').scrollIntoView({block:'start',behavior:'instant'});document.getElementById('badgeCaseToggle').focus({preventScroll:true});});
     document.getElementById('profileToggle').addEventListener('click',openMyLab);
+    document.getElementById('profileDockBtn').addEventListener('click',openMyLab);
     mineTab.addEventListener('click',()=>{renderMyLab();setLabTab('mine');});
     document.getElementById('menuTheLab').addEventListener('click',()=>requestAnimationFrame(addPersonalLabLink));
     document.getElementById('labDockBtn').addEventListener('click',()=>requestAnimationFrame(addPersonalLabLink));
@@ -206,6 +207,82 @@
   function closeBadgeDetail(){document.getElementById('badgeDetailOverlay').classList.remove('show');}
   function openMyLab(){if(!CURRENT_MEMBER)return;closeMenu();openTheLab('mine');renderMyLab();addPersonalLabLink();}
 
+
+  const pendingAchievementSaves=new Map(),noticeMemory=new Map();
+  let noticeReturnFocus=null,noticeOverflow='';
+  const memberKey=()=>String(CURRENT_MEMBER||'').trim().toLowerCase();
+  function readNoticeRanks(member){
+    const key='slr_achievement_seen:v1:'+encodeURIComponent(member);
+    let stored={};try{stored=JSON.parse(localStorage.getItem(key)||'{}');}catch{}
+    const ranks={...(noticeMemory.get(member)||{})};
+    if(stored&&typeof stored==='object')for(const [id,value] of Object.entries(stored)){
+      if(Number.isSafeInteger(value)&&value>=0)ranks[id]=Math.max(ranks[id]||0,value);
+    }
+    return ranks;
+  }
+  function rememberNoticeRanks(member,result){
+    const ranks=readNoticeRanks(member);
+    result.achievements.forEach(item=>{ranks[item.id]=Math.max(ranks[item.id]||0,item.rank||0);});
+    noticeMemory.set(member,ranks);
+    try{localStorage.setItem('slr_achievement_seen:v1:'+encodeURIComponent(member),JSON.stringify(ranks));}catch{}
+  }
+  function achievementSnapshot(){return memberKey()?currentProgress():null;}
+  function expectAchievementSave(before){
+    const member=String(before?.member||'').trim().toLowerCase();
+    if(!member||member!==memberKey())return;
+    // Keep the earliest checkpoint if multiple saves precede their readback.
+    if(!pendingAchievementSaves.has(member))pendingAchievementSaves.set(member,before);
+  }
+  function achievementDataReady(){
+    const member=memberKey();if(!member)return;
+    const result=currentProgress(),before=pendingAchievementSaves.get(member);
+    if(before){
+      // A successful POST can precede Notion's query visibility. Try again on the
+      // next normal refresh; never announce from optimistic or failed writes.
+      if(result.metrics.sessions<=before.metrics.sessions)return;
+      const awards=engine.newlyEarned(before,result,readNoticeRanks(member));
+      pendingAchievementSaves.delete(member);
+      rememberNoticeRanks(member,result);
+      if(awards.length)showAchievementNotice(awards);
+    }else rememberNoticeRanks(member,result);
+  }
+  function closeAchievementNotice(restore=true){
+    const overlay=document.getElementById('achievementNotice');
+    if(!overlay?.classList.contains('show'))return;
+    overlay.classList.remove('show');document.body.style.overflow=noticeOverflow;
+    if(restore){const target=noticeReturnFocus?.isConnected&&noticeReturnFocus.getClientRects().length?noticeReturnFocus:document.getElementById('profileDockBtn');target?.focus({preventScroll:true});}
+  }
+  function showAchievementNotice(awards,{preview=false}={}){
+    if(!awards?.length)return;
+    const overlay=document.getElementById('achievementNotice'),first=awards[0];
+    if(!overlay.classList.contains('show')){noticeReturnFocus=document.activeElement;noticeOverflow=document.body.style.overflow;}
+    const title=awards.length>1?'Lab breakthroughs':first.rank>1?'New badge rank':'Achievement unlocked';
+    const milestoneCopy=first.repeatable?first.description.replace(String(first.threshold),String(first.rank*first.threshold)):first.description;
+    overlay.innerHTML=`<section class="achievementNoticeCard" role="dialog" aria-modal="true" aria-labelledby="achievementNoticeTitle" aria-describedby="achievementNoticeSummary" style="--coin:${badgeColor(first)}"><button class="achievementNoticeClose" aria-label="Close achievement announcement">✕</button><div class="achievementNoticeEyebrow">${preview?'Preview · example achievement':'Lab breakthrough'}</div><div class="achievementNoticeCoin" aria-hidden="true">${coin(first)}</div><h2 id="achievementNoticeTitle">${safeHtml(title)}</h2><p class="achievementNoticeName">${safeHtml(badgeName(first))}</p><p id="achievementNoticeSummary">${safeHtml(milestoneCopy)}</p>${awards.length>1?`<ul class="achievementNoticeMore">${awards.slice(1).map(item=>`<li><span>${safeHtml(badgeName(item))}</span><b>+${item.awardedXp} XP</b></li>`).join('')}</ul>`:''}<div class="achievementNoticeXp">+${awards.reduce((sum,item)=>sum+item.awardedXp,0)} XP${preview?' · example':''}</div><div class="achievementNoticeActions"><button data-achievement-profile>View achievements</button><button data-achievement-dismiss>Got it</button></div></section>`;
+    overlay.classList.add('show');document.body.style.overflow='hidden';
+    overlay.querySelector('.achievementNoticeClose').focus({preventScroll:true});
+  }
+  function buildAchievementNotice(){
+    const overlay=document.createElement('div');overlay.id='achievementNotice';overlay.className='achievementNotice';document.body.append(overlay);
+    overlay.addEventListener('click',event=>{
+      if(event.target.closest('[data-achievement-profile]')){
+        closeAchievementNotice(false);if(document.getElementById('scrim').classList.contains('show'))closeSheet();openMyLab();
+        document.getElementById('badgeCase').scrollIntoView({block:'start',behavior:'instant'});document.getElementById('badgeCaseToggle').focus({preventScroll:true});
+      }else if(event.target===overlay||event.target.closest('.achievementNoticeClose,[data-achievement-dismiss]'))closeAchievementNotice();
+    });
+    document.addEventListener('keydown',event=>{
+      if(!overlay.classList.contains('show'))return;
+      if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();closeAchievementNotice();}
+      if(event.key==='Tab'){
+        const buttons=[...overlay.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+      }
+    },true);
+  }
+  window.SLRLabAchievements={snapshot:achievementSnapshot,expectSave:expectAchievementSave,dataReady:achievementDataReady,show:showAchievementNotice};
+
   buildShell();
+  buildAchievementNotice();
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.getElementById('badgeDetailOverlay').classList.contains('show')){event.stopImmediatePropagation();closeBadgeDetail();}},true);
 })();

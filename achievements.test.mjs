@@ -79,3 +79,22 @@ for(const [type,id] of [['Sativa','high-voltage'],['Indica','dreamwalker'],['Hyb
   assert.equal(progress.achievements.find(b=>b.id==='complete-observation').earnedXp,Math.floor(count/10)*35);
  }
 }
+
+// Hybrid lean is recorded detail; both leanings remain in the Hybrid family.
+const hybrids=engine.calculateMember({sessions:Array.from({length:5},(_,index)=>({id:`hy${index}`,strainId:`hy-strain-${index}`,members:['Cyrus'],type:index%2?'Hybrid-S':'Hybrid-I',overall:4})),trackedTerpenes:[]},'Cyrus');
+assert.equal(hybrids.metrics.hybridStrains,5);
+assert.equal(hybrids.metrics.sativaStrains,0);
+assert.equal(hybrids.metrics.indicaStrains,0);
+assert.equal(hybrids.metrics.ratedTypes,1);
+assert.equal(hybrids.achievements.find(item=>item.id==='best-of-both').rank,1);
+const rankContext=count=>({sessions:Array.from({length:count},(_,i)=>({id:`rank-${i}`,strainId:`rank-strain-${i}`,members:['Cyrus'],type:'Sativa'}))});
+const rankOne=engine.calculateMember(rankContext(9),'Cyrus'),rankTwo=engine.calculateMember(rankContext(10),'Cyrus');
+const gains=engine.newlyEarned(rankOne,rankTwo);
+assert.equal(gains.find(item=>item.id==='high-voltage').awardedXp,25);
+assert.equal(gains.find(item=>item.id==='high-voltage').rank,2);
+assert.equal(engine.newlyEarned(rankTwo,rankTwo).length,0);
+assert.equal(engine.newlyEarned(null,rankTwo).length,0);
+assert.equal(engine.newlyEarned({...rankOne,member:'Amber'},rankTwo).length,0);
+assert.equal(engine.newlyEarned(rankOne,rankTwo,{'high-voltage':2}).some(item=>item.id==='high-voltage'),false);
+const rankThree=engine.calculateMember(rankContext(15),'Cyrus');
+assert.equal(engine.newlyEarned(rankOne,rankThree).find(item=>item.id==='high-voltage').awardedXp,50);
