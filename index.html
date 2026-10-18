@@ -1291,6 +1291,9 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
+let SLR_ACTIVE_WRITES=0;
+async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
+
 const APP_VERSION = 'v2.6.14';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
@@ -4473,7 +4476,7 @@ async function submitSession() {
   };
 
   try {
-    const res = await fetch(WORKER_URL, {
+    const res = await slrWrite(WORKER_URL, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload),
@@ -4598,7 +4601,7 @@ async function preparePhoto(file){
 async function uploadPhotoForStrain(strainUrl,file,replace,retried=false){
   const code=await ensureCode();if(!code)throw new Error('Invite code required.');
   const form=new FormData();form.append('code',code);form.append('strainUrl',strainUrl);form.append('replace',String(replace));form.append('photo',file,file.name);
-  const res=await fetch(WORKER_URL+'/photo',{method:'POST',body:form});
+  const res=await slrWrite(WORKER_URL+'/photo',{method:'POST',body:form});
   if(res.status===401&&!retried){const newCode=await reauthAndRetry();if(newCode)return uploadPhotoForStrain(strainUrl,file,replace,true);}
   const data=await res.json().catch(()=>({}));
   if(!res.ok||data.error)throw new Error(data.error||'Photo upload failed.');
@@ -4759,7 +4762,7 @@ document.getElementById('asSubmit').addEventListener('click', async ()=>{
   st.textContent = '';
 
   try{
-    const res = await fetch(WORKER_URL, {
+    const res = await slrWrite(WORKER_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -4947,7 +4950,7 @@ buildChips(); render();
 window.SLRPushHost={
   api:WORKER_URL,version:APP_VERSION,code:getStoredCode,member:()=>CURRENT_MEMBER,
   openSettings:openMenu,profile:()=>{closeMenu();window.openMyLab();},
-  safeToUpdate:()=>!AS.busy&&!['scrim','asOverlay','photoOverlay','blazeOverlay','filterOverlay','referenceOverlay','infoOverlay','labHubOverlay','achievementNotice','icOverlay'].some(id=>document.getElementById(id)?.classList.contains('show'))
+  safeToUpdate:()=>SLR_ACTIVE_WRITES===0&&!AS.busy&&!['scrim','asOverlay','photoOverlay','blazeOverlay','filterOverlay','referenceOverlay','infoOverlay','labHubOverlay','achievementNotice','icOverlay'].some(id=>document.getElementById(id)?.classList.contains('show'))
 };
 showCheckingGate();refresh(true);
 </script>
