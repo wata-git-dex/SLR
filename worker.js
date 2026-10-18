@@ -1,3 +1,5 @@
+import {arm,runAlarm} from './push/scheduler.mjs';
+import {notificationRoute,markAchievementSave,reconcileProgress,drainAuthorized} from './push/server.mjs';
 // SLR live-data Worker — reads Notion data AND writes new sessions
 // NOTION_TOKEN stored as encrypted Cloudflare secret
 
@@ -17,9 +19,9 @@ const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 // Each active code maps to the member named in its Given To field.
 let _memberCache = { members: null, ts: 0 };
 
-async function activeMembers(token) {
+async function activeMembers(token, fresh=false) {
   const FRESH_MS = 60_000;
-  if (_memberCache.members && (Date.now() - _memberCache.ts) < FRESH_MS) return _memberCache.members;
+  if (!fresh && _memberCache.members && (Date.now() - _memberCache.ts) < FRESH_MS) return _memberCache.members;
 
   const pages = await queryAll(DS.invites, token);
   const members = new Map();
@@ -27,7 +29,12 @@ async function activeMembers(token) {
     if (page.properties?.Status?.select?.name !== "Active") continue;
     const code = title(page, "Code").trim().toUpperCase();
     const name = richText(page, "Given To").trim();
-    if (code && name) members.set(code, { name });
+    if (code && name) {
+      const identity=String(page.id||'').replace(/-/g,'')+'|'+name.trim().toLowerCase();
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(identity));
+      const subject='slr-'+Array.from(new Uint8Array(digest),value=>value.toString(16).padStart(2,'0')).join('');
+      members.set(code, { name, subject });
+    }
   }
 
   _memberCache = { members, ts: Date.now() };
@@ -48,6 +55,8 @@ function codeRejected(cors) {
 
 export default {
   async fetch(request, env) {
+    const notification=await notificationRoute(request,env,async code=>typeof code==='string'&&code.trim()&&code.length<=64?(await activeMembers(env.NOTION_TOKEN,true)).get(code.trim().toUpperCase()):null);
+    if(notification)return notification;
     const requestUrl = new URL(request.url);
     const origin = env.ALLOWED_ORIGIN || "*";
     const cors = {
@@ -108,7 +117,8 @@ export default {
           });
         }
 
-        await createSession(data, env.NOTION_TOKEN, member.name);
+        const savedSession=await createSession(data, env.NOTION_TOKEN, member.name);
+        await markAchievementSave(env,member.subject,savedSession.id).catch(()=>{});
         return new Response(JSON.stringify({ ok: true, viewer: member.name }), {
           headers: { ...cors, "Content-Type": "application/json" },
         });
@@ -197,6 +207,7 @@ export default {
         terpenes: terpenePages.map(p => ({ url: idToUrl(p.id), Name: title(p, "Name") })).filter(t => t.Name),
       };
 
+      await reconcileProgress(env,member,payload).catch(()=>{});
       return new Response(JSON.stringify(payload), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -207,6 +218,7 @@ export default {
       });
     }
   },
+
 };
 
 function jsonError(message, status, cors) {
@@ -597,4 +609,15 @@ function urlToPageId(url) {
   const hex = String(url || "").split('/').pop().replace(/-/g, "");
   if (!/^[0-9a-f]{32}$/i.test(hex)) throw new Error("Invalid terpene reference");
   return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
+}
+
+// Internal Durable Object namespace only; no public alarm or arbitrary emitter route.
+export class SLRDeliveryScheduler {
+  constructor(state,env){this.state=state;this.env=env;}
+  async fetch(request){
+    if(request.method!=='POST'||new URL(request.url).pathname!=='/kick')return new Response(null,{status:404});
+    if(this.env.SLR_PUSH_DELIVERY_ENABLED==='on')await arm(this.state.storage);
+    return new Response(null,{status:204});
+  }
+  async alarm(){await runAlarm(this.state.storage,this.env,async()=>drainAuthorized(this.env,await activeMembers(this.env.NOTION_TOKEN,true)));}
 }

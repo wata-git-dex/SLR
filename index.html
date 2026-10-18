@@ -935,6 +935,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .dockRatMark{display:block;width:24px;height:24px;background:#fff;mask:url('assets/icons/rat-mark.svg') center/contain no-repeat;-webkit-mask:url('assets/icons/rat-mark.svg') center/contain no-repeat}
 @media(forced-colors:active){.dockRatMark{background:ButtonText}.asType.on{outline:2px solid Highlight;background:Highlight;color:HighlightText}}
 </style>
+<link rel="stylesheet" href="push/settings.css">
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
   <img id="lightboxImg" src="" alt="">
@@ -1193,6 +1194,16 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
           </div>
         </div>
       </div>
+      <details class="slrPush" id="slrPush" hidden>
+        <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0v5l-2 3h16l-2-3V8M9 20h6"/></svg><span>Notifications<span id="pushCount"></span></span></summary>
+        <div class="slrPushBody"><p id="pushPermission">Open SLR from its Home Screen icon to use device notifications.</p><div id="pushStatus" role="status" aria-live="polite"></div>
+          <div class="slrPushActions"><button id="pushEnable" type="button">Enable this device</button><button id="pushTest" type="button" disabled>Send test</button><button id="pushDisable" type="button" disabled>Disable this device</button></div>
+          <h4>Devices</h4><div id="pushDevices"></div><h4>Recent alerts</h4><div id="pushEvents"></div>
+          <div class="slrPushActions"><button id="pushRead" type="button">Mark displayed read</button><button id="pushRefresh" type="button">Refresh alerts</button></div>
+          <p>New badges and ranks appear after a saved Session is confirmed. Older achievements stay in your profile. Notification previews never show strain names or ratings.</p>
+          <h4>App updates</h4><p class="slrPushVersion" id="pushVersion">App v2.6.14</p><div class="slrPushActions"><button id="pushCheck" type="button">Check updates</button><button id="pushApply" type="button" disabled>Apply update</button></div><p>Save work and close other SLR windows before applying. Your account, preferences and saved data stay in place.</p>
+        </div>
+      </details>
       <div class="menuDisclosure">
         <button class="menuItem noticeToggle" id="menuLabNotice" aria-expanded="false" aria-controls="noticePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h5M8 12h8M8 16h6"/><circle cx="17" cy="6" r="2.5" fill="var(--panel)"/></svg></span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">⌄</span></button>
         <div class="noticePanel" id="noticePanel"><div class="noticeVersion" id="menuNoticeVersion">Version 2.0.2</div><div class="noticeSummary" id="menuNoticeSummary"></div></div>
@@ -1280,7 +1291,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <script src="achievements.js"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
-const APP_VERSION = 'v2.6.13';
+const APP_VERSION = 'v2.6.14';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
@@ -3937,7 +3948,7 @@ const IC_KEY = 'slr_invite_code';
 const MEMBER_HINT_KEY = 'slr_member_hint';
 function getStoredCode(){ return localStorage.getItem(IC_KEY) || ''; }
 function setStoredCode(c){ localStorage.setItem(IC_KEY, c); }
-function clearStoredCode(){ localStorage.removeItem(IC_KEY); localStorage.removeItem(MEMBER_HINT_KEY); }
+function clearStoredCode(){ const oldCode=getStoredCode();void window.SLRPush?.signOut(oldCode);localStorage.removeItem(IC_KEY); localStorage.removeItem(MEMBER_HINT_KEY); }
 
 let _icResolve = null;
 function showCheckingGate(){
@@ -4252,6 +4263,7 @@ try{
     buildChips(); render();
     if(labHubIsOpen())renderTheLab();
     window.SLRLabAchievements?.dataReady();
+    void window.SLRPush?.authenticated(CURRENT_MEMBER);
     toast((initial?'Welcome, '+displayName(CURRENT_MEMBER):'Updated — '+STRAINS.length+' strains'),'ok');
   }catch(err){
     if(initial){
@@ -4932,9 +4944,15 @@ setColorMode();
 setHeaderPanel(localStorage.getItem(HEADER_PANEL_KEY)==='open',false);
 syncCardViewButton();
 buildChips(); render();
+window.SLRPushHost={
+  api:WORKER_URL,version:APP_VERSION,code:getStoredCode,member:()=>CURRENT_MEMBER,
+  openSettings:openMenu,profile:()=>{closeMenu();window.openMyLab();},
+  safeToUpdate:()=>!AS.busy&&!['scrim','asOverlay','photoOverlay','blazeOverlay','filterOverlay','referenceOverlay','infoOverlay','labHubOverlay','achievementNotice','icOverlay'].some(id=>document.getElementById(id)?.classList.contains('show'))
+};
 showCheckingGate();refresh(true);
 </script>
 <script src="my-lab-preview.js"></script>
+<script type="module" src="push/settings.mjs"></script>
 <script type="module" src="assets/navigation/slr-navigation.mjs"></script>
 </body>
 </html>

@@ -1,1 +1,6 @@
 .wrangler/
+
+node_modules/
+push/node_modules/
+push/wrangler.local.jsonc
+push/node_modules

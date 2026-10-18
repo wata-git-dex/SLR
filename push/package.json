@@ -1,0 +1,15 @@
+{
+  "name": "slr-push",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild ../worker.js --bundle --format=esm --platform=browser --target=es2022 --outfile=../.wrangler/slr-push/worker.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@block65/webcrypto-web-push": "2.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1"
+  }
+}
