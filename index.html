@@ -934,6 +934,11 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 :root.slr-light.slr-no-glass .dockRatMark{background:var(--text)}
 .dockRatMark{display:block;width:24px;height:24px;background:#fff;mask:url('assets/icons/rat-mark.svg') center/contain no-repeat;-webkit-mask:url('assets/icons/rat-mark.svg') center/contain no-repeat}
 @media(forced-colors:active){.dockRatMark{background:ButtonText}.asType.on{outline:2px solid Highlight;background:Highlight;color:HighlightText}}
+/* Approved October 19 header: bare brand, matched 40px elements and a little more space. */
+:root.slr-ui header .brandbox{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;gap:10px}
+:root.slr-ui header .brandicon{width:40px;height:40px}
+:root.slr-ui header .hstat>button{width:40px;height:40px}
+:root.slr-ui header{padding-top:calc(var(--safe-t) + 18px);padding-bottom:18px}
 </style>
 <link rel="stylesheet" href="push/settings.css?v=2.6.18">
 </head>
@@ -1207,7 +1212,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
         </div>
       </details>
       <details class="menuDisclosure slrPush" id="slrUpdates" hidden>
-        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.18</span></span><span class="menuArrow">⌄</span></summary>
+        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.19</span></span><span class="menuArrow">⌄</span></summary>
         <div class="slrPushBody"><div class="slrPushActions"><button id="pushCheck" type="button">Check for updates</button><button id="pushApply" type="button" hidden>Update app</button></div><p id="pushUpdateStatus" role="status" aria-live="polite">Check for the latest version of SLR.</p></div>
       </details>
       <div class="menuDisclosure">
@@ -1300,7 +1305,7 @@ const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.6.18';
+const APP_VERSION = 'v2.6.19';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
