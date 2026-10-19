@@ -7,13 +7,6 @@ const get=id=>document.getElementById(id);
 let registrationPromise,client,identity='',identityCode='',busy=false,lastRead=0,applying=false,reg,updateBusy=false,updateAvailable=false;
 const supported=()=>isSecureContext&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
 function say(text){status.textContent=text;}
-function renderBell(){
-  const count=client?.state?.unread;
-  get('pushBell').hidden=!identity;
-  get('pushBellCount').hidden=!count;
-  get('pushBellCount').textContent=count>99?'99+':String(count||'');
-  get('pushBell').setAttribute('aria-label',Number.isSafeInteger(count)?`Notifications, ${count} unread`:'Notifications');
-}
 function openInbox(refreshInbox=true){
   if(!identity)return;
   host.openSettings();root.open=true;
@@ -46,7 +39,7 @@ function preferenceRows(parent,device,deviceLabel='this device'){
   }
 }
 function render(){
-  renderBell();get('pushRefresh').disabled=busy;const state=client?.state;if(!state)return;
+  get('pushRefresh').disabled=busy;const state=client?.state;if(!state)return;
   get('pushCount').textContent=state.unread?` · ${state.unread} unread`:'';
   const current=state.devices.find(device=>device.id===client.deviceId);
   const needsInstall=installationRequired();
@@ -84,7 +77,7 @@ function updateReady(){updateAvailable=true;get('pushApply').hidden=false;showUp
 async function authenticated(member){
   const code=host.code();
   if(member!==identity||code!==identityCode){client?.reset();identity=member;identityCode=code;lastRead=0;say('');client=new NotificationClient({identity:()=>identity,request:(action,data)=>request(action,data,code),registration});}
-  root.hidden=!identity;updates.hidden=!identity;renderBell();get('pushVersion').textContent=`App ${host.version}`;
+  root.hidden=!identity;updates.hidden=!identity;get('pushVersion').textContent=`App ${host.version}`;
   if(!identity)return;
   // App updates do not depend on notification permission or push support.
   try{await registration();if(reg.waiting)updateReady();}catch(error){showUpdate(error.message);}
@@ -92,14 +85,13 @@ async function authenticated(member){
   if(location.hash==='#notifications')openInbox(false);
 }
 async function signOut(code){
-  identity='';identityCode='';client?.reset();client=null;root.hidden=true;updates.hidden=true;renderBell();await badge(0);
+  identity='';identityCode='';client?.reset();client=null;root.hidden=true;updates.hidden=true;await badge(0);
   try{const r=await registration(),sub=await r.pushManager.getSubscription();if(sub){const endpoint=sub.endpoint;await sub.unsubscribe();await request('unsubscribe',{endpoint},code);}}catch{/* No credentials are saved in the worker. Revoked invites are checked at dispatch. */}
   try{localStorage.removeItem('slr.push.device.v1');}catch{}
 }
 get('pushEnabled').addEventListener('change',()=>{const enabled=get('pushEnabled').checked;void run(async()=>{if(enabled)await client.enable();else await client.disable();});});
 get('pushTest').addEventListener('click',()=>run(async()=>{await request('test',{});await refresh(true);say('Test queued. Check your device notifications.');}));
 get('pushRead').addEventListener('click',()=>run(async()=>{await client.markAllRead();render();},'Marking all read…'));
-get('pushBell').addEventListener('click',()=>openInbox());
 get('pushRefresh').addEventListener('click',()=>run(()=>refresh(true),'Loading alerts…'));
 async function runUpdate(action){
   if(updateBusy)return;updateBusy=true;get('pushCheck').disabled=true;get('pushApply').disabled=true;

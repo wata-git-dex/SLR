@@ -13,10 +13,4 @@
 @media(prefers-reduced-motion:reduce){.slrPushSetting input::before{transition:none}}
 @media(forced-colors:active){.slrPushSetting input{appearance:auto;-webkit-appearance:auto}.slrPushSetting input::before{display:none}}
 .slrPush .menuCopy #pushCount{display:inline;font:400 10px 'Space Mono',monospace;color:var(--dim);margin:0}
-/* Account inbox entry: existing notification state, no extra polling. */
-.slrHeaderBell{position:relative;color:var(--green)}.slrHeaderBell[hidden],#pushBellCount[hidden]{display:none}
-:root.slr-ui .hstat>button{width:44px;height:44px;min-width:44px;min-height:44px}
-#pushBellCount{position:absolute;top:-5px;right:-4px;display:grid;place-items:center;min-width:18px;min-height:18px;padding:2px 4px;border-radius:99px;background:var(--green);color:var(--ink);font:700 10px/1 'Space Mono',monospace;border:1px solid var(--ink)}
-.slrHeaderBell:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 #pushInbox{scroll-margin-top:calc(var(--safe-t) + 110px)}#pushInboxHeading:focus-visible{outline:2px solid var(--green);outline-offset:3px}.slrPushHeading{flex-wrap:wrap}.slrPushHeading h4{flex:1 1 auto}
-@media(max-width:540px){:root.slr-ui header{column-gap:8px}.brandbox{min-width:0;max-width:100%;gap:7px}:root.slr-ui .brandbox{padding:7px}.brandicon{width:28px;height:28px}.wordmark{font-size:14px;white-space:normal;line-height:1.15}.wordmark b{display:block}.hstat{gap:5px}}

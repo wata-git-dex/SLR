@@ -40,10 +40,10 @@ On the installed iPhone app, open Lab Settings → Notifications, enable the dev
 
 Rollback: set dispatch to `off`, keep the Durable Object class/binding and D1/VAPID secrets, and restore the prior static frontend if needed. Do not simply delete the Durable Object export or apply a whole old catalog. Keep schema/storage and existing user data. Installed service workers persist through their normal lifecycle; do not clear site data.
 
-## Header inbox and full read acknowledgement (v2.6.17)
+## Settings inbox and full read acknowledgement (v2.6.18)
 
-The 44px header bell opens the existing inbox directly without marking anything read. It reuses authenticated notification state: unread is shown up to 99+ visually, with the exact count in the accessible label. Zero hides the counter. Signed-out clients hide the bell. The inbox works without device push permission/support. No polling timer was added.
+Notifications stay in Lab Settings → Notifications. SLR deliberately keeps its established header without a notification bell. Opening the inbox never marks anything read. The settings summary shows authoritative unread state; the inbox works without device push permission/support. No polling timer was added.
 
 State returns a snapshot cursor `readThrough`, alongside total unread and at most 50 event rows, using one D1 transactional batch. Explicit `read-all` updates only this authenticated app/account's unread rows through that cursor, covering every page. Events are append-only; later inserted rows have larger SQLite rowids, so same-timestamp/backdated arrivals during acknowledgement remain unread. Do not introduce event deletion/rowid-rewriting retention without migrating this cursor contract. The legacy per-event read API remains compatible.
 
-After success the client invalidates older unfinished reads and refreshes authoritative state before changing the header/OS badge. Offline/server failures retain counts. A failed follow-up read may leave the old count visible until a successful refresh; it never pretends all alerts were cleared. Account changes reject late responses. The Worker still requires canonical Origin and freshly validated invite identity; no browser subject/app is trusted.
+After success the client invalidates older unfinished reads and refreshes authoritative state before changing settings unread counts/the OS badge. Offline/server failures retain counts. A failed follow-up read may leave the old count visible until a successful refresh; it never pretends all alerts were cleared. Account changes reject late responses. The Worker still requires canonical Origin and freshly validated invite identity; no browser subject/app is trusted.
