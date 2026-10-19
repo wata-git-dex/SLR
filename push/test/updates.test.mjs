@@ -38,3 +38,18 @@ test('update apply preserves drafts and worker rejection, then recovers after st
  args.send=async()=>{serviceWorker.dispatchEvent(new Event('controllerchange'));return {ok:true};};await applyAppUpdate(args);assert.equal(reloads,1);
  args.registration.waiting=null;await applyAppUpdate(args);assert.equal(reloads,2);
 });
+
+test('notification actions retain the invite for their authenticated UI account across a switch',()=>{
+ const settings=readFileSync(new URL('../settings.mjs',import.meta.url),'utf8');
+ const start=settings.indexOf('  const code=host.code();',settings.indexOf('async function authenticated'));
+ const end=settings.indexOf('  root.hidden=',start);assert.ok(start>0&&end>start);
+ let code='alice-code';const calls=[];
+ const context=vm.createContext({host:{code:()=>code},member:'Alice',say(){},registration(){},request:(...args)=>calls.push(args),NotificationClient:class{constructor(options){Object.assign(this,options);}reset(){this.resetCalled=true;}}});
+ vm.runInContext("let identity='',identityCode='',client,lastRead=0;function authenticate(){"+settings.slice(start,end)+'}',context);
+ vm.runInContext('authenticate()',context);const old=vm.runInContext('client',context);
+ code='bob-code';context.member='Bob';vm.runInContext('authenticate()',context);const current=vm.runInContext('client',context);
+ old.request('read-all',{through:123});current.request('read-all',{through:3});
+ assert.equal(calls[0][2],'alice-code');assert.equal(calls[1][2],'bob-code');assert.equal(old.resetCalled,true);
+ // A replacement invite with the same display name also gets a fresh request context.
+ code='new-bob-code';vm.runInContext('authenticate()',context);assert.notEqual(current,vm.runInContext('client',context));
+});

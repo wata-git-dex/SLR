@@ -4,7 +4,7 @@ import {handle,APP,drain} from './delivery.mjs';
 const ORIGIN='https://labrats.saltyviewfinder.com';
 const headers={'access-control-allow-origin':ORIGIN,'access-control-allow-methods':'POST, OPTIONS','access-control-allow-headers':'Content-Type','cache-control':'private, no-store','vary':'Origin'};
 const response=(data,status)=>Response.json(data,{status,headers});
-const routes=new Set(['state','subscribe','unsubscribe','remove-device','preferences','test','read']);
+const routes=new Set(['state','subscribe','unsubscribe','remove-device','preferences','test','read','read-all']);
 export async function notificationRoute(request,env,authorize){
   const path=new URL(request.url).pathname;
   if(!path.startsWith('/notifications/'))return null;

@@ -935,7 +935,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .dockRatMark{display:block;width:24px;height:24px;background:#fff;mask:url('assets/icons/rat-mark.svg') center/contain no-repeat;-webkit-mask:url('assets/icons/rat-mark.svg') center/contain no-repeat}
 @media(forced-colors:active){.dockRatMark{background:ButtonText}.asType.on{outline:2px solid Highlight;background:Highlight;color:HighlightText}}
 </style>
-<link rel="stylesheet" href="push/settings.css">
+<link rel="stylesheet" href="push/settings.css?v=2.6.17">
 </head>
   <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')">
   <img id="lightboxImg" src="" alt="">
@@ -963,6 +963,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
   </div>
   <div class="hstat">
+    <button class="menuBtn slrHeaderBell" id="pushBell" type="button" aria-label="Notifications" aria-haspopup="dialog" aria-controls="menuOverlay" title="Notifications" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0v5l-2 3h16l-2-3V8M9 20h6"/></svg><span id="pushBellCount" aria-hidden="true" hidden></span></button>
     <button class="headerToggle" id="headerToggle" type="button" aria-label="Show lab controls" aria-expanded="false" title="Show lab controls"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"/></svg></button>
     <button class="menuBtn" id="menuBtn" aria-label="Open menu" title="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
@@ -1200,15 +1201,14 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
           <label class="slrPushSetting"><span><b>On this device</b><small id="pushPermission">Loading notification settings…</small></span><input id="pushEnabled" type="checkbox" role="switch" disabled></label>
           <div id="pushCurrent"></div>
           <div class="slrPushActions"><button class="slrPushQuiet" id="pushTest" type="button" disabled>Send test</button></div>
-          <div id="pushStatus" role="status" aria-live="polite"></div>
           <details class="slrPushExtra" id="pushOther" hidden><summary>Other devices<span id="pushDeviceCount"></span></summary><div id="pushDevices"></div></details>
-          <div class="slrPushHeading"><h4>Recent alerts</h4><button class="slrPushQuiet" id="pushRead" type="button" disabled>Read all</button><button class="slrPushQuiet slrPushIcon" id="pushRefresh" type="button" aria-label="Refresh alerts" title="Refresh alerts">↻</button></div>
-          <div id="pushEvents"></div>
+          <section id="pushInbox" aria-labelledby="pushInboxHeading"><div class="slrPushHeading"><h4 id="pushInboxHeading" tabindex="-1">Recent alerts</h4><button class="slrPushQuiet" id="pushRead" type="button" disabled>Mark all read</button><button class="slrPushQuiet slrPushIcon" id="pushRefresh" type="button" aria-label="Refresh alerts" title="Refresh alerts">↻</button></div>
+          <div id="pushStatus" role="status" aria-live="polite"></div><div id="pushEvents" aria-busy="false"></div></section>
           <p class="slrPushNote">New badges and ranks appear after a saved session. Notification previews keep strains and ratings private.</p>
         </div>
       </details>
       <details class="menuDisclosure slrPush" id="slrUpdates" hidden>
-        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.16</span></span><span class="menuArrow">⌄</span></summary>
+        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.17</span></span><span class="menuArrow">⌄</span></summary>
         <div class="slrPushBody"><div class="slrPushActions"><button id="pushCheck" type="button">Check for updates</button><button id="pushApply" type="button" hidden>Update app</button></div><p id="pushUpdateStatus" role="status" aria-live="polite">Check for the latest version of SLR.</p></div>
       </details>
       <div class="menuDisclosure">
@@ -1301,7 +1301,7 @@ const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.6.16';
+const APP_VERSION = 'v2.6.17';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
@@ -4962,7 +4962,7 @@ window.SLRPushHost={
 showCheckingGate();refresh(true);
 </script>
 <script src="my-lab-preview.js"></script>
-<script type="module" src="push/settings.mjs"></script>
+<script type="module" src="push/settings.mjs?v=2.6.17"></script>
 <script type="module" src="assets/navigation/slr-navigation.mjs"></script>
 </body>
 </html>

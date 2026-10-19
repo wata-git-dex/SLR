@@ -36,12 +36,13 @@ export async function handle(request,env) {
   if(!env.DB||!env.VAPID_PUBLIC_KEY||!env.VAPID_PRIVATE_KEY)return reply({error:'Device notification service is not configured'},503);
   const db=env.DB,path=new URL(request.url).pathname,now=Date.now();
   if(request.method==='GET'&&path==='/state') {
-    const [events,devices,count]=await Promise.all([
-      statement(db,'SELECT id,category,created,read_at FROM events WHERE app=? AND subject=? ORDER BY (read_at IS NOT NULL),created DESC LIMIT 50',APP,subject).all(),
-      statement(db,'SELECT id,account_enabled,achievement_enabled,created,updated FROM subscriptions WHERE app=? AND subject=? ORDER BY created DESC',APP,subject).all(),
-      statement(db,'SELECT count(*) AS unread FROM events WHERE app=? AND subject=? AND read_at IS NULL',APP,subject).first()
+    // D1 batch reads share one snapshot; the cursor covers the whole inbox, not just page one.
+    const [events,devices,counts]=await db.batch([
+      statement(db,'SELECT id,category,created,read_at FROM events WHERE app=? AND subject=? ORDER BY (read_at IS NOT NULL),created DESC LIMIT 50',APP,subject),
+      statement(db,'SELECT id,account_enabled,achievement_enabled,created,updated FROM subscriptions WHERE app=? AND subject=? ORDER BY created DESC',APP,subject),
+      statement(db,'SELECT count(*) AS unread,COALESCE(MAX(rowid),0) AS readThrough FROM events WHERE app=? AND subject=? AND read_at IS NULL',APP,subject)
     ]);
-    return reply({publicKey:env.VAPID_PUBLIC_KEY,events:events.results,devices:devices.results,unread:count.unread});
+    return reply({publicKey:env.VAPID_PUBLIC_KEY,events:events.results,devices:devices.results,unread:counts.results[0].unread,readThrough:counts.results[0].readThrough});
   }
   if(request.method!=='POST')return reply({error:'Not found'},404);
   const data=await body(request);
@@ -75,6 +76,12 @@ export async function handle(request,env) {
   if(path==='/read') {
     if(!Array.isArray(data.ids)||data.ids.length>50||data.ids.some(id=>typeof id!=='string'||id.length>150))fail('Invalid event IDs');
     if(data.ids.length)await statement(db,`UPDATE events SET read_at=? WHERE app=? AND subject=? AND id IN (${data.ids.map(()=>'?').join(',')})`,now,APP,subject,...data.ids).run();
+    return reply({ok:true});
+  }
+  if(path==='/read-all') {
+    if(!Number.isSafeInteger(data.through)||data.through<0)fail('Reload the inbox before marking all read');
+    // Events are append-only. Later inserts have a larger rowid, even with an old/same timestamp.
+    await statement(db,'UPDATE events SET read_at=? WHERE app=? AND subject=? AND read_at IS NULL AND rowid<=?',now,APP,subject,data.through).run();
     return reply({ok:true});
   }
   if(path==='/test') {

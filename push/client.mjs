@@ -17,6 +17,16 @@ export class NotificationClient {
     })().finally(()=>{if(this.pending?.promise===promise)this.pending=null;});
     this.pending={owner,promise};return promise;
   }
+  async markAllRead(){
+    const owner=this.identity(),generation=this.generation,through=this.state?.readThrough;
+    if(!Number.isSafeInteger(through))throw Error('Reload the inbox before marking all read.');
+    if(!navigator.onLine)throw Error('You’re offline. Your unread alerts have not been changed.');
+    await this.request('read-all',{through});
+    if(owner!==this.identity()||generation!==this.generation)return null;
+    // An earlier unfinished state read must not restore the pre-ack count or OS badge.
+    this.generation++;this.pending=null;
+    return this.refresh();
+  }
   async enable(){
     if(installationRequired())throw Error('In Safari, use Share → Add to Home Screen, then open SLR from its icon.');
     if(!globalThis.Notification||!globalThis.PushManager)throw Error('Device notifications are unavailable in this browser.');

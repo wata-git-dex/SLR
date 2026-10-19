@@ -13,7 +13,7 @@ import {arm,runAlarm,kickDelivery} from '../scheduler.mjs';
 const b64=bytes=>Buffer.from(bytes).toString('base64url');
 function db(){
  const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../migrations/0001.sql',import.meta.url),'utf8'));
- return {sqlite,prepare(sql){return {bind(...args){const stmt=sqlite.prepare(sql);return {async first(){return stmt.get(...args)||null;},async all(){return {results:stmt.all(...args)};},async run(){return stmt.run(...args);}};}};},async batch(statements){return Promise.all(statements.map(s=>s.run()));}};
+ return {sqlite,prepare(sql){return {bind(...args){const stmt=sqlite.prepare(sql);return {async first(){return stmt.get(...args)||null;},async all(){return {results:stmt.all(...args)};},async run(){return stmt.run(...args);}};}};},async batch(statements){return Promise.all(statements.map(s=>s.all()));}};
 }
 const request=(path,subject='alice',data)=>new Request('https://internal'+path,{method:data===undefined?'GET':'POST',headers:{'x-slr-app':'stoned-lab-rats','x-slr-subject':subject},body:data===undefined?undefined:JSON.stringify(data)});
 async function keys(){const pair=await webcrypto.subtle.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']);const jwk=await webcrypto.subtle.exportKey('jwk',pair.privateKey);return {VAPID_PUBLIC_KEY:b64(await webcrypto.subtle.exportKey('raw',pair.publicKey)),VAPID_PRIVATE_KEY:jwk.d};}
@@ -198,4 +198,51 @@ test('durable alarms retain earlier work, reschedule queue retries and stop when
  await runAlarm(storage,{...env,SLR_PUSH_DB:{prepare(){throw Error('temporary outage');}}},async()=>{});assert.ok(alarm>=Date.now()+59000);
  let kicked=0;env.SLR_DELIVERY={idFromName:name=>name,get(){return {fetch:async()=>{kicked++;return new Response(null,{status:204});}};}};
  await kickDelivery(env);assert.equal(kicked,0);DB.sqlite.prepare("UPDATE deliveries SET status='pending'").run();await kickDelivery(env);assert.equal(kicked,1);
+});
+
+test('read-all covers more than one page, isolates accounts and preserves later alerts even with old timestamps',async()=>{
+ const DB=db(),env={DB,...await keys()};
+ const insert=DB.sqlite.prepare('INSERT INTO events(id,app,subject,category,created) VALUES(?,?,?,?,?)');
+ for(let i=0;i<123;i++)insert.run('old-'+i,APP_FOR_TEST,'alice','achievement',1000+i);
+ insert.run('bob-old',APP_FOR_TEST,'bob','test',1);
+ insert.run('other-app','another-app','alice','test',1);
+ const snapshot=await (await handle(request('/state','alice'),env)).json();
+ assert.equal(snapshot.events.length,50);assert.equal(snapshot.unread,123);assert.ok(snapshot.readThrough>0);
+ insert.run('late',APP_FOR_TEST,'alice','test',0); // Arrives during the operation, with a backdated timestamp.
+ await handle(request('/read-all','alice',{through:snapshot.readThrough,subject:'bob'}),env);
+ const state=await (await handle(request('/state','alice'),env)).json();
+ assert.equal(state.unread,1);assert.equal(state.events.find(e=>e.id==='late').read_at,null);
+ assert.equal((await (await handle(request('/state','bob'),env)).json()).unread,1);
+ assert.equal(DB.sqlite.prepare('SELECT read_at FROM events WHERE id=?').get('other-app').read_at,null);
+ await handle(request('/read-all','alice',{through:snapshot.readThrough}),env);assert.equal((await (await handle(request('/state','alice'),env)).json()).unread,1);
+ await assert.rejects(handle(request('/read-all','alice',{through:'999'}),env),/Reload the inbox/);
+});
+const APP_FOR_TEST='stoned-lab-rats';
+test('read-all reconciles OS badge from server state and leaves counts intact on offline or server failure',async()=>{
+ const descriptor=Object.getOwnPropertyDescriptor(globalThis,'navigator');const badges=[];
+ Object.defineProperty(globalThis,'navigator',{configurable:true,value:{onLine:true,setAppBadge:n=>badges.push(n),clearAppBadge:()=>badges.push(0)}});
+ try{
+  let failure=false,requests=0;
+  const client=new NotificationClient({identity:()=> 'alice',request:async(action,data)=>{
+   requests++;
+   if(action==='read-all'){assert.deepEqual(data,{through:123});if(failure)throw Error('Server unavailable');return {ok:true};}
+   return {unread:2,readThrough:125,events:[],devices:[]};
+  }});
+  client.state={unread:123,readThrough:123};
+  failure=true;await assert.rejects(client.markAllRead(),/Server unavailable/);assert.equal(client.state.unread,123);assert.equal(badges.length,0);
+  navigator.onLine=false;const before=requests;await assert.rejects(client.markAllRead(),/offline/);assert.equal(requests,before);assert.equal(client.state.unread,123);
+  navigator.onLine=true;failure=false;await client.markAllRead();assert.equal(client.state.unread,2);assert.deepEqual(badges,[2]);
+  const cleared=new NotificationClient({identity:()=> 'alice',request:async action=>action==='read-all'?{ok:true}:{unread:0,readThrough:0}});cleared.state={unread:1,readThrough:1};await cleared.markAllRead();assert.equal(cleared.state.unread,0);assert.deepEqual(badges,[2,0]);
+ }finally{if(descriptor)Object.defineProperty(globalThis,'navigator',descriptor);else delete globalThis.navigator;}
+});
+test('read-all invalidates a pending pre-ack refresh and rejects a late old-account reply',async()=>{
+ const descriptor=Object.getOwnPropertyDescriptor(globalThis,'navigator');const badges=[];
+ Object.defineProperty(globalThis,'navigator',{configurable:true,value:{onLine:true,setAppBadge:n=>badges.push(n),clearAppBadge:()=>badges.push(0)}});
+ try{
+  let finish,owner='alice',reads=0;
+  const client=new NotificationClient({identity:()=>owner,request:async action=>action==='read-all'?{ok:true}:++reads===1?new Promise(resolve=>finish=resolve):{unread:1,readThrough:200}});
+  client.state={unread:100,readThrough:100};const old=client.refresh();await client.markAllRead();finish({unread:100,readThrough:100});await old;
+  assert.equal(client.state.unread,1);assert.deepEqual(badges,[1]);
+  let acknowledge;client.request=()=>new Promise(resolve=>acknowledge=resolve);const pending=client.markAllRead();owner='bob';client.reset();acknowledge({ok:true});await pending;assert.equal(client.state,null);assert.deepEqual(badges,[1,0]);
+ }finally{if(descriptor)Object.defineProperty(globalThis,'navigator',descriptor);else delete globalThis.navigator;}
 });
