@@ -5,7 +5,8 @@ self.installSLRNotifications = function ({version,icon}) {
   self.addEventListener('push',event=>event.waitUntil((async()=>{
     let data={};try{data=event.data?.json()||{};}catch{}
     // Payload never controls visible private text. Always display a user-visible alert.
-    await self.registration.showNotification('Stoned Lab Rats',{
+    const title=data.category==='test'?'Test notification':data.category==='account'?'Notifications enabled':data.category==='achievement'?'New achievement':'Notification';
+    await self.registration.showNotification(title,{
       body:data.category==='test'?'Your test notification has arrived.':data.category==='achievement'?'New achievement unlocked. Open the Lab to view your progress.':'Device notifications are enabled for your account.',
       icon,tag:typeof data.id==='string'?data.id.slice(0,150):'wata-update',
       data:{url:safeURL(data.url)}

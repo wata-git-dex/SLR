@@ -86,6 +86,18 @@ test('SW uses generic previews, constrains tap URLs, and denies update with anot
  vm.runInNewContext(readFileSync(new URL('../sw-runtime.js',import.meta.url),'utf8'),{self,URL});self.installSLRNotifications({version:'1',icon:'/icon.png'});
  let work;handlers.push({data:{json:()=>({body:'secret beneficiary',url:'https://evil.test',unread:2})},waitUntil:p=>work=p});await work;
  assert.ok(!JSON.stringify(shown).includes('secret'));assert.equal(shown[0][1].data.url,'https://labrats.saltyviewfinder.com/#notifications');
+ assert.equal(shown[0][0],'Notification');
+ for(const [category,title,body] of [
+  ['test','Test notification','Your test notification has arrived.'],
+  ['account','Notifications enabled','Device notifications are enabled for your account.'],
+  ['achievement','New achievement','New achievement unlocked. Open the Lab to view your progress.'],
+  ['__proto__','Notification','Device notifications are enabled for your account.']
+ ]){
+  handlers.push({data:{json:()=>({category,title:'secret title',body:'secret rating',id:'event-1',url:'/#notifications',unread:2})},waitUntil:p=>work=p});await work;
+  const [actual,options]=shown.at(-1);assert.equal(actual,title);assert.equal(options.body,body);assert.equal(options.tag,'event-1');assert.equal(options.icon,'/icon.png');assert.equal(options.data.url,'https://labrats.saltyviewfinder.com/#notifications');
+ }
+ assert.ok(!JSON.stringify(shown).includes('secret'));
+
  handlers.notificationclick({notification:{close(){},data:{url:'https://evil.test'}},waitUntil:p=>work=p});await work;assert.deepEqual(opened,['https://labrats.saltyviewfinder.com/#notifications']);
  self.clients.matchAll=async()=>[{id:'one'},{id:'two'}];handlers.message({data:{type:'SLR_APPLY_UPDATE'},source:{id:'one'},ports:[{postMessage:m=>messages.push(m)}],waitUntil:p=>work=p});await work;assert.equal(skipped,0);assert.equal(messages[0].ok,false);
  self.clients.matchAll=async()=>[{id:'one'}];handlers.message({data:{type:'SLR_APPLY_UPDATE'},source:{id:'one'},ports:[{postMessage:m=>messages.push(m)}],waitUntil:p=>work=p});await work;assert.equal(skipped,1);
