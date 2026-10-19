@@ -1194,15 +1194,22 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
           </div>
         </div>
       </div>
-      <details class="slrPush" id="slrPush" hidden>
-        <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0v5l-2 3h16l-2-3V8M9 20h6"/></svg><span>Notifications<span id="pushCount"></span></span></summary>
-        <div class="slrPushBody"><p id="pushPermission">Open SLR from its Home Screen icon to use device notifications.</p><div id="pushStatus" role="status" aria-live="polite"></div>
-          <div class="slrPushActions"><button id="pushEnable" type="button">Enable this device</button><button id="pushTest" type="button" disabled>Send test</button><button id="pushDisable" type="button" disabled>Disable this device</button></div>
-          <h4>Devices</h4><div id="pushDevices"></div><h4>Recent alerts</h4><div id="pushEvents"></div>
-          <div class="slrPushActions"><button id="pushRead" type="button">Mark displayed read</button><button id="pushRefresh" type="button">Refresh alerts</button></div>
-          <p>New badges and ranks appear after a saved Session is confirmed. Older achievements stay in your profile. Notification previews never show strain names or ratings.</p>
-          <h4>App updates</h4><p class="slrPushVersion" id="pushVersion">App v2.6.14</p><div class="slrPushActions"><button id="pushCheck" type="button">Check updates</button><button id="pushApply" type="button" disabled>Apply update</button></div><p>Save work and close other SLR windows before applying. Your account, preferences and saved data stay in place.</p>
+      <details class="menuDisclosure slrPush" id="slrPush" hidden>
+        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0v5l-2 3h16l-2-3V8M9 20h6"/></svg></span><span class="menuCopy"><b>Notifications<span id="pushCount"></span></b><span>Achievements and device alerts</span></span><span class="menuArrow">⌄</span></summary>
+        <div class="slrPushBody">
+          <label class="slrPushSetting"><span><b>On this device</b><small id="pushPermission">Loading notification settings…</small></span><input id="pushEnabled" type="checkbox" role="switch" disabled></label>
+          <div id="pushCurrent"></div>
+          <div class="slrPushActions"><button class="slrPushQuiet" id="pushTest" type="button" disabled>Send test</button></div>
+          <div id="pushStatus" role="status" aria-live="polite"></div>
+          <details class="slrPushExtra" id="pushOther" hidden><summary>Other devices<span id="pushDeviceCount"></span></summary><div id="pushDevices"></div></details>
+          <div class="slrPushHeading"><h4>Recent alerts</h4><button class="slrPushQuiet" id="pushRead" type="button" disabled>Read all</button><button class="slrPushQuiet slrPushIcon" id="pushRefresh" type="button" aria-label="Refresh alerts" title="Refresh alerts">↻</button></div>
+          <div id="pushEvents"></div>
+          <p class="slrPushNote">New badges and ranks appear after a saved session. Notification previews keep strains and ratings private.</p>
         </div>
+      </details>
+      <details class="menuDisclosure slrPush" id="slrUpdates" hidden>
+        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.15</span></span><span class="menuArrow">⌄</span></summary>
+        <div class="slrPushBody"><div class="slrPushActions"><button id="pushCheck" type="button">Check for updates</button><button id="pushApply" type="button" hidden>Update app</button></div><p id="pushUpdateStatus" role="status" aria-live="polite">Check for the latest version of SLR.</p></div>
       </details>
       <div class="menuDisclosure">
         <button class="menuItem noticeToggle" id="menuLabNotice" aria-expanded="false" aria-controls="noticePanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h5M8 12h8M8 16h6"/><circle cx="17" cy="6" r="2.5" fill="var(--panel)"/></svg></span><span class="menuCopy"><b>Latest Lab Notice</b><span>See what changed in the current SLR update</span></span><span class="menuArrow">⌄</span></button>
@@ -1294,7 +1301,7 @@ const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.6.14';
+const APP_VERSION = 'v2.6.15';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
