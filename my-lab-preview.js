@@ -132,6 +132,10 @@
     return {sessions,trackedTerpenes:tracked};
   }
   function currentProgress(){return engine.calculateMember(normalizeContext(),CURRENT_MEMBER);}
+  function updateProfileXp(){
+    const value=document.getElementById('profileXpValue');if(!value)return;
+    value.textContent=CURRENT_MEMBER?currentProgress().totalXp.toLocaleString():'—';
+  }
   function orderedAchievements(items){
     return items.map((item,index)=>({...item,_catalogIndex:index})).sort((a,b)=>{
       const group=item=>item.earned?2:(item.unavailable||item.secret)?1:0;
@@ -148,7 +152,9 @@
     detail.addEventListener('click',event=>{if(event.target===detail||event.target.closest('[data-close-badge]'))closeBadgeDetail();});
     document.getElementById('menuLabHeading').textContent='The Lab';
     const badgeLink=document.createElement('button');badgeLink.type='button';badgeLink.className='profileBadgeLink';badgeLink.id='profileBadgeLink';badgeLink.setAttribute('aria-label','View achievements');badgeLink.title='View achievements';badgeLink.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 7 6-3 6 3-2-7m-4-8 1 2 2 .3-1.5 1.5.3 2.2-1.8-1-1.8 1 .3-2.2L9 8.3l2-.3Z"/></svg>';
-    const achievements=document.createElement('div');achievements.className='profileAchievements';badgeLink.insertAdjacentHTML('beforeend','<span>View achievements</span>');achievements.append(badgeLink);document.getElementById('profileDetails').append(achievements);
+    const achievements=document.createElement('div');achievements.className='profileAchievements';badgeLink.insertAdjacentHTML('beforeend','<span>View achievements</span>');
+    const xp=document.createElement('span');xp.className='profileXp';xp.innerHTML='<span id="profileXpValue">—</span> <small>XP</small>';
+    achievements.append(xp,badgeLink);document.getElementById('profileDetails').append(achievements);updateProfileXp();
     badgeLink.addEventListener('click',()=>{openMyLab();document.getElementById('badgeCase').scrollIntoView({block:'start',behavior:'instant'});document.getElementById('badgeCaseToggle').focus({preventScroll:true});});
     document.getElementById('profileToggle').addEventListener('click',openMyLab);
     document.getElementById('profileDockBtn').addEventListener('click',openMyLab);
@@ -280,7 +286,7 @@
       }
     },true);
   }
-  window.SLRLabAchievements={snapshot:achievementSnapshot,expectSave:expectAchievementSave,dataReady:achievementDataReady,show:showAchievementNotice};
+  window.SLRLabAchievements={snapshot:achievementSnapshot,expectSave:expectAchievementSave,dataReady:achievementDataReady,show:showAchievementNotice,updateProfileXp};
 
   buildShell();
   buildAchievementNotice();

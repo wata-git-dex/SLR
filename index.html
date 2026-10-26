@@ -557,7 +557,8 @@ main{padding-top:14px;padding-right:max(16px,calc(var(--safe-r) + 12px));padding
 .profileEffects{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.profileEffect{font:9px 'Space Mono',monospace;color:var(--positive);border:1px solid rgba(var(--positive-rgb),.25);background:rgba(var(--positive-rgb),.07);padding:5px 8px;border-radius:999px}.profileEmpty{font:10px/1.55 'Space Mono',monospace;color:var(--dim);margin-top:10px}
 .menuList{display:grid;gap:8px}.menuItem{width:100%;display:flex;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px;color:var(--text);cursor:pointer;box-sizing:border-box}.menuItem:active{transform:scale(.98)}.menuIcon{width:32px;height:32px;flex:0 0 auto;display:grid;place-items:center;border-radius:9px;background:var(--panel2);color:var(--green);font-size:15px}.menuIcon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.menuCopy b{display:block;font-size:12px}.menuCopy span{display:block;color:var(--dim);font:9px/1.45 'Space Mono',monospace;margin-top:2px}.menuArrow{margin-left:auto;color:var(--faint);font-size:16px;transition:transform .18s}.menuFoot{text-align:center;margin-top:15px;color:var(--faint);font:9px 'Space Mono',monospace}
 .menuDisclosure{border:1px solid var(--line);border-radius:13px;background:var(--panel);overflow:hidden}.menuDisclosure>.menuItem{border:0;border-radius:0;background:transparent}.menuDisclosure>.menuItem:active{transform:none;background:var(--panel2)}
-.appearancePanel,.noticePanel{display:none;padding:0 12px 12px;border-top:1px solid var(--line)}.appearancePanel.open,.noticePanel.open{display:grid}.appearanceToggle[aria-expanded="true"] .menuArrow,.noticeToggle[aria-expanded="true"] .menuArrow{transform:rotate(180deg)}
+.appearancePanel,.noticePanel,.guidesPanel{display:none;padding:0 12px 12px;border-top:1px solid var(--line)}.appearancePanel.open,.noticePanel.open,.guidesPanel.open{display:grid}.appearanceToggle[aria-expanded="true"] .menuArrow,.noticeToggle[aria-expanded="true"] .menuArrow,.guidesToggle[aria-expanded="true"] .menuArrow{transform:rotate(180deg)}
+.guideLink{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 2px;border:0;background:transparent;color:var(--text);text-align:left;font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}.guideLink+.guideLink{border-top:1px solid var(--line)}.guideLink svg{width:18px;height:18px;fill:none;stroke:var(--green);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.guideLink .menuArrow{color:var(--green)}
 .appearancePanel .themeItem{border:0;border-radius:0;background:transparent;padding:12px 0}.appearancePanel .themeItem .menuIcon{margin-left:2px}.appearancePanel .cyrusPalette{border:0;border-radius:0;background:transparent;padding:2px 0 0}
 .themeSwitch{margin-left:auto;width:42px;height:24px;padding:3px;border-radius:999px;background:var(--panel2);border:1px solid var(--line2);flex:0 0 auto;transition:.18s}.themeSwitch i{display:block;width:16px;height:16px;border-radius:50%;background:var(--faint);transition:.18s}.themeItem[aria-checked="true"] .themeSwitch{background:rgba(var(--accent-rgb),.18);border-color:var(--green)}.themeItem[aria-checked="true"] .themeSwitch i{transform:translateX(16px);background:var(--green);box-shadow:0 0 8px rgba(var(--accent-rgb),.35)}
 .cyrusPalette{display:none;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px}.cyrusPalette.show{display:block}.memberPaletteSet{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.memberPaletteSet.show{display:grid}.cyrusPaletteBtn{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:9px 5px;border:1px solid var(--line2);border-radius:9px;background:var(--panel2);color:var(--dim);font:600 10px 'Space Mono',monospace;cursor:pointer}.cyrusPaletteBtn.on{border-color:var(--green);color:var(--text);box-shadow:0 0 12px rgba(var(--accent-rgb),.13)}.cyrusPaletteBtn:active{transform:scale(.97)}.paletteDot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 8px currentColor}.paletteDot.green{color:#63d374;background:#63d374}.paletteDot.blue{color:#24c8ff;background:#24c8ff}.paletteDot.purple{color:#9466ff;background:#9466ff}.paletteDot.pink{color:#f4478c;background:#f4478c}.paletteDot.amber{color:#f28a24;background:#f28a24}.paletteDot.yellow{color:#ffd21a;background:#ffd21a}.paletteDot.red{color:#ff2718;background:#ff2718}
@@ -918,6 +919,9 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 :root.slr-ui .profileDestination .profileBadgeLink svg{width:19px;height:19px}
 :root.slr-ui .profileDestination .profileBadgeLink:focus-visible{outline:2px solid var(--dim);outline-offset:3px}
 @media(max-width:440px){.menuDestinations .profileDestination .profileCard{grid-template-columns:1fr}}
+.menuDestinations .profileDestination .profileStats{grid-column:1/-1}
+.menuDestinations .profileDestination .profileAchievements{grid-column:1/-1;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.profileXp{display:flex;align-items:center;gap:6px;min-height:40px;box-sizing:border-box;padding:9px 12px;border:1px solid rgba(var(--accent-rgb),.3);border-radius:10px;background:rgba(var(--accent-rgb),.07);color:var(--green);font:700 14px 'Space Mono',monospace;overflow-wrap:anywhere}.profileXp small{font-size:10px;font-weight:400;color:var(--dim)}
 
 /* Five recorded types, with three shared collection families. */
 .asTypes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
@@ -1212,7 +1216,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
         </div>
       </details>
       <details class="menuDisclosure slrPush" id="slrUpdates" hidden>
-        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.19</span></span><span class="menuArrow">⌄</span></summary>
+        <summary class="menuItem"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7a8 8 0 1 0 0 10M20 3v5h-5"/></svg></span><span class="menuCopy"><b>App updates</b><span id="pushVersion">App v2.6.20</span></span><span class="menuArrow">⌄</span></summary>
         <div class="slrPushBody"><div class="slrPushActions"><button id="pushCheck" type="button">Check for updates</button><button id="pushApply" type="button" hidden>Update app</button></div><p id="pushUpdateStatus" role="status" aria-live="polite">Check for the latest version of SLR.</p></div>
       </details>
       <div class="menuDisclosure">
@@ -1220,8 +1224,13 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <div class="noticePanel" id="noticePanel"><div class="noticeVersion" id="menuNoticeVersion">Version 2.0.2</div><div class="noticeSummary" id="menuNoticeSummary"></div></div>
       </div>
       <button class="menuItem" id="menuRatings"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg></span><span class="menuCopy"><b>How Ratings Work</b><span>Overall, Effects, Side Effects and Lab Results</span></span><span class="menuArrow">›</span></button>
-      <button class="menuItem" id="menuVisualGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="m10 8 5 4-5 4Z"/><path d="M10 19h4"/></svg></span><span class="menuCopy"><b>Quick guide</b><span>Find your way around SLR</span></span><span class="menuArrow">›</span></button>
-      <button class="menuItem" id="menuFullGuide"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15M6 8h3m6 0h3M6 12h3m6 0h3"/></svg></span><span class="menuCopy"><b>Full guide</b><span>Strains, sessions, ratings and achievements</span></span><span class="menuArrow">›</span></button>
+      <div class="menuDisclosure">
+        <button class="menuItem guidesToggle" id="guidesToggle" aria-expanded="false" aria-controls="guidesPanel"><span class="menuIcon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15M6 8h3m6 0h3M6 12h3m6 0h3"/></svg></span><span class="menuCopy"><b>Guides</b><span>Quick start and full reference</span></span><span class="menuArrow">⌄</span></button>
+        <div class="guidesPanel" id="guidesPanel">
+          <button class="guideLink" id="menuVisualGuide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="m10 8 5 4-5 4Z"/><path d="M10 19h4"/></svg>Quick guide<span class="menuArrow" aria-hidden="true">›</span></button>
+          <button class="guideLink" id="menuFullGuide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/></svg>Full guide<span class="menuArrow" aria-hidden="true">›</span></button>
+        </div>
+      </div>
     </div>
     </section>
     <div class="menuDestinations">
@@ -1305,7 +1314,7 @@ const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.6.19';
+const APP_VERSION = 'v2.6.20';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
@@ -4153,6 +4162,7 @@ function renderProfile(){
   const top=Object.entries(stats.effects||{}).filter(([k])=>EFFECTS.includes(k)).sort((a,b)=>b[1]-a[1]).slice(0,3);
   document.getElementById('profileFeelingsLabel').hidden=!top.length;
   effects.replaceChildren(...top.map(([k])=>{const chip=document.createElement('span');chip.className='profileEffect';chip.textContent=EFFECT_ICON[k]+' '+effectLabel(k);return chip;}));
+  window.SLRLabAchievements?.updateProfileXp();
 }
 const RAT_IDENTITIES={
   cyrus:['#24c8ff','#63d374'],
@@ -4928,8 +4938,9 @@ function setNoticeOpen(open){
   document.getElementById('menuLabNotice').setAttribute('aria-expanded',open?'true':'false');
 }
 let menuReturnFocus=null;
-function openMenu(){menuReturnFocus=document.activeElement;closeDockSearch();renderProfile();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true');document.querySelector('.menuClose').focus();}
-function closeMenu(){setAppearanceOpen(false);setNoticeOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false');if(menuReturnFocus?.isConnected)menuReturnFocus.focus();}
+function setGuidesOpen(open){document.getElementById('guidesPanel').classList.toggle('open',open);document.getElementById('guidesToggle').setAttribute('aria-expanded',String(open));}
+function openMenu(){menuReturnFocus=document.activeElement;closeDockSearch();renderProfile();syncMemberPalette();setAppearanceOpen(false);setNoticeOpen(false);setGuidesOpen(false);document.getElementById('menuOverlay').classList.add('show');document.body.style.overflow='hidden';document.getElementById('menuBtn').setAttribute('aria-expanded','true');document.querySelector('.menuClose').focus();}
+function closeMenu(){setAppearanceOpen(false);setNoticeOpen(false);setGuidesOpen(false);document.getElementById('menuOverlay').classList.remove('show');document.body.style.overflow='';document.getElementById('menuBtn').setAttribute('aria-expanded','false');if(menuReturnFocus?.isConnected)menuReturnFocus.focus();}
 
 document.getElementById('menuBtn').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
@@ -4960,6 +4971,7 @@ document.querySelectorAll('[data-appearance-mode]').forEach(b=>b.addEventListene
 document.querySelectorAll('[data-appearance-material]').forEach(b=>b.addEventListener('click',()=>setAppearancePreference('material',b.dataset.appearanceMaterial)));
 document.querySelectorAll('[data-member-palette]').forEach(button=>button.addEventListener('click',()=>setMemberPalette(button.dataset.memberPalette)));
 document.getElementById('menuRatings').addEventListener('click',openRatingsInfo);
+document.getElementById('guidesToggle').addEventListener('click',e=>setGuidesOpen(e.currentTarget.getAttribute('aria-expanded')!=='true'));
 
 function openReference(title,type,url){
   document.getElementById('referenceTitle').textContent=title;
