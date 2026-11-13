@@ -471,53 +471,22 @@ function brandCode(brand) {
   return brand.replace(/[^a-z]/gi, "").slice(0, 3).toUpperCase() || "NEW";
 }
 
-// Look for an existing strain by name (case-insensitive, trimmed)
-async function findStrainByName(name, token) {
-  const r = await fetch(
-    `https://api.notion.com/v1/data_sources/${DS.strains}/query`,
-    {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + token,
-        "Notion-Version": "2025-09-03",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ page_size: 100 }),
-    }
-  );
-  if (!r.ok) throw new Error(`Notion read ${r.status}: ${(await r.text()).slice(0, 200)}`);
-  const j = await r.json();
-  const want = name.trim().toLowerCase();
-  const hit = (j.results || []).find(p => {
-    const t = p.properties?.Name?.title?.map(x => x.plain_text).join("") || "";
-    return t.trim().toLowerCase() === want;
-  });
-  return hit ? hit.id : null;
-}
-
-// Find an existing brand option, case-insensitively, so "oakfruitland"
-// doesn't create a twin of "Oakfruitland".
-async function normalizeBrand(brand, token) {
-  const r = await fetch(
-    `https://api.notion.com/v1/data_sources/${DS.batches}/query`,
-    {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + token,
-        "Notion-Version": "2025-09-03",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ page_size: 100 }),
-    }
-  );
-  if (!r.ok) return brand.trim();
-  const j = await r.json();
-  const want = brand.trim().toLowerCase();
-  for (const p of j.results || []) {
-    const b = p.properties?.Brand?.select?.name;
-    if (b && b.trim().toLowerCase() === want) return b; // reuse exact existing casing
+// Names are suggestions, not identity. Resolve against canonical batch brands.
+function matchingStrainTarget(data, strainName, brand, strains, batches) {
+  const key=value=>String(value||'').trim().toLowerCase();
+  const sameName=strains.filter(page=>key(title(page,'Name'))===key(strainName));
+  const brandsFor=id=>batches.filter(page=>relation(page,'Strains').includes(idToUrl(id))).map(page=>key(select(page,'Brand'))).filter(Boolean);
+  if(data.existingStrainUrl){
+    const id=urlToPageId(data.existingStrainUrl);
+    const chosen=sameName.find(page=>idToUrl(page.id)===idToUrl(id));
+    if(!chosen)throw new Error('That strain no longer matches. Reopen Add Strain and choose again.');
+    if(brandsFor(chosen.id).some(value=>value!==key(brand)))throw new Error('Different brands must use separate strains. Choose Create separate strain.');
+    return chosen.id;
   }
-  return brand.trim();
+  if(data.createSeparate===true)return null;
+  // Older clients may omit the choice. Never attach a different brand by name.
+  const matches=sameName.filter(page=>{const brands=brandsFor(page.id);return brands.length&&brands.every(value=>value===key(brand));});
+  return matches.length===1?matches[0].id:null;
 }
 
 async function createStrainAndBatch(data, token, clean, memberName) {
@@ -538,11 +507,14 @@ async function createStrainAndBatch(data, token, clean, memberName) {
   const thcDecimal = Math.round(thcNum * 100) / 10000; // 29 -> 0.29
   const thcLabel   = Math.round(thcNum);              // 29 -> "29" for the name
 
-  const brand = await normalizeBrand(clean(data.brand), token);
+  const enteredBrand=clean(data.brand);
+  if(!enteredBrand)throw new Error("Brand is required");
+  const [strainPages,batchPages]=await Promise.all([queryAll(DS.strains,token),queryAll(DS.batches,token)]);
+  const brand=batchPages.map(page=>select(page,'Brand')).find(value=>value?.trim().toLowerCase()===enteredBrand.toLowerCase())||enteredBrand;
   if (!brand) throw new Error("Brand is required");
 
-  // 1. Reuse the strain if it already exists, otherwise create it.
-  let strainId = await findStrainByName(strainName, token);
+  // 1. Only reuse an explicit or unambiguous same-brand entry.
+  let strainId = matchingStrainTarget(data,strainName,brand,strainPages,batchPages);
   if (!strainId) {
     const rs = await fetch("https://api.notion.com/v1/pages", {
       method: "POST",
