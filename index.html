@@ -961,7 +961,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="access">◇ Restricted · Authorized personnel only</div>
     <button class="enterbtn" id="enterBtn">Enter the Lab <span>→</span></button>
     <div class="landing-version">SLR <span id="landingVersion"></span></div>
-    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Nov 20</div>
+    <div class="landing-count"><span id="lcount">0</span> specimens logged · updated Nov 21</div>
   </div>
 </div>
 <header>
@@ -1341,6 +1341,14 @@ let RAW_TERPENES = [];
 let RAW_MEMBERS = [];
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
+ {
+  "url": "https://app.notion.com/41fd93f919bc81778af7c75e6f3464e6",
+  "Name": "Minty Cookies",
+  "Batches": [
+   "https://app.notion.com/41fd93f919bc819c8718cd9746507bf0"
+  ],
+  "has_image": true
+ },
  {
   "url": "https://app.notion.com/416d93f919bc80dfb94ad042a9f1d89b",
   "Name": "Durban Poison",
@@ -1947,6 +1955,20 @@ let RAW_STRAINS = [
  }
 ];
 let RAW_BATCHES = [
+ {
+  "url": "https://app.notion.com/41fd93f919bc819c8718cd9746507bf0",
+  "Batch": "Minty Cookies | ENU | 30",
+  "Brand": "ENUA",
+  "Type": "Hybrid",
+  "THC": 0.3,
+  "Terps": [
+   "Limonene",
+   "Caryophyllene",
+   "Linalool"
+  ],
+  "Strain": "https://app.notion.com/41fd93f919bc81778af7c75e6f3464e6",
+  "Date": "2026-11-21"
+ },
  {
   "url": "https://app.notion.com/416d93f919bc813b91eedf3d13d2b250",
   "Batch": "Polar Pop | BAT | 36",
@@ -3721,7 +3743,7 @@ let viewList=[], currentIdx=-1;
 const $=s=>document.querySelector(s);
 
 function setUpdated(txt){ $('#updated').textContent=txt; }
-setUpdated('Nov 20');   // baked snapshot date (set at build time)
+setUpdated('Nov 21');   // baked snapshot date (set at build time)
 
 function buildChips(){
   const sr=$('#shelfrow'), tr=$('#typerow'), ftr=$('#filterTyperow'), fcr=$('#filterCountryrow'); sr.innerHTML=''; tr.innerHTML=''; ftr.innerHTML=''; fcr.innerHTML='';
