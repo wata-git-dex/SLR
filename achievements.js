@@ -33,6 +33,9 @@
     {id:'hybrid-specialist',name:'Hybrid Specialist',description:'Tried 15 different Hybrid strains.',category:'types',xp:50,metric:'hybridStrains',threshold:15,art:'dualLeaf',color:'#48cf79'},
     {id:'rat-recruiter',name:'Rat Recruiter',description:'Brought a new Rat into the Lab.',category:'contribution',xp:40,metric:'referrals',threshold:1,art:'recruiter',color:'#35bde6'},
     {id:'lab-contributor',name:'Lab Contributor',description:'Add 5 useful new strains to the shared library.',category:'contribution',xp:50,metric:'contributedStrains',threshold:5,art:'tray',color:'#2ebde7',unavailable:true,unavailableReason:'Starts after contribution tracking launches.'},
+    {id:'mix-first-blend',name:'First Blend',description:'Recorded your first equal-share mix with your own result.',category:'mixes',xp:25,metric:'mixes',threshold:1,art:'mixPour',color:'#55d4bc'},
+    {id:'mix-notes',name:'Mix Notes',description:'Recorded results for 5 different mixes.',category:'mixes',xp:35,metric:'mixes',threshold:5,art:'mixNotes',color:'#a98bea'},
+    {id:'mix-shared-bench',name:'Shared Bench',description:'Completed a mix with results from at least 2 Lab Rats.',category:'mixes',xp:25,metric:'sharedMixes',threshold:1,art:'mixCrew',color:'#e6b24c'},
     {id:'unknown-specimen',name:'Unknown Specimen',description:'A hidden Lab discovery.',category:'secret',xp:0,metric:'secret',threshold:1,art:'unknown',color:'#8f98a0',secret:true,disabled:true}
   ];
 
@@ -119,6 +122,8 @@
     // Flatten array-valued terpene fields without relying on string coercion.
     const terpeneSet=new Set();sessions.forEach(session=>(session.terpenes||[]).map(key).filter(Boolean).forEach(value=>terpeneSet.add(value)));
     const metrics={
+      mixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.completed)||0)),
+      sharedMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.shared)||0)),
       sessions:sessionCount,
       strains:strains.size,
       ratedStrains:distinct(rated,'strainId').size,
@@ -150,7 +155,7 @@
       return {...definition,value,earned,unavailable,rank,nextThreshold,earnedXp,
         progress:unavailable?0:definition.repeatable?(value%definition.threshold)/definition.threshold:Math.min(1,value/definition.threshold)};
     });
-    const activityXp=sessionCount*10+strains.size*5;
+    const activityXp=sessionCount*10+strains.size*5+metrics.mixes*10;
     const achievementXp=achievements.filter(item=>item.earned).reduce((sum,item)=>sum+item.earnedXp,0);
     const totalXp=activityXp+achievementXp;
     return {member,metrics,activityXp,achievementXp,totalXp,level:levelForXp(totalXp),achievements,earned:achievements.filter(item=>item.earned)};

@@ -1,0 +1,193 @@
+/* Experiments inherit the current SLR appearance. */
+.labHub.expReview .labTabs{grid-template-columns:repeat(5,minmax(0,1fr))}
+.expPanel{max-width:1000px;margin:auto}
+.expPanel *{box-sizing:border-box}
+.expEyebrow{font:10px 'Space Mono',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--green)}
+.expIntro{display:flex;align-items:center;gap:22px;padding:24px 0 22px}
+.expIntro h3{font-size:30px;letter-spacing:-.04em;margin:6px 0 8px}
+.expIntro p{color:var(--dim);font:12px/1.6 'Space Grotesk',sans-serif;margin:0;max-width:430px}
+.expVessel{flex:0 0 88px;width:88px;height:105px;color:var(--green);filter:drop-shadow(0 0 14px rgba(var(--accent-rgb),.13))}
+.expCaps{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.expCaps span{font:9px 'Space Mono',monospace;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:5px 8px}
+.expBench{position:relative;border:1px solid rgba(var(--accent-rgb),.35);border-radius:18px;padding:22px;background:linear-gradient(130deg,rgba(var(--accent-rgb),.07),transparent 70%),var(--panel);overflow:hidden}
+.expBench::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:repeating-linear-gradient(135deg,rgba(var(--accent-rgb),.3) 0 6px,transparent 6px 13px)}
+.expBenchTop,.expListHead,.expFormFoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.expBench h4{font-size:19px;margin:4px 0 5px;letter-spacing:-.02em}
+.expBenchTop p{font-size:12px;color:var(--dim);margin:0;line-height:1.55;max-width:380px}
+.expButton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border:1px solid rgba(var(--accent-rgb),.4);border-radius:12px;padding:10px 15px;background:rgba(var(--accent-rgb),.08);color:var(--green);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
+.expButton.primary{background:var(--green);color:#050607;border-color:var(--green)}
+.expButton:disabled{opacity:.4;cursor:default}
+.expButton:focus-visible,.expPanel input:focus-visible,.expPanel select:focus-visible,.expPanel textarea:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.expForm[hidden],.expBenchTop[hidden]{display:none}
+.expStep{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:24px 0 13px}
+.expStep:first-child{margin-top:0}
+.expStep h4{font-size:14px;margin:0}
+.expStep small{font:9px 'Space Mono',monospace;color:var(--dim)}
+.expIngredient{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}
+.expIndex{font:10px 'Space Mono',monospace;color:var(--green)}
+.expIngredient label{display:block;font:9px 'Space Mono',monospace;color:var(--dim);margin-bottom:6px}
+.expIngredient select,.expPanel input[type=text],.expPanel textarea{width:100%;min-width:0;min-height:44px;padding:11px 12px;background:var(--ink);border:1px solid var(--line);border-radius:10px;color:var(--text);font:12px 'Space Grotesk',sans-serif}
+.expPanel textarea{min-height:80px;resize:vertical}
+.expRatio{display:flex;align-items:center;gap:4px;flex-wrap:wrap;max-width:130px;justify-content:flex-end}
+.expRatio button{width:32px;min-height:44px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--ink);color:var(--green);font:18px 'Space Grotesk',sans-serif;cursor:pointer}
+.expRatio span{min-width:18px;text-align:center;font:700 12px 'Space Mono',monospace}
+.expRatio small{width:100%;text-align:center;color:var(--dim);font:9px 'Space Mono',monospace}
+.expRemove{grid-column:2/-1;justify-self:start;border:0;background:transparent;color:var(--dim);font:10px 'Space Grotesk',sans-serif;padding:0 0 3px;cursor:pointer}
+.expComponentActions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap}
+.expQuiet{border:0;background:transparent;color:var(--green);font:600 11px 'Space Grotesk',sans-serif;min-height:44px;padding:5px;cursor:pointer}
+.expBlendBar{height:8px;display:flex;overflow:hidden;border-radius:999px;background:var(--line);gap:3px;margin:20px 0 8px}
+.expBlendBar i{background:var(--green);opacity:var(--blend-opacity,1)}
+.expBlendLabel{color:var(--dim);font:10px/1.6 'Space Mono',monospace;margin-bottom:20px}
+.expField{display:block;margin:16px 0;color:var(--dim);font:10px 'Space Mono',monospace}
+.expField>input,.expField>textarea{display:block;margin-top:8px}
+.expRating{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.expRating button{min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--ink);color:var(--dim);font:17px 'Space Grotesk',sans-serif;cursor:pointer}
+.expRating button.on{color:#050607;background:var(--green);border-color:var(--green)}
+.expRating small{color:var(--dim);font:10px 'Space Mono',monospace;margin-left:4px}
+.expEffects{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}
+.expEffect{min-height:40px;padding:8px 11px;border:1px solid var(--line);background:var(--ink);border-radius:999px;color:var(--dim);font:11px 'Space Grotesk',sans-serif;cursor:pointer}
+.expEffect.on{color:var(--green);background:rgba(var(--accent-rgb),.1);border-color:rgba(var(--accent-rgb),.5)}
+.expHelp{color:var(--dim);font:11px/1.6 'Space Grotesk',sans-serif;margin:10px 0}
+.expSide{border-top:1px solid var(--line);padding-top:12px;margin:16px 0}.expSide summary{cursor:pointer;color:var(--dim);font:12px 'Space Grotesk',sans-serif;min-height:32px}
+.expFormFoot{border-top:1px solid var(--line);padding-top:18px;margin-top:20px}
+.expFormFoot small{max-width:300px;color:var(--dim);font:10px/1.6 'Space Mono',monospace}
+.expNotice{color:var(--green);font:12px/1.6 'Space Grotesk',sans-serif;min-height:20px;margin-top:14px}
+.expListHead{margin:28px 0 14px}.expListHead h4{font-size:18px;margin:0}
+.expViews{display:flex;gap:3px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
+.expViews button{min-height:40px;padding:7px 13px;border:0;background:none;color:var(--dim);border-radius:999px;font:600 11px 'Space Grotesk',sans-serif;cursor:pointer}
+.expViews button.on{background:rgba(var(--accent-rgb),.12);color:var(--green)}
+.expHistory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.expRecord{min-width:0;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.expRecordHead{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--dim);font:9px 'Space Mono',monospace}
+.expRecord h4{font-size:17px;line-height:1.3;margin:13px 0 15px;overflow-wrap:anywhere;letter-spacing:-.02em}
+.expFormula{display:grid;gap:8px;margin:12px 0 16px}
+.expFormula>div{display:flex;gap:8px;align-items:baseline;color:var(--text);font:12px 'Space Grotesk',sans-serif;min-width:0}
+.expFormula b{color:var(--green);font:10px 'Space Mono',monospace;min-width:42px}
+.expFormula small{color:var(--dim);font-size:10px}
+.expOutcome{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
+.expScore{font:700 14px 'Space Mono',monospace;color:var(--green)}
+.expOutcome .expEffects{margin:0;gap:5px}
+.expSignal{color:var(--dim);font:10px 'Space Grotesk',sans-serif}
+.expRecord p{font:12px/1.6 'Space Grotesk',sans-serif;color:var(--dim);margin:14px 0 0}
+.expPreviewLabel{font:9px/1.5 'Space Mono',monospace;color:var(--dim);margin:18px 0;text-align:center}
+.expEntry{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:64px;padding:16px;border:1px solid rgba(var(--accent-rgb),.3);background:var(--panel);color:var(--text);border-radius:14px;text-align:left;font:600 13px 'Space Grotesk',sans-serif;margin-top:18px;cursor:pointer}
+.expEntry small{display:block;margin-top:4px;font-size:11px;font-weight:400;color:var(--dim)}.expEntry>span:last-child{color:var(--green);font-size:20px}
+.expEntry[hidden]{display:none}
+.expPeople{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.expPerson{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(var(--accent-rgb),.3);border-radius:999px;padding:6px 10px;font:11px 'Space Grotesk',sans-serif;background:rgba(var(--accent-rgb),.06);color:var(--green)}.expPerson button{border:0;background:none;color:inherit;font-size:16px;min-width:24px;min-height:28px;cursor:pointer}
+.expPeopleSelect{width:100%;min-height:44px;padding:10px 12px;background:var(--ink);border:1px solid var(--line);border-radius:10px;color:var(--text);font:12px 'Space Grotesk',sans-serif}
+.expProgress{padding:20px;margin-top:22px;border:1px solid rgba(var(--accent-rgb),.25);border-radius:16px;background:var(--panel)}.expProgressHead{display:flex;justify-content:space-between;gap:12px;align-items:center}.expProgressHead h4{font-size:15px;margin:0}.expProgressHead b{color:var(--green);font:700 17px 'Space Mono',monospace}.expProgressHead small{display:block;color:var(--dim);font-size:10px;margin-top:5px}
+.expBadges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.expBadge{text-align:center;color:var(--dim);font:10px/1.4 'Space Grotesk',sans-serif}.expBadge i{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 8px;border:1px solid var(--line);border-radius:50%;font-style:normal;font-size:20px;color:var(--dim);background:var(--ink)}.expBadge.earned i{color:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(var(--accent-rgb),.12)}.expBadge small{display:block;font:9px 'Space Mono',monospace;margin-top:4px}
+@media(max-width:600px){.expHistory{grid-template-columns:1fr}.expIntro{gap:14px;padding-top:20px}.expIntro h3{font-size:27px}.expVessel{flex-basis:64px;width:64px;height:88px}.expBench{padding:17px}.expIngredient{grid-template-columns:18px minmax(0,1fr);gap:8px}.expRatio{grid-column:2;justify-content:flex-start;max-width:none;gap:8px}.expRatio small{width:auto;text-align:left}.expRemove{grid-column:2}.expPanel .expBenchTop{align-items:flex-start}.expBenchTop>.expButton{margin-top:9px}.expFormula>div{flex-wrap:wrap}.expStep{align-items:flex-start}.expStep small{max-width:110px;text-align:right}.labHub.expReview .labTab{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.expPanel *{scroll-behavior:auto;transition:none}}
+@media(forced-colors:active){.expBlendBar i{background:Highlight}.expButton,.expRecord,.expBench{border-color:CanvasText}}
+/* Revised bench: compact even-mix components, and the existing Blaze controls. */
+#expComponents{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.expIngredient{display:block;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--ink)}
+.expIngredientLabel{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.expIngredientLabel label{margin:0;font:600 11px 'Space Grotesk',sans-serif;color:var(--text)}
+.expIngredientLabel>span{font:9px 'Space Mono',monospace;color:var(--dim)}
+.expSelectWrap{position:relative;min-width:0;width:100%}
+.expSelectWrap>select{appearance:none;-webkit-appearance:none;padding-right:36px!important;width:100%;text-overflow:ellipsis;border-color:var(--line);background:var(--panel)}
+.expSelectWrap>span{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--green);font-size:18px;pointer-events:none}
+.expIngredient .expRemove{margin-top:8px;min-height:32px;padding:4px 0}
+.expBlendBar{margin-top:12px}.expBlendLabel{margin-bottom:22px}
+.expStep{margin-top:20px}.expStep h4{font-size:13px}.expStep small{font-size:9px}
+.expPanel .eff-btn{min-height:44px;font-family:'Space Grotesk',sans-serif}
+.expPanel .overall-clear{min-height:32px}
+.expForm{max-width:720px;margin:0 auto}
+.expBench:has(.expForm:not([hidden])){max-width:780px;margin:0 auto}
+@media(max-width:600px){#expComponents{grid-template-columns:1fr;gap:9px}.expIngredient{padding:10px 12px}.expBench{padding:16px}.expStep small{max-width:130px}.expPanel .eff-btn{padding:9px 8px;gap:5px;font-size:11px}.expPanel .eff-btn .eval{font-size:9px;min-width:20px}.expPanel .eff-btn .efi{font-size:14px}}
+.expIngredient{border-left:3px solid var(--component-color,var(--line));background:linear-gradient(115deg,color-mix(in srgb,var(--component-color,var(--line)) 6%,transparent),transparent 75%),var(--ink)}
+.expIngredientLabel>span{color:var(--component-color,var(--dim))}
+.expProgress{padding:17px 20px;background:var(--panel);border-color:var(--line)}
+.expProgressIdentity{display:flex;align-items:center;gap:10px}
+.expProgressIdentity img{width:38px;height:38px;border-radius:10px;object-fit:contain}
+.expProgressHead h4{font-size:14px}.expProgressHead small{font-size:10px}
+.expLevelMeter{height:5px;border-radius:999px;background:var(--line);overflow:hidden;margin:17px 0 8px}.expLevelMeter i{display:block;height:100%;border-radius:inherit;background:var(--green)}
+.expLevelFoot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--dim);font:9px 'Space Mono',monospace}
+.expAchievements{border-top:1px solid var(--line);padding-top:10px;margin-top:14px}.expAchievements summary{cursor:pointer;color:var(--green);font:11px 'Space Grotesk',sans-serif;min-height:30px}
+.expHistory{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:12px}
+.expRecord.expCompact{position:relative;padding:14px 15px 12px;border:1px solid transparent;isolation:isolate;border-radius:15px;background:linear-gradient(145deg,color-mix(in srgb,var(--mix-start) 12%,var(--panel)),var(--panel)) padding-box,var(--mix-gradient) border-box}
+.expCompact::before{content:'';position:absolute;inset:0 auto 0 0;width:3px;border-radius:14px 0 0 14px;background:var(--mix-gradient);pointer-events:none}
+.expCompactTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.expCompact h4{font-size:14px;line-height:1.35;margin:0;font-weight:700;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.expCompact .expScore{flex-shrink:0;font-size:11px;white-space:nowrap;padding:6px 8px;border:1px solid var(--line);border-radius:9px;background:var(--ink);color:var(--text)}
+.expMiniRecipe{display:grid;gap:8px;margin:12px 0}
+.expMiniRecipe>div{display:flex;align-items:center;gap:7px;min-width:0;font:11px 'Space Grotesk',sans-serif}
+.expMiniRecipe i{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--ingredient-color)}
+.expMiniRecipe span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.expMiniRecipe small{display:inline;margin-left:4px;color:var(--dim);font-size:9px}
+.expMiniRecipe b{color:var(--ingredient-color);font:9px 'Space Mono',monospace;font-weight:400}
+.expCompactFoot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:9px;color:var(--dim);font:9px/1.5 'Space Mono',monospace}
+.expCompactFoot>span{min-width:0;overflow-wrap:anywhere}.expCompactFoot>div{display:flex;gap:5px;flex-shrink:0;font-size:13px}
+@media(max-width:600px){.expProgress{padding:16px}.expProgressHead{gap:8px}.expProgressHead b{font-size:15px}.expRecord.expCompact{padding:13px 14px 11px}}
+/* November 22 refinement: contained card edges, shared badges and icon navigation. */
+.expMixMark{width:84px;height:100px;flex:0 0 84px;display:grid;place-items:center;color:var(--green)}
+.expMixMark svg{width:76px;height:76px;stroke:currentColor;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.labHub.expReview .labTab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;padding:7px 3px;font-size:10px;line-height:1.2;white-space:nowrap;overflow-wrap:normal}
+.labHub.expReview .labTab svg{display:block;width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.labHub.expReview{padding-bottom:calc(var(--phone-dock-clearance) + 12px);scroll-padding-bottom:calc(var(--phone-dock-clearance) + 12px)}
+.expRecord.expCompact{overflow:hidden;border-radius:16px;padding:14px 15px;background:linear-gradient(135deg,color-mix(in srgb,var(--mix-start) 9%,var(--panel)),color-mix(in srgb,var(--mix-end) 6%,var(--panel))) padding-box,linear-gradient(135deg,color-mix(in srgb,var(--mix-start) 60%,var(--line)),color-mix(in srgb,var(--mix-end) 60%,var(--line))) border-box;box-shadow:0 4px 14px #0002}
+.expCompact::before{display:none}
+.expCardStripe{height:3px;border-radius:999px;background:var(--mix-gradient);margin-bottom:13px;opacity:.85}
+.expCompact h4{font-size:15px;line-height:1.4;min-height:21px}
+.expMiniRecipe{gap:7px;margin:13px 0}
+.expMiniRecipe>div{padding:7px 8px;border:1px solid color-mix(in srgb,var(--ingredient-color) 22%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--ingredient-color) 4%,var(--ink));font-size:11px}
+.expMiniRecipe small{display:block;margin:3px 0 0;font-size:9px}
+.expMiniRecipe i{width:3px;flex-basis:3px;height:24px;border-radius:999px}
+.expMiniRecipe span{white-space:normal;overflow-wrap:anywhere}
+.expCompact .expScore{font-size:12px;padding:7px 9px;min-width:40px;text-align:center}
+.expCompactFoot{padding-top:11px;font-size:9px}
+.expProfileLink{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:44px;border:0;border-top:1px solid var(--line);margin-top:13px;padding:11px 0 0;background:transparent;color:var(--green);font:600 11px 'Space Grotesk',sans-serif;cursor:pointer}
+.expProfileLink:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.labHub.expReview .myLabStats{grid-template-columns:repeat(6,minmax(0,1fr))!important}.labHub.expReview .myLabStat{grid-column:span 2}.labHub.expReview .myLabStat:nth-child(n+4){grid-column:span 3}
+.labHub.expReview .badgeViewSwitch{grid-template-columns:repeat(3,minmax(0,1fr))}.labHub.expReview .badgeViewSwitch button{min-height:40px;font-size:10px}
+.rewardHistory{padding:0 12px 18px}.rewardHistory h4{margin:8px 0 14px;font:700 14px 'Space Grotesk',sans-serif}
+.rewardHistoryRow{display:flex;align-items:center;gap:14px;width:100%;padding:14px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);text-align:left;cursor:pointer}
+.rewardHistoryRow .badgeCoin{width:44px;flex:0 0 44px;margin:0}.rewardHistoryRow>span{flex:1;min-width:0}.rewardHistoryRow b{font:700 12px 'Space Grotesk',sans-serif;display:block;overflow-wrap:anywhere}.rewardHistoryRow small{font:9px/1.5 'Space Mono',monospace;display:block;color:var(--dim);margin-top:5px}.rewardHistoryRow strong{font:600 11px 'Space Mono',monospace;white-space:nowrap;color:var(--green)}
+.rewardHistoryNote,.rewardHistoryEmpty{font:11px/1.6 'Space Grotesk',sans-serif;color:var(--dim);margin:15px 0}.rewardHistoryEarlier summary{color:var(--green);font:600 11px 'Space Grotesk',sans-serif;min-height:44px;display:flex;align-items:center;cursor:pointer}.rewardHistoryEarlier>div{display:grid;gap:6px}.rewardHistoryEarlier button{display:flex;justify-content:space-between;gap:10px;min-height:44px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:8px;padding:9px;background:var(--ink);color:var(--text);font:11px 'Space Grotesk',sans-serif}.rewardHistoryEarlier small{color:var(--dim);font-size:9px}
+.chip.typechip.hybs{--filter-a:var(--sativa);--filter-b:var(--hybrid)}.chip.typechip.hybi{--filter-a:var(--hybrid);--filter-b:var(--indica)}
+.chip.typechip:is(.hybs,.hybi){border-color:color-mix(in srgb,var(--filter-a) 50%,var(--filter-b));color:var(--text);background:linear-gradient(110deg,color-mix(in srgb,var(--filter-a) 18%,var(--panel)),color-mix(in srgb,var(--filter-b) 18%,var(--panel)))}
+.chip.typechip:is(.hybs,.hybi).on{color:#101511;background:linear-gradient(110deg,var(--filter-a),var(--filter-b));border-color:transparent;box-shadow:0 0 0 1px color-mix(in srgb,var(--filter-a) 55%,var(--filter-b))}
+:root.slr-light .chip.typechip:is(.hybs,.hybi).on{color:white}
+.headerControls .typechips{gap:4px}.headerControls .chip.typechip{flex-shrink:0;padding-left:7px;padding-right:7px;white-space:nowrap}
+@media(max-width:600px){.expMixMark{flex-basis:60px;width:60px;height:80px}.expMixMark svg{width:57px;height:57px}.expRecord.expCompact{padding:13px}.headerControls .chip.typechip{font-size:9px;padding-left:6px;padding-right:6px}}
+@media(min-width:750px){.labHub.expReview .myLabStats{grid-template-columns:repeat(5,minmax(0,1fr))!important}.labHub.expReview .myLabStat,.labHub.expReview .myLabStat:nth-child(n+4){grid-column:auto}}
+@media(forced-colors:active){.expRecord.expCompact{background:Canvas;border-color:CanvasText}.expCardStripe{background:Highlight}.expMiniRecipe>div{border-color:CanvasText}.chip.typechip:is(.hybs,.hybi).on{color:HighlightText;background:Highlight}}
+/* Keep all five type choices visible on phones; tools reflow in the same control card. */
+@media(max-width:600px){.headerControls .filterrow{flex-wrap:wrap;justify-content:flex-end;row-gap:5px}.headerControls .filterrow .typechips{flex:0 0 100%;width:100%;justify-content:space-between;overflow:visible;min-height:34px;align-items:center}.headerControls .filterrow .chip.typechip{font-size:9px;padding:6px 7px}.headerControls .filterrow .filterSearchBtn{min-height:34px}.headerControls .filterrow .filterbtn{min-height:34px}}
+
+@media(max-width:330px){.headerControls .filterrow .chip.typechip{padding-left:4px;padding-right:4px}}
+:root.slr-light .expButton.primary{color:#fff}
+/* Refined SLR navigation artwork, retaining the existing bar and hit targets. */
+.labHub.expReview .labTab>.expCrewMark{width:35px;height:26px;fill:none;stroke:none}
+.labHub.expReview .labTab .expCrewMark>svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:20}
+.labHub.expReview .labTab>.expResultsMark,.labHub.expReview .labTab>.expMixGlyph{width:25px;height:26px}
+.expNavAvatar{display:block;width:26px;height:26px;border-radius:6px;object-fit:contain}
+.expMixMark svg{stroke-width:1.65}
+/* Match the original type pills' 12% tint and 30% border, including their text. */
+.chip.typechip:is(.hybs,.hybi):not(.on){border:1px solid transparent;box-shadow:none;background:linear-gradient(110deg,color-mix(in srgb,var(--filter-a) 12%,var(--panel)),color-mix(in srgb,var(--filter-b) 12%,var(--panel))) padding-box,linear-gradient(110deg,color-mix(in srgb,var(--filter-a) 30%,var(--panel)),color-mix(in srgb,var(--filter-b) 30%,var(--panel))) border-box}
+.typeGradientLabel{background:linear-gradient(110deg,var(--filter-a),var(--filter-b));background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.chip.typechip:is(.hybs,.hybi).on{box-shadow:none}
+.chip.typechip:is(.hybs,.hybi).on .typeGradientLabel{background:none;color:inherit;-webkit-text-fill-color:currentColor}
+@media(forced-colors:active){.typeGradientLabel{background:none;color:ButtonText;-webkit-text-fill-color:currentColor}.chip.typechip:is(.hybs,.hybi):not(.on){border-color:ButtonText;background:ButtonFace}}
+
+/* Tighten the mobile start card, with a centered action and no empty status spacer. */
+.expNotice{min-height:0}
+.expNotice:empty{margin:0}
+.expMyLabMark{display:block;width:26px;height:26px;background:currentColor;mask:url('../assets/icons/rat-mark.svg') center/contain no-repeat;-webkit-mask:url('../assets/icons/rat-mark.svg') center/contain no-repeat}
+@media(max-width:600px){.expPanel .expBenchTop{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}.expBenchTop>.expButton{justify-self:center;margin-top:0}}
+/* Results cards flow independently; shorter cards no longer leave empty grid rows. */
+.labHub.expReview #tasteGrid{display:block;column-count:1;column-gap:12px}
+.labHub.expReview #tasteGrid>.intelCard{display:inline-block;vertical-align:top;width:100%;box-sizing:border-box;break-inside:avoid;margin:0 0 12px}
+@media(min-width:700px){.labHub.expReview #tasteGrid{column-count:2}}
+
+.expRecordAction{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:36px;margin-top:8px;width:100%;padding:4px 0;background:transparent;border:0;color:var(--green);font:600 10px 'Space Grotesk',sans-serif;cursor:pointer}
+.expRecordAction:focus-visible,.expDetail button:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.expDetail{margin:20px 0;padding:18px;border:1px solid rgba(var(--accent-rgb),.4);border-radius:16px;background:var(--panel);scroll-margin-top:90px}
+.expDetail[hidden],.expPanel [hidden]{display:none!important}
+.expDetailHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.expDetailHead h4{font:700 18px 'Space Grotesk',sans-serif;margin:0;overflow-wrap:anywhere}.expDetailHead p{font:10px 'Space Mono',monospace;color:var(--dim);margin:8px 0}
+.expDetailRecipe{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}.expDetailRecipe span{border:1px solid var(--line);border-radius:9px;padding:8px;font:11px/1.5 'Space Grotesk',sans-serif}
+.expPersonalResults{display:grid;gap:10px;margin:16px 0}.expPersonalResults>div{padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--ink)}.expPersonalResults .expResultHeading{position:static;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none}.expPersonalResults .expResultHeading::after,.expPersonalResults .expResultHeading::before{display:none}.expPersonalResults b{font-size:13px}.expPersonalResults strong{font:11px 'Space Mono',monospace;color:var(--green)}.expPersonalResults p{font:11px/1.6 'Space Grotesk',sans-serif;color:var(--dim);margin:9px 0 0}.expDetailNotes{white-space:pre-wrap;overflow-wrap:anywhere}
+
+.expPerson{max-width:100%;white-space:normal;overflow-wrap:anywhere}.expPerson button{flex-shrink:0}

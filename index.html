@@ -1070,7 +1070,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <button type="button" class="asType" data-type="Hybrid-I" aria-pressed="false" title="Indica-leaning hybrid">Hybrid-I</button>
       <button type="button" class="asType" data-type="Indica" aria-pressed="false">Indica</button>
     </div>
-    <div class="asHint">Hybrid-S leans Sativa · Hybrid-I leans Indica. Both stay in the Hybrid filter.</div>
+    <div class="asHint">Hybrid-S leans Sativa · Hybrid-I leans Indica. Hybrid includes both; use Hybrid-S or Hybrid-I to narrow it down.</div>
 
     <div class="asLbl">THC %</div>
     <input class="asInput" id="asTHC" type="number" inputmode="decimal" min="0" max="100" step="0.1" placeholder="e.g. 29">
@@ -1260,7 +1260,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
   <section class="labHub" role="dialog" aria-modal="true" aria-labelledby="labHubHeading">
     <div class="labHubHead">
       <div class="labHubMark" aria-hidden="true"><svg viewBox="0 0 32 32" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M11 3h10m-8 0v9L5 24a3 3 0 0 0 2.5 5h17a3 3 0 0 0 2.5-5l-8-12V3M9 21h14"/><circle cx="14" cy="17" r="1"/><circle cx="19" cy="23" r="1"/></svg></div>
-      <div class="labHubTitle"><h2 id="labHubHeading">The Lab</h2><p>Shared experiments · individual taste</p></div>
+      <div class="labHubTitle"><h2 id="labHubHeading">The Lab</h2></div>
       <button class="labHubClose" id="labHubClose" aria-label="Exit Lab">Exit Lab <span aria-hidden="true">↗</span></button>
     </div>
     <div class="labHubBody">
@@ -1309,13 +1309,13 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="sheet" id="sheet"><div class="grip" id="sheetGrip" role="button" tabindex="0" aria-label="Drag up to expand or down to close"></div><div id="sheetContent"></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="achievements.js"></script>
+<script src="achievements.js?v=2.7.0"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.6.21';
+const APP_VERSION = 'v2.7.0';
 const LAB_NOTICE = {
   id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
   title:'A little more Lab.',
@@ -1339,6 +1339,16 @@ const MEMBER_PALETTES = {
 };
 let RAW_TERPENES = [];
 let RAW_MEMBERS = [];
+let SLR_MIX_PROGRESS={},SLR_REWARD_HISTORY=[],SLR_MIXES_AVAILABLE=true,SLR_MIX_IDENTITY='',SLR_MIX_REVISION=0,SLR_VERIFIED_CODE='';
+function acceptMixProfile(data){
+  const identity=CURRENT_MEMBER.toLowerCase();
+  if(SLR_MIX_IDENTITY!==identity){SLR_MIX_PROGRESS={};SLR_REWARD_HISTORY=[];SLR_MIX_REVISION=0;}
+  SLR_MIX_IDENTITY=identity;SLR_MIXES_AVAILABLE=!data.mixesUnavailable;
+  if(data.mixProgress&&Number(data.mixRevision||0)>=SLR_MIX_REVISION){
+    SLR_MIX_PROGRESS=data.mixProgress;SLR_MIX_REVISION=Number(data.mixRevision||0);
+    if(data.rewardHistory)SLR_REWARD_HISTORY=[...new Map([...SLR_REWARD_HISTORY,...data.rewardHistory].map(row=>[row.badgeId+':'+row.rank,row])).values()].sort((a,b)=>b.created-a.created).slice(0,50);
+  }
+}
 // ---- baked raw data (Notion cleaned shape); refresh replaces these ----
 let RAW_STRAINS = [
  {
@@ -3731,7 +3741,7 @@ const SHELVES=[
   {id:'careful',label:'Careful',test:s=>['mixed','avoid'].includes(s.verdict)},
   {id:'rated',label:'Rated',test:s=>s.score!=null},
 ];
-const TYPES=[{id:'Sativa',label:'Sativa',cls:'sat'},{id:'Hybrid',label:'Hybrid',cls:'hyb'},{id:'Indica',label:'Indica',cls:'ind'}];
+const TYPES=[{id:'Sativa',label:'Sativa',cls:'sat'},{id:'Hybrid-S',label:'Hybrid-S',cls:'hybs'},{id:'Hybrid',label:'Hybrid',cls:'hyb'},{id:'Hybrid-I',label:'Hybrid-I',cls:'hybi'},{id:'Indica',label:'Indica',cls:'ind'}];
 const COUNTRIES=[
   {id:'🇩🇪',label:'🇩🇪 Germany'}, {id:'🇺🇸',label:'🇺🇸 USA'}, {id:'🇹🇭',label:'🇹🇭 Thailand'},
   {id:'🇳🇱',label:'🇳🇱 Netherlands'}, {id:'🇪🇸',label:'🇪🇸 Spain'}
@@ -3758,7 +3768,7 @@ function buildChips(){
   function addTypeChip(t,parent){
     const b=document.createElement('button');
     b.className=`chip typechip ${t.cls}`; b.dataset.kind='type'; b.dataset.id=t.id; b.dataset.cls=t.cls;
-    b.textContent=t.label;
+    b.textContent=t.label;if(['Hybrid-S','Hybrid-I'].includes(t.id))b.innerHTML='<span class=typeGradientLabel>'+t.label+'</span>';b.setAttribute('aria-pressed',String(ftype===t.id));
     b.onclick=()=>{ftype=(ftype===t.id?'all':t.id);syncChips();render();};  // click active to clear
     parent.appendChild(b);
   }
@@ -3781,7 +3791,7 @@ function buildChips(){
 }
 function syncChips(){
   document.querySelectorAll('#shelfrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===shelf));
-  document.querySelectorAll('#typerow .chip,#filterTyperow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===ftype));
+  document.querySelectorAll('#typerow .chip,#filterTyperow .chip').forEach(b=>(b.classList.toggle('on', b.dataset.id===ftype),b.setAttribute('aria-pressed',String(b.dataset.id===ftype))));
   document.querySelectorAll('#filterCountryrow .chip').forEach(b=>b.classList.toggle('on', b.dataset.id===fcountry));
   const count=(shelf!=='all'?1:0)+(ftype!=='all'?1:0)+(fcountry!=='all'?1:0)+(activeBrand?1:0)+(sortBy!=='recent'?1:0);
   const filterBtn=document.getElementById('filterBtn');
@@ -3881,7 +3891,7 @@ function render(){
   let list=STRAINS.filter(s=>{
     if(SCORE_VIEW==='mine'&&(s.mine?.num_sessions||0)===0)return false;
     if(!shTest(s))return false;
-    if(ftype!=='all'&&s.type!==ftype)return false;
+    if(ftype!=='all'&&(['Hybrid-S','Hybrid-I'].includes(ftype)?s.typeLabel!==ftype:s.type!==ftype))return false;
     if(fcountry!=='all'&&!(s.countries||[]).includes(fcountry))return false;
    if(activeBrand && !(s.brands||[]).includes(activeBrand))return false;
     if(query){const hay=(s.name+' '+(s.brands||[]).join(' ')+' '+(s.terpenes||[]).join(' ')+' '+(s.typeLabel||s.type||'')).toLowerCase();if(!hay.includes(query))return false;}
@@ -4345,7 +4355,7 @@ function renderTheLab(){
     const tastes=[rat.favoriteType,rat.favoriteBrand].filter(Boolean).map(safeHtml);
     const effects=rat.topEffects.map(effect=>`${EFFECT_ICON[effect]||''} ${safeHtml(effectLabel(effect))}`);
     const key=safeHtml(rat.name.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
-    return `<article class="ratCard${isYou?' you':''}" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><button class="ratSummary" type="button" data-rat-expand="${key}" aria-expanded="false"><div class="ratTop"><div class="ratAvatar${rat.name.toLowerCase()==='cyrus'?' cyrus':''}"><img src="${memberIconFor(rat.name)}" alt=""></div><div class="ratIdentity"><b>${safeHtml(displayName(rat.name))}${isYou?' · You':''}</b><span>${rat.sessions?'Active Lab Rat':'New Lab Rat · first experiment pending'}</span></div><div class="ratXp"><small>Activity XP</small>${rat.points}</div><span class="ratChevron" aria-hidden="true">⌄</span></div><div class="ratMetrics"><div class="ratMetric"><b>${rat.sessions}</b><span>Sessions</span></div><div class="ratMetric"><b>${rat.strains}</b><span>Strains</span></div><div class="ratMetric"><b class="${scoreClass(rat.average)}">${rat.average==null?'—':`★ ${rat.average}`}</b><span>Avg rating</span></div></div><span class="ratDetailsHint" aria-hidden="true"></span></button><div class="ratSignals"><div class="ratSignalsInner"><div class="ratSignal"><label>Reaches for</label><div class="ratPills">${pills(tastes,true)}</div></div><div class="ratSignal"><label>Top-rated strains</label><div class="ratPills">${rat.topRated.length?pills(rated):'<span class="ratPill empty">No Overall ratings yet</span>'}</div></div><div class="ratSignal"><label>Most logged strains</label><div class="ratPills">${rat.mostLogged.length?pills(logged):'<span class="ratPill empty">First experiment pending</span>'}</div></div><div class="ratSignal"><label>Common Effects</label><div class="ratPills">${pills(effects,true)}</div></div></div></div></article>`;
+    return `<article class="ratCard${isYou?' you':''}" style="--rat-a:${colors[0]};--rat-b:${colors[1]}"><button class="ratSummary" type="button" data-rat-expand="${key}" aria-expanded="false"><div class="ratTop"><div class="ratAvatar${rat.name.toLowerCase()==='cyrus'?' cyrus':''}"><img src="${memberIconFor(rat.name)}" alt=""></div><div class="ratIdentity"><b>${safeHtml(displayName(rat.name))}${isYou?' · You':''}</b><span>${rat.sessions?'Active Lab Rat':'New Lab Rat · first experiment pending'}</span></div><div class="ratXp"><small>Lab XP</small>${window.SLRLabAchievements?.forMember(rat.name).totalXp??rat.points}</div><span class="ratChevron" aria-hidden="true">⌄</span></div><div class="ratMetrics"><div class="ratMetric"><b>${rat.sessions}</b><span>Sessions</span></div><div class="ratMetric"><b>${rat.strains}</b><span>Strains</span></div><div class="ratMetric"><b class="${scoreClass(rat.average)}">${rat.average==null?'—':`★ ${rat.average}`}</b><span>Avg rating</span></div></div><span class="ratDetailsHint" aria-hidden="true"></span></button><div class="ratSignals"><div class="ratSignalsInner"><div class="ratSignal"><label>Reaches for</label><div class="ratPills">${pills(tastes,true)}</div></div><div class="ratSignal"><label>Top-rated strains</label><div class="ratPills">${rat.topRated.length?pills(rated):'<span class="ratPill empty">No Overall ratings yet</span>'}</div></div><div class="ratSignal"><label>Most logged strains</label><div class="ratPills">${rat.mostLogged.length?pills(logged):'<span class="ratPill empty">First experiment pending</span>'}</div></div><div class="ratSignal"><label>Common Effects</label><div class="ratPills">${pills(effects,true)}</div></div></div></div></article>`;
   }).join('');
   grid.querySelectorAll('[data-rat-expand]').forEach(button=>button.addEventListener('click',()=>{const card=button.closest('.ratCard'),open=!card.classList.contains('open');card.classList.toggle('open',open);button.setAttribute('aria-expanded',open?'true':'false');}));
   renderTasteMap(crew);
@@ -4424,7 +4434,9 @@ try{
     if(!res.ok) throw new Error('Worker error '+res.status);
     const data = await res.json();
     if(data.error) throw new Error(data.error);
+    if(getStoredCode()!==code)return;
     CURRENT_MEMBER = data.viewer || '';
+    SLR_VERIFIED_CODE=code;
     if(!CURRENT_MEMBER) throw new Error('This code is missing a member name.');
     const memberHint=CURRENT_MEMBER.trim().toLowerCase();
     const previousHint=localStorage.getItem(MEMBER_HINT_KEY) || '';
@@ -4438,6 +4450,7 @@ try{
     RAW_SESSIONS = data.sessions;
     RAW_TERPENES = data.terpenes || [];
     RAW_MEMBERS = data.members || [];
+    acceptMixProfile(data);
     STRAINS = process(RAW_STRAINS,RAW_BATCHES,RAW_SESSIONS);
     applyMemberUi(); hideCodeGate();
     $('#lcount').textContent = STRAINS.length;
@@ -4446,6 +4459,7 @@ try{
     buildChips(); render();
     if(labHubIsOpen())renderTheLab();
     window.SLRLabAchievements?.dataReady();
+    window.SLRMixes?.dataReady();
     void window.SLRPush?.authenticated(CURRENT_MEMBER);
     toast((initial?'Welcome, '+displayName(CURRENT_MEMBER):'Updated — '+STRAINS.length+' strains'),'ok');
   }catch(err){
@@ -5137,11 +5151,13 @@ buildChips(); render();
 window.SLRPushHost={
   api:WORKER_URL,version:APP_VERSION,code:getStoredCode,member:()=>CURRENT_MEMBER,
   openSettings:openMenu,profile:()=>{closeMenu();window.openMyLab();},
-  safeToUpdate:()=>SLR_ACTIVE_WRITES===0&&!AS.busy&&!['scrim','asOverlay','photoOverlay','blazeOverlay','filterOverlay','referenceOverlay','infoOverlay','labHubOverlay','achievementNotice','icOverlay'].some(id=>document.getElementById(id)?.classList.contains('show'))
+  safeToUpdate:()=>SLR_ACTIVE_WRITES===0&&!AS.busy&&!window.SLRMixes?.isBusy?.()&&!['scrim','asOverlay','photoOverlay','blazeOverlay','filterOverlay','referenceOverlay','infoOverlay','labHubOverlay','achievementNotice','icOverlay'].some(id=>document.getElementById(id)?.classList.contains('show'))
 };
 showCheckingGate();refresh(true);
 </script>
-<script src="my-lab-preview.js"></script>
+<script src="my-lab-preview.js?v=2.7.0"></script>
+<link rel="stylesheet" href="mixes/mixes.css?v=2.7.0">
+<script type="module" src="mixes/app.mjs?v=2.7.0"></script>
 <script type="module" src="push/settings.mjs?v=2.6.18"></script>
 <script type="module" src="assets/navigation/slr-navigation.mjs"></script>
 </body>

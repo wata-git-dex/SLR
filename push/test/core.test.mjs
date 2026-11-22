@@ -12,7 +12,7 @@ import appWorker from '../../worker.js';
 import {arm,runAlarm,kickDelivery} from '../scheduler.mjs';
 const b64=bytes=>Buffer.from(bytes).toString('base64url');
 function db(){
- const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../migrations/0001.sql',import.meta.url),'utf8'));
+ const sqlite=new DatabaseSync(':memory:');sqlite.exec(readFileSync(new URL('../migrations/0001.sql',import.meta.url),'utf8'));sqlite.exec(readFileSync(new URL('../migrations/0002-mixes.sql',import.meta.url),'utf8'));
  return {sqlite,prepare(sql){return {bind(...args){const stmt=sqlite.prepare(sql);return {async first(){return stmt.get(...args)||null;},async all(){return {results:stmt.all(...args)};},async run(){return stmt.run(...args);}};}};},async batch(statements){return Promise.all(statements.map(s=>s.all()));}};
 }
 const request=(path,subject='alice',data)=>new Request('https://internal'+path,{method:data===undefined?'GET':'POST',headers:{'x-slr-app':'stoned-lab-rats','x-slr-subject':subject},body:data===undefined?undefined:JSON.stringify(data)});

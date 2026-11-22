@@ -1,3 +1,4 @@
+import {experimentRoute,mixProfile} from './mixes/server.mjs';
 import {arm,runAlarm} from './push/scheduler.mjs';
 import {notificationRoute,markAchievementSave,reconcileProgress,drainAuthorized} from './push/server.mjs';
 // SLR live-data Worker — reads Notion data AND writes new sessions
@@ -57,6 +58,15 @@ export default {
   async fetch(request, env) {
     const notification=await notificationRoute(request,env,async code=>typeof code==='string'&&code.trim()&&code.length<=64?(await activeMembers(env.NOTION_TOKEN,true)).get(code.trim().toUpperCase()):null);
     if(notification)return notification;
+    const experiment=await experimentRoute(request,env,{
+      activeMembers:()=>activeMembers(env.NOTION_TOKEN,true),
+      loadCatalog:async()=>{
+        const [batches,strains]=await Promise.all([queryAll(DS.batches,env.NOTION_TOKEN),queryAll(DS.strains,env.NOTION_TOKEN)]);
+        const names=new Map(strains.map(page=>[idToUrl(page.id),title(page,'Name')]));
+        return batches.map(page=>({id:idToUrl(page.id),strainId:relation(page,'Strains')[0],name:names.get(relation(page,'Strains')[0]),brand:select(page,'Brand')||'Unknown brand',family:globalThis.SLRAchievements.typeFamily(select(page,'Type'))||'Hybrid'})).filter(batch=>batch.name);
+      }
+    });
+    if(experiment)return experiment;
     const requestUrl = new URL(request.url);
     const origin = env.ALLOWED_ORIGIN || "*";
     const cors = {
@@ -117,6 +127,7 @@ export default {
           });
         }
 
+        if(data.kind&&data.kind!=='session')return jsonError('Unknown save type.',400,cors);
         const savedSession=await createSession(data, env.NOTION_TOKEN, member.name);
         await markAchievementSave(env,member.subject,savedSession.id).catch(()=>{});
         return new Response(JSON.stringify({ ok: true, viewer: member.name }), {
@@ -207,7 +218,10 @@ export default {
         terpenes: terpenePages.map(p => ({ url: idToUrl(p.id), Name: title(p, "Name") })).filter(t => t.Name),
       };
 
-      await reconcileProgress(env,member,payload).catch(()=>{});
+      try{Object.assign(payload,await mixProfile(env.SLR_PUSH_DB,member,activeMemberMap));}catch{payload.mixesUnavailable=true;}
+      const reconciled=await reconcileProgress(env,member,payload).catch(()=>false);
+      // Reconciliation can add a confirmed unlock to History during this read.
+      if(reconciled&&env.SLR_PUSH_DB&&!payload.mixesUnavailable){try{payload.rewardHistory=(await env.SLR_PUSH_DB.prepare('SELECT badge_id AS badgeId,rank,xp,created FROM slr_reward_history WHERE subject=? ORDER BY created DESC,badge_id LIMIT 50').bind(member.subject).all()).results;}catch{}}
       return new Response(JSON.stringify(payload), {
         headers: { ...cors, "Content-Type": "application/json" },
       });

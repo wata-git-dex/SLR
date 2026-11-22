@@ -42,6 +42,9 @@
   };
 
   const badgeArt={
+    mixPour:'<path d="M4 16h24c-1 8-5 12-12 12S5 24 4 16Zm6 13h12M14 16 24 3a2.5 2.5 0 0 1 4 3L20 16"/><path d="M7 21c5 3 13 3 18 0M5 7c5-1 8 2 8 6-5 0-8-2-8-6Zm2 2 4 3"/>',
+    mixNotes:'<rect x="5" y="4" width="22" height="25" rx="3"/><path d="M10 10h12m-12 5h12m-12 5h7m-7 5h12"/>',
+    mixCrew:'<path d="M3 28c0-5 3-8 7-8m19 8c0-5-3-8-7-8M6 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0m12 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0M12 23h8l-1 6h-6Z"/>',
     rat:'<path d="M9 12C6 6 2 7 3 12c.4 2 2 3 4 3m16-3c3-6 7-5 6 0-.4 2-2 3-4 3M8 14c1-5 4-8 8-8s7 3 8 8l1 6c-1 6-5 9-9 9s-8-3-9-9l1-6Z"/><path d="m11 18 2 1m8-1-2 1m-5 4 2 1 2-1m-2 1v3M7 22l6 1m12-1-6 1"/>',
     fiveLeaves:'<path d="M16 26V11m0 5c-5-1-8-5-8-9 5 0 8 3 8 7m0 6c5-1 8-5 8-9-5 0-8 3-8 7M11 25h10"/><path d="M6 20c-3-2-4-5-3-8 4 1 6 4 6 7m14 1c3-2 4-5 3-8-4 1-6 4-6 7"/>',
     tenJar:'<path d="M9 4h14M11 4v5l-4 6v11h18V15l-4-6V4M9 18h16"/><path d="M12 14h8m-4-4v8"/>',
@@ -129,12 +132,12 @@
       });
     });
     const tracked=RAW_TERPENES.length?RAW_TERPENES.map(terp=>terp.Name||terp.name):[...new Set(RAW_BATCHES.flatMap(batch=>parseArr(batch.Terps)))];
-    return {sessions,trackedTerpenes:tracked};
+    return {sessions,trackedTerpenes:tracked,mixProgress:SLR_MIX_PROGRESS};
   }
   function currentProgress(){return engine.calculateMember(normalizeContext(),CURRENT_MEMBER);}
   function updateProfileXp(){
     const value=document.getElementById('profileXpValue');if(!value)return;
-    value.textContent=CURRENT_MEMBER?currentProgress().totalXp.toLocaleString():'—';
+    value.textContent=CURRENT_MEMBER&&SLR_MIXES_AVAILABLE?currentProgress().totalXp.toLocaleString():'—';
   }
   function orderedAchievements(items){
     return items.map((item,index)=>({...item,_catalogIndex:index})).sort((a,b)=>{
@@ -147,7 +150,7 @@
   function buildShell(){
     const tabs=document.querySelector('.labTabs');
     const mineTab=document.createElement('button');mineTab.className='labTab';mineTab.dataset.labTab='mine';mineTab.setAttribute('role','tab');mineTab.setAttribute('aria-selected','false');mineTab.textContent='My Lab';tabs.append(mineTab);
-    const minePanel=document.createElement('div');minePanel.className='labPanel myLabPanel';minePanel.dataset.labPanel='mine';minePanel.innerHTML='<div class="labSectionHead"><h3>Your progress</h3><span>Only visible to you.</span></div><main class="myLabBody" id="myLabBody"></main>';document.querySelector('.labHubBody').append(minePanel);
+    const minePanel=document.createElement('div');minePanel.className='labPanel myLabPanel';minePanel.dataset.labPanel='mine';minePanel.innerHTML='<div class="labSectionHead"><h3>Your Progress</h3><span>Only visible to you.</span></div><main class="myLabBody" id="myLabBody"></main>';document.querySelector('.labHubBody').append(minePanel);
     const detail=document.createElement('div');detail.className='badgeDetailOverlay';detail.id='badgeDetailOverlay';detail.innerHTML='<div class="badgeDetail" id="badgeDetail"></div>';document.body.append(detail);
     detail.addEventListener('click',event=>{if(event.target===detail||event.target.closest('[data-close-badge]'))closeBadgeDetail();});
     document.getElementById('menuLabHeading').textContent='The Lab';
@@ -186,18 +189,24 @@
       const meter=(!item.earned||item.repeatable)&&!item.unavailable&&!hidden?`<span class="badgeRowMeter"><i style="width:${Math.round(item.progress*100)}%"></i></span>`:'';
       return `<button class="badgeRow ${state}" data-badge-id="${item.id}">${coin(item)}<span class="badgeRowCopy"><b>${safeHtml(name)}</b><small>${safeHtml(description)}</small>${meter}</span><span class="badgeRowStatus">${safeHtml(status)}</span><span class="badgeRowArrow">›</span></button>`;
     }).join('');
-    document.getElementById('myLabBody').innerHTML=`<section class="myLabIdentity"><div class="myLabIdentityTop"><div class="myLabAvatar"><img src="${avatar}" alt=""></div><div class="myLabName"><small>Active Lab Rat</small><h3>${safeHtml(displayName(CURRENT_MEMBER))}</h3></div><div class="myLabLevel"><b>Level ${level.level}</b><span>${safeHtml(level.title)}</span></div></div><div class="myLabProgressMeta"><span><b>${result.totalXp.toLocaleString()} XP</b> · ${result.activityXp} activity + ${result.achievementXp} badges</span><span>${level.needed} to Level ${level.level+1}</span></div><div class="myLabProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(level.progress*100)}"><i style="width:${Math.round(level.progress*100)}%"></i></div><div class="myLabStats"><div class="myLabStat"><b>${result.metrics.strains}</b><span>Strains</span></div><div class="myLabStat"><b>${result.metrics.sessions}</b><span>Sessions</span></div><div class="myLabStat"><b>${personal.average==null?'—':'★ '+personal.average}</b><span>Avg rating</span></div><div class="myLabStat"><b>${earned}</b><span>Badges</span></div></div><div class="profileTasteRows">${[
+    document.getElementById('myLabBody').innerHTML=`<section class="myLabIdentity"><div class="myLabIdentityTop"><div class="myLabAvatar"><img src="${avatar}" alt=""></div><div class="myLabName"><small>Active Lab Rat</small><h3>${safeHtml(displayName(CURRENT_MEMBER))}</h3></div><div class="myLabLevel"><b>Level ${level.level}</b><span>${safeHtml(level.title)}</span></div></div><div class="myLabProgressMeta"><span><b>${SLR_MIXES_AVAILABLE?result.totalXp.toLocaleString()+' XP':'XP temporarily unavailable'}</b> · ${result.activityXp} activity + ${result.achievementXp} badges</span><span>${level.needed} to Level ${level.level+1}</span></div><div class="myLabProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(level.progress*100)}"><i style="width:${Math.round(level.progress*100)}%"></i></div><div class="myLabStats"><div class="myLabStat"><b>${result.metrics.strains}</b><span>Strains</span></div><div class="myLabStat"><b>${result.metrics.sessions}</b><span>Sessions</span></div><div class="myLabStat"><b>${personal.average==null?'—':'★ '+personal.average}</b><span>Avg rating</span></div><div class="myLabStat"><b>${SLR_MIXES_AVAILABLE?(result.metrics.mixes||0):'—'}</b><span>Mixes</span></div><div class="myLabStat"><b>${earned}</b><span>Badges</span></div></div><div class="profileTasteRows">${[
 ['Reaches for',[personal.favoriteType,personal.favoriteBrand].filter(Boolean)],
 ['Top-rated strains',personal.topRated.map(item=>item.strain+' · ★ '+formatRating(item.stats.score))],
 ['Most logged strains',personal.mostLogged],
 ['Common effects',personal.topEffects.map(effect=>(EFFECT_ICON[effect]||'')+' '+effectLabel(effect))]
-].map(([label,values])=>`<div class="profileTasteRow"><h4>${label}</h4><div class="ratPills">${values.length?values.map(value=>`<span class="ratPill">${safeHtml(value)}</span>`).join(''):'<span class="ratPill empty">No records yet</span>'}</div></div>`).join('')}</div><p class="myLabHistoryNote">Progress updates from your saved sessions. Ratings-based badges use recorded Overall ratings.</p></section><section class="badgeCase open" id="badgeCase"><button class="badgeCaseToggle" id="badgeCaseToggle" aria-expanded="true"><span class="badgeCaseIcon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="14" r="10"/><path d="M10 23 8 30l8-4 8 4-2-7M16 8l1.8 3.7 4.1.6-3 2.9.7 4.1-3.6-2-3.6 2 .7-4.1-3-2.9 4.1-.6Z"/></svg></span><span class="badgeCaseCopy"><strong>Badges</strong><small>${earned} earned · tap to collapse</small></span><span class="badgeCaseArrow">⌄</span></button><div class="badgeCaseBody"><div class="badgeCaseInner"><div class="badgeViewSwitch" role="group" aria-label="Badge view"><button data-badge-view="collection" class="${badgeView==='collection'?'active':''}">Collection</button><button data-badge-view="checklist" class="${badgeView==='checklist'?'active':''}">Checklist</button></div><div class="badgeViewPanel ${badgeView==='collection'?'active':''}" data-badge-panel="collection"><div class="badgeGrid">${badgeButtons}</div></div><div class="badgeViewPanel ${badgeView==='checklist'?'active':''}" data-badge-panel="checklist"><div class="badgeList">${badgeRows}</div></div></div></div></section>`;
+].map(([label,values])=>`<div class="profileTasteRow"><h4>${label}</h4><div class="ratPills">${values.length?values.map(value=>`<span class="ratPill">${safeHtml(value)}</span>`).join(''):'<span class="ratPill empty">No records yet</span>'}</div></div>`).join('')}</div><p class="myLabHistoryNote">Progress includes saved Sessions and Mixes. Strain ratings stay separate from mix results.</p></section><section class="badgeCase open" id="badgeCase"><button class="badgeCaseToggle" id="badgeCaseToggle" aria-expanded="true"><span class="badgeCaseIcon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="14" r="10"/><path d="M10 23 8 30l8-4 8 4-2-7M16 8l1.8 3.7 4.1.6-3 2.9.7 4.1-3.6-2-3.6 2 .7-4.1-3-2.9 4.1-.6Z"/></svg></span><span class="badgeCaseCopy"><strong>Badges</strong><small>${earned} earned · tap to collapse</small></span><span class="badgeCaseArrow">⌄</span></button><div class="badgeCaseBody"><div class="badgeCaseInner"><div class="badgeViewSwitch" role="group" aria-label="Badge view"><button data-badge-view="collection" class="${badgeView==='collection'?'active':''}">Collection</button><button data-badge-view="checklist" class="${badgeView==='checklist'?'active':''}">Checklist</button><button data-badge-view="history" class="${badgeView==='history'?'active':''}">History</button></div><div class="badgeViewPanel ${badgeView==='collection'?'active':''}" data-badge-panel="collection"><div class="badgeGrid">${badgeButtons}</div></div><div class="badgeViewPanel ${badgeView==='checklist'?'active':''}" data-badge-panel="checklist"><div class="badgeList">${badgeRows}</div></div><div class="badgeViewPanel ${badgeView==='history'?'active':''}" data-badge-panel="history">${renderRewardHistory(result)}</div></div></div></section>`;
     document.getElementById('badgeCaseToggle').addEventListener('click',toggleBadgeCase);
     document.querySelectorAll('[data-badge-view]').forEach(button=>button.addEventListener('click',()=>setBadgeView(button.dataset.badgeView)));
-    document.querySelectorAll('[data-badge-id]').forEach(button=>button.addEventListener('click',()=>openBadgeDetail(result.achievements.find(item=>item.id===button.dataset.badgeId))));
+    document.querySelectorAll('[data-badge-id]').forEach(button=>button.addEventListener('click',()=>{const item=result.achievements.find(item=>item.id===button.dataset.badgeId),rank=Number(button.dataset.badgeRank);openBadgeDetail(rank?{...item,earned:true,rank,value:rank*item.threshold,earnedXp:rank*item.xp,nextThreshold:(rank+1)*item.threshold}:item);}));
+  }
+  function renderRewardHistory(result){
+    const events=SLR_REWARD_HISTORY.map(event=>({...event,badge:result.achievements.find(item=>item.id===event.badgeId)})).filter(event=>event.badge);
+    const rows=events.map(event=>{const badge={...event.badge,earned:true,rank:event.rank};return `<button class="rewardHistoryRow" data-badge-id="${safeHtml(badge.id)}" data-badge-rank="${event.rank}">${coin(badge)}<span><b>Unlocked ${safeHtml(badgeName(badge))}</b><small>${safeHtml(new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(event.created)))}</small></span><strong>+${event.xp} XP</strong></button>`;}).join('');
+    const earlier=result.earned.filter(item=>!events.some(event=>event.badgeId===item.id));
+    return `<div class="rewardHistory"><h4>Recent Unlocks</h4>${rows||'<p class="rewardHistoryEmpty">Your next confirmed unlock will appear here, newest first.</p>'}${earlier.length?`<details class="rewardHistoryEarlier"><summary>Earlier Achievements · ${earlier.length}</summary><p class="rewardHistoryNote">These badges predate your unlock history.</p><div>${earlier.map(item=>`<button data-badge-id="${safeHtml(item.id)}"><span>${safeHtml(badgeName(item))}</span><small>Earlier achievement</small></button>`).join('')}</div></details>`:''}</div>`;
   }
   function toggleBadgeCase(){const card=document.getElementById('badgeCase'),open=!card.classList.contains('open');card.classList.toggle('open',open);document.getElementById('badgeCaseToggle').setAttribute('aria-expanded',String(open));document.querySelector('.badgeCaseCopy small').textContent=document.querySelectorAll('.badgeItem.earned').length+' earned · tap to '+(open?'collapse':'expand');}
-  function setBadgeView(view){badgeView=view==='checklist'?'checklist':'collection';document.querySelectorAll('[data-badge-view]').forEach(button=>button.classList.toggle('active',button.dataset.badgeView===badgeView));document.querySelectorAll('[data-badge-panel]').forEach(panel=>panel.classList.toggle('active',panel.dataset.badgePanel===badgeView));}
+  function setBadgeView(view){badgeView=['collection','checklist','history'].includes(view)?view:'collection';document.querySelectorAll('[data-badge-view]').forEach(button=>button.classList.toggle('active',button.dataset.badgeView===badgeView));document.querySelectorAll('[data-badge-panel]').forEach(panel=>panel.classList.toggle('active',panel.dataset.badgePanel===badgeView));}
   function openBadgeDetail(item){
     if(!item)return;
     const hidden=item.secret&&!item.earned;
@@ -286,7 +295,7 @@
       }
     },true);
   }
-  window.SLRLabAchievements={snapshot:achievementSnapshot,expectSave:expectAchievementSave,dataReady:achievementDataReady,show:showAchievementNotice,updateProfileXp};
+  window.SLRLabAchievements={forMember:name=>engine.calculateMember(normalizeContext(),name),render:renderMyLab,snapshot:achievementSnapshot,expectSave:expectAchievementSave,dataReady:achievementDataReady,show:showAchievementNotice,updateProfileXp};
 
   buildShell();
   buildAchievementNotice();

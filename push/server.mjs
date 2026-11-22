@@ -42,7 +42,7 @@ export function progressContext(data){
       sessions.push({id:session.url||`session-${index}`,date:session.Date||batch.Date||'',members:names.length?names:legacy?['Cyrus','Amber']:['Cyrus'],strainId:strain.url,strainName:strain.Name,overall:Number.isInteger(n)&&n>=1&&n<=5?n:null,type:batch.Type,brand:batch.Brand,terpenes:array(batch.Terps),thc:batch.THC,effects:Object.fromEntries(effects.map(k=>[k,dots(session[k])])),sideEffects:Object.fromEntries(sides.map(k=>[k,dots(session[k])]))});
     }
   });
-  return {sessions,trackedTerpenes:data.terpenes?.length?data.terpenes.map(t=>t.Name||t.name):[...new Set(data.batches.flatMap(b=>array(b.Terps)))]};
+  return {sessions,mixProgress:data.mixProgress||{},trackedTerpenes:data.terpenes?.length?data.terpenes.map(t=>t.Name||t.name):[...new Set(data.batches.flatMap(b=>array(b.Terps)))]};
 }
 const stmt=(db,sql,...args)=>db.prepare(sql).bind(...args);
 export async function markAchievementSave(env,subject,sessionId){
@@ -63,6 +63,8 @@ export async function reconcileProgress(env,member,data){
   // Data arrived from the authorized Notion read following a confirmed server save.
   // Historical catalog/ratings edits and first launch only establish a baseline.
   if(receipts.length)for(const [id,rank]of Object.entries(current))if(rank>(previous[id]||0)){
+    const definition=result.achievements.find(item=>item.id===id);
+    commands.push(stmt(db,`INSERT OR IGNORE INTO slr_reward_history(subject,badge_id,rank,xp,created) SELECT ?,?,?,?,? WHERE EXISTS(SELECT 1 FROM achievement_progress WHERE subject=? AND revision=?)`,subject,id,rank,(rank-(previous[id]||0))*definition.xp,now,subject,old.revision));
     const eventId=`achievement:${subject}:${id}:${rank}`;
     commands.push(stmt(db,`INSERT OR IGNORE INTO events(id,app,subject,category,created) SELECT ?,?,?,'achievement',? WHERE EXISTS(SELECT 1 FROM achievement_progress WHERE subject=? AND revision=?)`,eventId,APP,subject,now,subject,old.revision));
     commands.push(stmt(db,`INSERT OR IGNORE INTO deliveries(event_id,subscription_id,due) SELECT e.id,s.id,? FROM events e JOIN subscriptions s ON s.app=e.app AND s.subject=e.subject WHERE e.id=? AND e.app=? AND e.subject=? AND s.created<=e.created AND s.achievement_enabled=1`,now,eventId,APP,subject));
@@ -71,6 +73,7 @@ export async function reconcileProgress(env,member,data){
   commands.push(stmt(db,'UPDATE achievement_progress SET ranks=?,pending=0,revision=revision+1 WHERE subject=? AND revision=?',JSON.stringify(high),subject,old.revision));
   await db.batch(commands);
   if(receipts.length)await kickDelivery(env);
+  return receipts.length>0;
 }
 export async function drainAuthorized(env,activeMembers){
   if(!env.SLR_PUSH_DB)return;
