@@ -63,7 +63,7 @@ export default {
       loadCatalog:async()=>{
         const [batches,strains]=await Promise.all([queryAll(DS.batches,env.NOTION_TOKEN),queryAll(DS.strains,env.NOTION_TOKEN)]);
         const names=new Map(strains.map(page=>[idToUrl(page.id),title(page,'Name')]));
-        return batches.map(page=>({id:idToUrl(page.id),strainId:relation(page,'Strains')[0],name:names.get(relation(page,'Strains')[0]),brand:select(page,'Brand')||'Unknown brand',family:globalThis.SLRAchievements.typeFamily(select(page,'Type'))||'Hybrid'})).filter(batch=>batch.name);
+        return batches.map(page=>({id:idToUrl(page.id),strainId:relation(page,'Strains')[0],name:names.get(relation(page,'Strains')[0]),brand:select(page,'Brand')||'Unknown brand',country:select(page,'Country'),family:globalThis.SLRAchievements.typeFamily(select(page,'Type'))||'Hybrid'})).filter(batch=>batch.name);
       }
     });
     if(experiment)return experiment;

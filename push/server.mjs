@@ -51,7 +51,8 @@ export async function markAchievementSave(env,subject,sessionId){
 export async function reconcileProgress(env,member,data){
   const db=env.SLR_PUSH_DB,subject=member.subject;if(!db||!subject)return;
   const result=globalThis.SLRAchievements.calculateMember(progressContext(data),member.name);
-  const current=Object.fromEntries(result.achievements.map(a=>[a.id,a.rank]));
+  // Mix saves own their per-rank history and notifications independently of Session receipts.
+  const current=Object.fromEntries(result.achievements.filter(a=>a.category!=='mixes').map(a=>[a.id,a.rank]));
   const old=await stmt(db,'SELECT * FROM achievement_progress WHERE subject=?',subject).first();
   if(!old){await stmt(db,'INSERT OR IGNORE INTO achievement_progress(subject,ranks) VALUES(?,?)',subject,JSON.stringify(current)).run();return;}
   const receipts=(await stmt(db,'SELECT session_id FROM achievement_receipts WHERE subject=?',subject).all()).results;

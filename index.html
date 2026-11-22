@@ -1293,7 +1293,7 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div class="infoHead"><h2>How Ratings Work</h2><button class="infoClose" id="infoClose" aria-label="Close">✕</button></div>
     <div class="infoBlock"><h3>Overall</h3><p>Tap 1–5 stars for how you rate the strain. Overall is optional and stays separate from Effects and Side Effects. In My Score, the app shows your average star rating; Community balances each Lab Rat equally.</p></div>
     <div class="infoBlock"><h3>Effects</h3><p>What the weed actually did. One dot = noticeable. Two dots = strong. These describe the experience and never change the Overall star rating.</p><div class="effectDefs">
-      <div class="effectDef"><span class="emoji">✨</span><b>Euphoric</b><span>Lifted, happy or unusually good mood.</span></div><div class="effectDef"><span class="emoji">🎯</span><b>Focused</b><span>Easier to concentrate or stay locked in.</span></div><div class="effectDef"><span class="emoji">🎨</span><b>Creative</b><span>Ideas, imagination or making things flowed.</span></div><div class="effectDef"><span class="emoji">🎉</span><b>Social</b><span>More talkative, open or comfortable with people.</span></div><div class="effectDef"><span class="emoji">😂</span><b>Giggly</b><span>Laughed more easily or found things funnier.</span></div><div class="effectDef"><span class="emoji">⚡</span><b>Energized</b><span>More alert, active or motivated to move.</span></div><div class="effectDef"><span class="emoji">🧘</span><b>Relaxed</b><span>Calm or loose without necessarily feeling sleepy.</span></div><div class="effectDef"><span class="emoji">🛋️</span><b>Couch-Locked</b><span>Heavy-bodied, planted or hard to get up.</span></div><div class="effectDef"><span class="emoji">🍕</span><b>Hungry</b><span>More appetite or serious munchies.</span></div>
+      <div class="effectDef"><span class="emoji">✨</span><b>Euphoric</b><span>Lifted, happy or unusually good mood.</span></div><div class="effectDef"><span class="emoji">🎯</span><b>Focused</b><span>Easier to concentrate or stay locked in.</span></div><div class="effectDef"><span class="emoji">🎨</span><b>Creative</b><span>Ideas, imagination or making things flowed.</span></div><div class="effectDef"><span class="emoji">🎉</span><b>Social</b><span>More talkative, open or comfortable with people.</span></div><div class="effectDef"><span class="emoji">😂</span><b>Giggly</b><span>Laughed more easily or found things funnier.</span></div><div class="effectDef"><span class="emoji">⚡️</span><b>Energized</b><span>More alert, active or motivated to move.</span></div><div class="effectDef"><span class="emoji">🧘</span><b>Relaxed</b><span>Calm or loose without necessarily feeling sleepy.</span></div><div class="effectDef"><span class="emoji">🛋️</span><b>Couch-Locked</b><span>Heavy-bodied, planted or hard to get up.</span></div><div class="effectDef"><span class="emoji">🍕</span><b>Hungry</b><span>More appetite or serious munchies.</span></div>
     </div></div>
     <div class="infoBlock side"><h3>Side Effects</h3><p>Generally undesirable reactions, using the same two-dot intensity.</p><div class="effectDefs">
       <div class="effectDef"><span class="emoji">😴</span><b>Sleepy</b><span>Drowsy or ready for sleep.</span></div><div class="effectDef"><span class="emoji">😰</span><b>Anxious</b><span>Worried, tense or uncomfortable.</span></div><div class="effectDef"><span class="emoji">👀</span><b>Paranoid</b><span>Suspicious, unsafe-feeling or spiraling thoughts.</span></div><div class="effectDef"><span class="emoji">😶‍🌫️</span><b>Washed</b><span>Foggy, depleted, cooked or not useful.</span></div><div class="effectDef"><span class="emoji">💤</span><b>KO’d</b><span>Unexpectedly put to sleep or fully out.</span></div><div class="effectDef"><span class="emoji">💫</span><b>Dizzy</b><span>Lightheaded, spinning or unsteady.</span></div><div class="effectDef"><span class="emoji">🤕</span><b>Headache</b><span>Head pain or pressure.</span></div>
@@ -1309,22 +1309,22 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="sheet" id="sheet"><div class="grip" id="sheetGrip" role="button" tabindex="0" aria-label="Drag up to expand or down to close"></div><div id="sheetContent"></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="achievements.js?v=2.7.1"></script>
+<script src="achievements.js?v=2.7.2"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.7.1';
+const APP_VERSION = 'v2.7.2';
 const LAB_NOTICE = {
-  id:'slr-v2.7.1', version:'Version 2.7.1', audience:'all',
-  title:'A Fresh Mix.',
-  copy:'A clearer mixing bench, with every Rat’s result kept their own.',
+  id:'slr-v2.7.2', version:'Version 2.7.2', audience:'all',
+  title:'Scientist. Specimen. Both.',
+  copy:'Your mix experiments have five new badge series, all part of your overall Lab XP.',
   items:[
-    ['⌕','Find Your Strains','Search names or brands. Type-colored options close after you choose.'],
-    ['✦','Make It Yours','Mix names fill in as Strain × Strain. Add a custom name anytime before saving.'],
-    ['◎','Try This Mix','Open a mix for details, then add your own result to someone else’s recipe.'],
-    ['◇','One Lab Progress','Saved mix results earn overall profile XP. Regular strain ratings stay separate.']
+    ['◎','Experiment & Replicate','Earn badges for two Sativas, two Indicas, Sativa + Indica, or trying another Rat’s recipe. Save your own result to qualify.'],
+    ['🌐','International Incident','Mix two recorded purchase countries. Unknown countries stay unknown.'],
+    ['◇','Ranks That Keep Going','Earn +25 XP at 1, 5, 10 and 25 distinct combinations, then every additional 25. See progress in your profile.'],
+    ['✦','A Clearer Mix','Separated leaf shapes and the familiar effect emojis, including Energized. Regular strain ratings stay separate.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -3633,7 +3633,7 @@ const EFFECT_ICON = {
   Focused:   '🎯',
   Social:    '🎉',
   Giggly:    '😂',
-  Energized: '⚡',
+  Energized: '⚡️',
   Relaxed:   '🧘',
   CouchLocked:'🛋️',
   Sleepy:    '😴',
@@ -4522,7 +4522,7 @@ const EFFS_POS = [
   {key:'Creative', emoji:'🎨', label:'Creative'},
   {key:'Social', emoji:'🎉', label:'Social'},
   {key:'Giggly', emoji:'😂', label:'Giggly'},
-  {key:'Energized', emoji:'⚡', label:'Energized'},
+  {key:'Energized', emoji:'⚡️', label:'Energized'},
   {key:'Relaxed', emoji:'🧘', label:'Relaxed'},
   {key:'CouchLocked', emoji:'🛋️', label:'Couch-Locked'},
   {key:'Hungry', emoji:'🍕', label:'Hungry'},
@@ -5156,9 +5156,9 @@ window.SLRPushHost={
 };
 showCheckingGate();refresh(true);
 </script>
-<script src="my-lab-preview.js?v=2.7.1"></script>
-<link rel="stylesheet" href="mixes/mixes.css?v=2.7.1">
-<script type="module" src="mixes/app.mjs?v=2.7.1"></script>
+<script src="my-lab-preview.js?v=2.7.2"></script>
+<link rel="stylesheet" href="mixes/mixes.css?v=2.7.2">
+<script type="module" src="mixes/app.mjs?v=2.7.2"></script>
 <script type="module" src="push/settings.mjs?v=2.6.18"></script>
 <script type="module" src="assets/navigation/slr-navigation.mjs"></script>
 </body>

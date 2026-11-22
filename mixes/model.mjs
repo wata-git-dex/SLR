@@ -1,4 +1,8 @@
-import {defaultMixTitle} from './presentation.mjs?v=2.7.1';
+import {defaultMixTitle} from './presentation.mjs?v=2.7.2';
+export function purchaseCountry(value){
+  const choices={de:'🇩🇪',germany:'🇩🇪',deutschland:'🇩🇪',us:'🇺🇸',usa:'🇺🇸','united states':'🇺🇸','united states of america':'🇺🇸',th:'🇹🇭',thailand:'🇹🇭',nl:'🇳🇱',netherlands:'🇳🇱',holland:'🇳🇱',es:'🇪🇸',spain:'🇪🇸'};
+  const raw=String(value||'').trim();return ['🇩🇪','🇺🇸','🇹🇭','🇳🇱','🇪🇸'].includes(raw)?raw:choices[raw.toLowerCase()]||null;
+}
 export function normalizeMix(ingredients,catalog){
   if(!Array.isArray(ingredients)||ingredients.length<2||ingredients.length>4)throw Error('Choose 2–4 strains for your mix.');
   const seen=new Set(),rows=ingredients.map(item=>{
@@ -6,7 +10,7 @@ export function normalizeMix(ingredients,catalog){
     if(!batch)throw Error('Choose a strain for every component.');
     if(seen.has(batch.id))throw Error('That batch is already in the mix. Choose a different batch.');
     seen.add(batch.id);
-    return {batchId:batch.id,strainId:batch.strainId,name:batch.name,brand:batch.brand,family:batch.family||'Hybrid'};
+    return {batchId:batch.id,strainId:batch.strainId,name:batch.name,brand:batch.brand,family:batch.family||'Hybrid',country:purchaseCountry(batch.country)};
   });
   return rows.map(row=>({...row,share:1/rows.length}));
 }

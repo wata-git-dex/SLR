@@ -36,6 +36,11 @@
     {id:'mix-first-blend',name:'First Blend',description:'Recorded your first equal-share mix with your own result.',category:'mixes',xp:25,metric:'mixes',threshold:1,art:'mixPour',color:'#55d4bc'},
     {id:'mix-notes',name:'Mix Notes',description:'Recorded results for 5 different mixes.',category:'mixes',xp:35,metric:'mixes',threshold:5,art:'mixNotes',color:'#a98bea'},
     {id:'mix-shared-bench',name:'Shared Bench',description:'Completed a mix with results from at least 2 Lab Rats.',category:'mixes',xp:25,metric:'sharedMixes',threshold:1,art:'mixCrew',color:'#e6b24c'},
+    {id:'mix-international',name:'International Incident',description:'Saved your own result for a mix with at least two recorded purchase countries. Two countries. One bench. The Lab has questions.',category:'mixes',xp:25,metric:'internationalMixes',threshold:1,repeatable:true,milestones:[1,5,10,25],repeatEvery:25,art:'mixPassport',color:'#34cde8'},
+    {id:'mix-replication',name:'Independent Replication',description:'Tried another Lab Rat’s recipe and saved your own result. Peer-reviewed. Personally tested.',category:'mixes',xp:25,metric:'replicatedMixes',threshold:1,repeatable:true,milestones:[1,5,10,25],repeatEvery:25,art:'mixReview',color:'#f16a9d'},
+    {id:'mix-twin-suns',name:'Twin Suns',description:'Saved your own result for a two-strain mix of two different pure Sativas.',category:'mixes',xp:25,metric:'doubleSativaMixes',threshold:1,repeatable:true,milestones:[1,5,10,25],repeatEvery:25,art:'mixSuns',color:'#e6b24c'},
+    {id:'mix-night-shift',name:'Double Night Shift',description:'Saved your own result for a two-strain mix of two different pure Indicas.',category:'mixes',xp:25,metric:'doubleIndicaMixes',threshold:1,repeatable:true,milestones:[1,5,10,25],repeatEvery:25,art:'mixMoons',color:'#a98bea'},
+    {id:'mix-opposing-forces',name:'Opposing Forces',description:'Saved your own result for a two-strain mix of one pure Sativa and one pure Indica. The research team could not agree.',category:'mixes',xp:25,metric:'opposingMixes',threshold:1,repeatable:true,milestones:[1,5,10,25],repeatEvery:25,art:'mixOpposites',color:'#63d374'},
     {id:'unknown-specimen',name:'Unknown Specimen',description:'A hidden Lab discovery.',category:'secret',xp:0,metric:'secret',threshold:1,art:'unknown',color:'#8f98a0',secret:true,disabled:true}
   ];
 
@@ -108,6 +113,15 @@
     });
     return [...byStrain.values()].filter(names=>names.has(rat)&&[...names].some(name=>name!==rat)).length;
   }
+  function thresholdForRank(definition,rank){
+    if(rank<=0)return 0;
+    if(definition.milestones){const stops=definition.milestones;return rank<=stops.length?stops[rank-1]:stops.at(-1)+(rank-stops.length)*definition.repeatEvery;}
+    return definition.repeatable?rank*definition.threshold:definition.threshold;
+  }
+  function rankForValue(definition,value){
+    if(definition.milestones){const stops=definition.milestones;return stops.filter(stop=>value>=stop).length+(value>stops.at(-1)?Math.floor((value-stops.at(-1))/definition.repeatEvery):0);}
+    return definition.repeatable?Math.floor(value/definition.threshold):Number(value>=definition.threshold);
+  }
   function calculateMember(context,member){
     const all=Array.isArray(context?.sessions)?context.sessions:[];
     const sessions=all.filter(session=>memberIn(session,member));
@@ -124,6 +138,11 @@
     const metrics={
       mixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.completed)||0)),
       sharedMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.shared)||0)),
+      internationalMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.international)||0)),
+      replicatedMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.replicated)||0)),
+      doubleSativaMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.doubleSativa)||0)),
+      doubleIndicaMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.doubleIndica)||0)),
+      opposingMixes:Math.max(0,Math.trunc(Number(context?.mixProgress?.[key(member)]?.opposites)||0)),
       sessions:sessionCount,
       strains:strains.size,
       ratedStrains:distinct(rated,'strainId').size,
@@ -149,11 +168,11 @@
       const value=Number(metrics[definition.metric]||0);
       const unavailable=Boolean(definition.unavailable||definition.disabled);
       const earned=!unavailable&&value>=definition.threshold;
-      const rank=unavailable?0:definition.repeatable?Math.floor(value/definition.threshold):Number(earned);
-      const nextThreshold=definition.repeatable?(rank+1)*definition.threshold:definition.threshold;
+      const rank=unavailable?0:rankForValue(definition,value);
+      const nextThreshold=thresholdForRank(definition,rank+1),floor=thresholdForRank(definition,rank);
       const earnedXp=rank*definition.xp;
       return {...definition,value,earned,unavailable,rank,nextThreshold,earnedXp,
-        progress:unavailable?0:definition.repeatable?(value%definition.threshold)/definition.threshold:Math.min(1,value/definition.threshold)};
+        progress:unavailable?0:definition.repeatable?(value-floor)/(nextThreshold-floor):Math.min(1,value/definition.threshold)};
     });
     const activityXp=sessionCount*10+strains.size*5+metrics.mixes*10;
     const achievementXp=achievements.filter(item=>item.earned).reduce((sum,item)=>sum+item.earnedXp,0);
@@ -161,5 +180,5 @@
     return {member,metrics,activityXp,achievementXp,totalXp,level:levelForXp(totalXp),achievements,earned:achievements.filter(item=>item.earned)};
   }
 
-  root.SLRAchievements={version:'preview-2',definitions:DEFINITIONS,typeFamily,newlyEarned,calculateMember,levelForXp,levelThreshold,levelTitle};
+  root.SLRAchievements={version:'preview-2',definitions:DEFINITIONS,thresholdForRank,rankForValue,typeFamily,newlyEarned,calculateMember,levelForXp,levelThreshold,levelTitle};
 })(typeof globalThis!=='undefined'?globalThis:window);

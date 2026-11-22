@@ -233,3 +233,5 @@
 .expTypeLeaf svg path[fill]:not([fill="none"]){fill:currentColor}
 .expTypeLeaf svg path[stroke]{stroke:currentColor}
 .expTypeLeaf svg path[stroke-width="1.1"]{opacity:.18}
+
+.expCompactFoot>div>span,.expPanel .efi{font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;font-variant-emoji:emoji}

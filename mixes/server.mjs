@@ -1,5 +1,6 @@
+import '../achievements.js';
 import {command,normalizeMix,memberKey} from './model.mjs';
-import {defaultMixTitle} from './presentation.mjs?v=2.7.1';
+import {defaultMixTitle} from './presentation.mjs?v=2.7.2';
 import {APP} from '../push/delivery.mjs';
 import {kickDelivery} from '../push/scheduler.mjs';
 const ORIGIN='https://labrats.saltyviewfinder.com';
@@ -16,28 +17,47 @@ async function input(request){
 }
 export async function progressRows(db){
   if(!db)return [];
-  return (await stmt(db,`SELECT r.subject,COUNT(*) AS completed,
-    SUM(CASE WHEN EXISTS(SELECT 1 FROM slr_mix_results other WHERE other.experiment_id=r.experiment_id AND other.subject<>r.subject) THEN 1 ELSE 0 END) AS shared
-    FROM slr_mix_results r GROUP BY r.subject`).all()).results;
+  return (await stmt(db,`WITH recipes AS (
+    SELECT e.id,e.author_subject,json_array_length(e.ingredients) AS components,
+      COUNT(DISTINCT json_extract(j.value,'$.strainId')) AS strains,
+      COUNT(DISTINCT NULLIF(json_extract(j.value,'$.country'),'')) AS countries,
+      SUM(json_extract(j.value,'$.family')='Sativa') AS sativas,
+      SUM(json_extract(j.value,'$.family')='Indica') AS indicas,
+      (SELECT group_concat(batch_id,'|') FROM (SELECT json_extract(part.value,'$.batchId') AS batch_id FROM json_each(e.ingredients) part ORDER BY batch_id)) AS recipe_key
+    FROM slr_mix_experiments e JOIN json_each(e.ingredients) j GROUP BY e.id
+  ) SELECT r.subject,COUNT(*) AS completed,
+    SUM(CASE WHEN EXISTS(SELECT 1 FROM slr_mix_results other WHERE other.experiment_id=r.experiment_id AND other.subject<>r.subject) THEN 1 ELSE 0 END) AS shared,
+    COUNT(DISTINCT CASE WHEN q.strains>=2 AND q.countries>=2 THEN q.recipe_key END) AS international,
+    COUNT(DISTINCT CASE WHEN q.author_subject<>r.subject THEN q.recipe_key END) AS replicated,
+    COUNT(DISTINCT CASE WHEN q.components=2 AND q.strains=2 AND q.sativas=2 THEN q.recipe_key END) AS doubleSativa,
+    COUNT(DISTINCT CASE WHEN q.components=2 AND q.strains=2 AND q.indicas=2 THEN q.recipe_key END) AS doubleIndica,
+    COUNT(DISTINCT CASE WHEN q.components=2 AND q.strains=2 AND q.sativas=1 AND q.indicas=1 THEN q.recipe_key END) AS opposites
+    FROM slr_mix_results r JOIN recipes q ON q.id=r.experiment_id GROUP BY r.subject`).all()).results;
 }
 export async function mixProfile(db,member,active){
   if(!db)return {mixProgress:{},rewardHistory:[],mixRevision:0};
   const [rows,history]=await Promise.all([progressRows(db),stmt(db,'SELECT badge_id AS badgeId,rank,xp,created FROM slr_reward_history WHERE subject=? ORDER BY created DESC,badge_id LIMIT 50',member.subject).all()]);
   const subjects=new Map([...active.values()].map(entry=>[entry.subject,memberKey(entry.name)]));
-  const mixProgress={};for(const row of rows){const key=subjects.get(row.subject);if(key)mixProgress[key]={completed:Number(row.completed),shared:Number(row.shared)};}
+  const mixProgress={};for(const row of rows){const key=subjects.get(row.subject);if(key)mixProgress[key]=Object.fromEntries(['completed','shared','international','replicated','doubleSativa','doubleIndica','opposites'].map(field=>[field,Number(row[field])]));}
   return {mixProgress,rewardHistory:history.results,mixRevision:rows.reduce((sum,row)=>sum+Number(row.completed),0)};
 }
 async function awardMixes(env,subjects,priority){
   const db=env.SLR_PUSH_DB,rows=await progressRows(db),now=Date.now(),owners=[...subjects];if(!owners.length)return;
-  const history=(await stmt(db,`SELECT h.subject,h.badge_id,h.created,e.id AS event_id FROM slr_reward_history h LEFT JOIN events e ON e.id=('achievement:'||h.subject||':'||h.badge_id||':1') WHERE h.subject IN (${owners.map(()=>'?').join(',')})`,...owners).all()).results;
-  const existing=new Map(history.map(row=>[row.subject+'|'+row.badge_id,row])),commands=[];let awards=0;
+  const history=(await stmt(db,`SELECT h.subject,h.badge_id,h.rank,h.created,e.id AS event_id FROM slr_reward_history h LEFT JOIN events e ON e.id=('achievement:'||h.subject||':'||h.badge_id||':'||h.rank) WHERE h.subject IN (${owners.map(()=>'?').join(',')})`,...owners).all()).results;
+  const commands=[];let awards=0;
   for(const row of rows.filter(row=>subjects.has(row.subject)).sort((a,b)=>Number(b.subject===priority)-Number(a.subject===priority))){
-    for(const [id,value,threshold,xp]of [['mix-first-blend',row.completed,1,25],['mix-notes',row.completed,5,35],['mix-shared-bench',row.shared,1,25]]){
-      const prior=existing.get(row.subject+'|'+id);if(value<threshold||prior?.event_id||awards>=10)continue;
-      const created=prior?.created||now,eventId=`achievement:${row.subject}:${id}:1`;awards++;
-      commands.push(stmt(db,'INSERT OR IGNORE INTO slr_reward_history(subject,badge_id,rank,xp,created) VALUES(?,?,1,?,?)',row.subject,id,xp,created));
-      commands.push(stmt(db,"INSERT OR IGNORE INTO events(id,app,subject,category,created) VALUES(?,?,?,'achievement',?)",eventId,APP,row.subject,created));
-      commands.push(stmt(db,`INSERT OR IGNORE INTO deliveries(event_id,subscription_id,due) SELECT e.id,s.id,? FROM events e JOIN subscriptions s ON s.app=e.app AND s.subject=e.subject WHERE e.id=? AND s.created<=e.created AND s.achievement_enabled=1`,now,eventId));
+    const earned=globalThis.SLRAchievements.calculateMember({sessions:[],mixProgress:{[memberKey(row.subject)]:row}},row.subject).earned.filter(badge=>badge.category==='mixes');
+    for(const badge of earned){
+      const prior=history.filter(item=>item.subject===row.subject&&item.badge_id===badge.id),highest=Math.max(0,...prior.map(item=>item.rank));
+      const candidates=[...prior.filter(item=>!item.event_id&&item.rank<=badge.rank).map(item=>item.rank)];
+      for(let rank=highest+1;rank<=Math.min(badge.rank,highest+10);rank++)candidates.push(rank);
+      for(const rank of candidates){
+        if(awards>=10)break;
+        const saved=prior.find(item=>item.rank===rank),created=saved?.created||now,eventId=`achievement:${row.subject}:${badge.id}:${rank}`;awards++;
+        commands.push(stmt(db,'INSERT OR IGNORE INTO slr_reward_history(subject,badge_id,rank,xp,created) VALUES(?,?,?,?,?)',row.subject,badge.id,rank,badge.xp,created));
+        commands.push(stmt(db,"INSERT OR IGNORE INTO events(id,app,subject,category,created) VALUES(?,?,?,'achievement',?)",eventId,APP,row.subject,created));
+        commands.push(stmt(db,`INSERT OR IGNORE INTO deliveries(event_id,subscription_id,due) SELECT e.id,s.id,? FROM events e JOIN subscriptions s ON s.app=e.app AND s.subject=e.subject WHERE e.id=? AND s.created<=e.created AND s.achievement_enabled=1`,now,eventId));
+      }
     }
   }
   if(commands.length)await db.batch(commands);

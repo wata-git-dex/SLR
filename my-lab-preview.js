@@ -42,6 +42,11 @@
   };
 
   const badgeArt={
+    mixPassport:'<rect x="6" y="3" width="20" height="26" rx="3"/><circle cx="16" cy="13" r="6"/><path d="M10 13h12m-6-6c-4 4-4 8 0 12 4-4 4-8 0-12Zm-6 17h12"/>',
+    mixReview:'<path d="M5 5h9v22H5Zm13 0h9v22h-9Z"/><path d="m8 15 2 2 3-5m8 3 2 2 3-5M14 9h4m-4 14h4"/>',
+    mixSuns:'<circle cx="10" cy="13" r="5"/><circle cx="23" cy="21" r="5"/><path d="M10 3v2m0 16v2M1 13h2m14 0h2M4 6l2 2m8 10 2 2M23 12v2m0 14v2m-9-9h2m14 0h1"/>',
+    mixMoons:'<path d="M13 3a9 9 0 1 0 5 16A10 10 0 0 1 13 3Zm12 10a9 9 0 1 0 5 16A10 10 0 0 1 25 13Z"/>',
+    mixOpposites:'<circle cx="10" cy="11" r="5"/><path d="M10 2v2m0 14v2M1 11h2m14 0h2m7 3a8 8 0 1 0 4 14 9 9 0 0 1-4-14ZM7 27l17-22"/>',
     mixPour:'<path d="M4 16h24c-1 8-5 12-12 12S5 24 4 16Zm6 13h12M14 16 24 3a2.5 2.5 0 0 1 4 3L20 16"/><path d="M7 21c5 3 13 3 18 0M5 7c5-1 8 2 8 6-5 0-8-2-8-6Zm2 2 4 3"/>',
     mixNotes:'<rect x="5" y="4" width="22" height="25" rx="3"/><path d="M10 10h12m-12 5h12m-12 5h7m-7 5h12"/>',
     mixCrew:'<path d="M3 28c0-5 3-8 7-8m19 8c0-5-3-8-7-8M6 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0m12 0a4 4 0 1 0 8 0 4 4 0 0 0-8 0M12 23h8l-1 6h-6Z"/>',
@@ -197,7 +202,7 @@
 ].map(([label,values])=>`<div class="profileTasteRow"><h4>${label}</h4><div class="ratPills">${values.length?values.map(value=>`<span class="ratPill">${safeHtml(value)}</span>`).join(''):'<span class="ratPill empty">No records yet</span>'}</div></div>`).join('')}</div><p class="myLabHistoryNote">Progress includes saved Sessions and Mixes. Strain ratings stay separate from mix results.</p></section><section class="badgeCase open" id="badgeCase"><button class="badgeCaseToggle" id="badgeCaseToggle" aria-expanded="true"><span class="badgeCaseIcon" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="14" r="10"/><path d="M10 23 8 30l8-4 8 4-2-7M16 8l1.8 3.7 4.1.6-3 2.9.7 4.1-3.6-2-3.6 2 .7-4.1-3-2.9 4.1-.6Z"/></svg></span><span class="badgeCaseCopy"><strong>Badges</strong><small>${earned} earned · tap to collapse</small></span><span class="badgeCaseArrow">⌄</span></button><div class="badgeCaseBody"><div class="badgeCaseInner"><div class="badgeViewSwitch" role="group" aria-label="Badge view"><button data-badge-view="collection" class="${badgeView==='collection'?'active':''}">Collection</button><button data-badge-view="checklist" class="${badgeView==='checklist'?'active':''}">Checklist</button><button data-badge-view="history" class="${badgeView==='history'?'active':''}">History</button></div><div class="badgeViewPanel ${badgeView==='collection'?'active':''}" data-badge-panel="collection"><div class="badgeGrid">${badgeButtons}</div></div><div class="badgeViewPanel ${badgeView==='checklist'?'active':''}" data-badge-panel="checklist"><div class="badgeList">${badgeRows}</div></div><div class="badgeViewPanel ${badgeView==='history'?'active':''}" data-badge-panel="history">${renderRewardHistory(result)}</div></div></div></section>`;
     document.getElementById('badgeCaseToggle').addEventListener('click',toggleBadgeCase);
     document.querySelectorAll('[data-badge-view]').forEach(button=>button.addEventListener('click',()=>setBadgeView(button.dataset.badgeView)));
-    document.querySelectorAll('[data-badge-id]').forEach(button=>button.addEventListener('click',()=>{const item=result.achievements.find(item=>item.id===button.dataset.badgeId),rank=Number(button.dataset.badgeRank);openBadgeDetail(rank?{...item,earned:true,rank,value:rank*item.threshold,earnedXp:rank*item.xp,nextThreshold:(rank+1)*item.threshold}:item);}));
+    document.querySelectorAll('[data-badge-id]').forEach(button=>button.addEventListener('click',()=>{const item=result.achievements.find(item=>item.id===button.dataset.badgeId),rank=Number(button.dataset.badgeRank);openBadgeDetail(rank?{...item,earned:true,rank,value:engine.thresholdForRank(item,rank),earnedXp:rank*item.xp,nextThreshold:engine.thresholdForRank(item,rank+1)}:item);}));
   }
   function renderRewardHistory(result){
     const events=SLR_REWARD_HISTORY.map(event=>({...event,badge:result.achievements.find(item=>item.id===event.badgeId)})).filter(event=>event.badge);
@@ -211,7 +216,7 @@
     if(!item)return;
     const hidden=item.secret&&!item.earned;
     const state=item.earned?'Earned':item.unavailable?'Not available yet':hidden?'Secret specimen':'Still testing';
-    const copy=hidden?'The Lab is keeping this one under wraps.':item.description+(item.repeatable?` Each additional ${item.threshold} earns another rank and +${item.xp} XP.`:'');
+    const copy=hidden?'The Lab is keeping this one under wraps.':item.description+(item.milestones?` Ranks at 1, 5, 10 and 25 different combinations, then every additional 25. Each rank earns +${item.xp} XP.`:item.repeatable?` Each additional ${item.threshold} earns another rank and +${item.xp} XP.`:'');
     const progress=item.unavailable?(item.unavailableReason||'Not available yet.'):item.repeatable?rankProgress(item):item.earned?'Unlocked':`${Math.min(item.value,item.threshold)} of ${item.threshold} complete`;
     const meter=(!item.earned||item.repeatable)&&!item.unavailable&&!hidden?`<div class="badgeDetailMeter"><i style="width:${Math.round(item.progress*100)}%"></i></div>`:'';
     const name=hidden?'Unknown Specimen':badgeName(item);
@@ -272,7 +277,8 @@
     const overlay=document.getElementById('achievementNotice'),first=awards[0];
     if(!overlay.classList.contains('show')){noticeReturnFocus=document.activeElement;noticeOverflow=document.body.style.overflow;}
     const title=awards.length>1?'Lab breakthroughs':first.rank>1?'New badge rank':'Achievement unlocked';
-    const milestoneCopy=first.repeatable?first.description.replace(String(first.threshold),String(first.rank*first.threshold)):first.description;
+    const reached=engine.thresholdForRank(first,first.rank);
+    const milestoneCopy=first.milestones?first.description+' '+reached+' qualifying combination'+(reached===1?'':'s')+'.':first.repeatable?first.description.replace(String(first.threshold),String(first.rank*first.threshold)):first.description;
     overlay.innerHTML=`<section class="achievementNoticeCard" role="dialog" aria-modal="true" aria-labelledby="achievementNoticeTitle" aria-describedby="achievementNoticeSummary" style="--coin:${badgeColor(first)}"><button class="achievementNoticeClose" aria-label="Close achievement announcement">✕</button><div class="achievementNoticeEyebrow">${preview?'Preview · example achievement':'Lab breakthrough'}</div><div class="achievementNoticeCoin" aria-hidden="true">${coin(first)}</div><h2 id="achievementNoticeTitle">${safeHtml(title)}</h2><p class="achievementNoticeName">${safeHtml(badgeName(first))}</p><p id="achievementNoticeSummary">${safeHtml(milestoneCopy)}</p>${awards.length>1?`<ul class="achievementNoticeMore">${awards.slice(1).map(item=>`<li><span>${safeHtml(badgeName(item))}</span><b>+${item.awardedXp} XP</b></li>`).join('')}</ul>`:''}<div class="achievementNoticeXp">+${awards.reduce((sum,item)=>sum+item.awardedXp,0)} XP${preview?' · example':''}</div><div class="achievementNoticeActions"><button data-achievement-profile>View achievements</button><button data-achievement-dismiss>Got it</button></div></section>`;
     overlay.classList.add('show');document.body.style.overflow='hidden';
     overlay.querySelector('.achievementNoticeClose').focus({preventScroll:true});
