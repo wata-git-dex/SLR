@@ -1,5 +1,6 @@
+import {defaultMixTitle} from './presentation.mjs?v=2.7.1';
 export function normalizeMix(ingredients,catalog){
-  if(!Array.isArray(ingredients)||ingredients.length<2||ingredients.length>4)throw Error('Choose 2–4 strains for your experiment.');
+  if(!Array.isArray(ingredients)||ingredients.length<2||ingredients.length>4)throw Error('Choose 2–4 strains for your mix.');
   const seen=new Set(),rows=ingredients.map(item=>{
     const batch=catalog.find(batch=>batch.id===item.batchId);
     if(!batch)throw Error('Choose a strain for every component.');
@@ -21,8 +22,8 @@ function observation(input,member){
 export function makeExperiment(input,catalog,members=[input.author]){
   const ingredients=normalizeMix(input.ingredients,catalog);
   const participants=[...new Set([input.author,...(input.participants||[])])];
-  if(!input.author||participants.some(member=>!members.includes(member)))throw Error('Choose active Lab Rats for this experiment.');
-  return {id:input.id,author:input.author,participants,title:String(input.title||'').trim().slice(0,80)||ingredients.map(row=>row.name).join(' + '),ingredients,observations:[observation(input,input.author)],created:input.created};
+  if(!input.author||participants.some(member=>!members.includes(member)))throw Error('Choose active Lab Rats for this mix.');
+  return {id:input.id,author:input.author,participants,title:String(input.title||'').trim().slice(0,80)||defaultMixTitle(ingredients),ingredients,observations:[observation(input,input.author)],created:input.created};
 }
 export function addObservation(record,member,input){
   if(!record.participants.includes(member))throw Error('Only a participating Lab Rat can add their result.');
@@ -38,7 +39,7 @@ export function experimentProgress(records,member){
 export const EFFECT_KEYS=['Euphoric','Focused','Creative','Social','Giggly','Energized','Relaxed','CouchLocked','Hungry','Sleepy','Anxious','Paranoid','Washed','KnockedOut','Dizzy','Headache'];
 export const memberKey=value=>String(value||'').trim().toLowerCase();
 export function command(input,{recipe=true}={}){
-  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Invalid experiment.');
+  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Invalid mix.');
   if(!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(input.operationId||''))throw Error('A save ID is required. Reopen your draft.');
   const overall=input.overall==null?null:input.overall;
   if(overall!==null&&(!Number.isInteger(overall)||overall<1||overall>5))throw Error('Choose 1–5 stars or leave the rating blank.');

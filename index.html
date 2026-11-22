@@ -1309,21 +1309,22 @@ body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <div class="sheet" id="sheet"><div class="grip" id="sheetGrip" role="button" tabindex="0" aria-label="Drag up to expand or down to close"></div><div id="sheetContent"></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="achievements.js?v=2.7.0"></script>
+<script src="achievements.js?v=2.7.1"></script>
 <script>
 const WORKER_URL = 'https://slr-notion.cleanwataorg.workers.dev';
 let SLR_ACTIVE_WRITES=0;
 async function slrWrite(...args){SLR_ACTIVE_WRITES++;try{return await fetch(...args);}finally{SLR_ACTIVE_WRITES--;}}
 
-const APP_VERSION = 'v2.7.0';
+const APP_VERSION = 'v2.7.1';
 const LAB_NOTICE = {
-  id:'slr-v2.6.13', version:'Version 2.6.13', audience:'all',
-  title:'A little more Lab.',
-  copy:'Your profile is closer, and achievements have their moment.',
+  id:'slr-v2.7.1', version:'Version 2.7.1', audience:'all',
+  title:'A Fresh Mix.',
+  copy:'A clearer mixing bench, with every Rat’s result kept their own.',
   items:[
-    ['◎','Profile shortcut','The white rat opens your profile, progress and badge collection.'],
-    ['◇','Achievement announcements','New badges and ranks appear after your saved session is confirmed.'],
-    ['●','Hybrid details','Record Hybrid-S or Hybrid-I. Both keep green cards and stay under the Hybrid filter.']
+    ['⌕','Find Your Strains','Search names or brands. Type-colored options close after you choose.'],
+    ['✦','Make It Yours','Mix names fill in as Strain × Strain. Add a custom name anytime before saving.'],
+    ['◎','Try This Mix','Open a mix for details, then add your own result to someone else’s recipe.'],
+    ['◇','One Lab Progress','Saved mix results earn overall profile XP. Regular strain ratings stay separate.']
   ]
 };
 const MEMBER_LAB_NOTICES = {};
@@ -5155,9 +5156,9 @@ window.SLRPushHost={
 };
 showCheckingGate();refresh(true);
 </script>
-<script src="my-lab-preview.js?v=2.7.0"></script>
-<link rel="stylesheet" href="mixes/mixes.css?v=2.7.0">
-<script type="module" src="mixes/app.mjs?v=2.7.0"></script>
+<script src="my-lab-preview.js?v=2.7.1"></script>
+<link rel="stylesheet" href="mixes/mixes.css?v=2.7.1">
+<script type="module" src="mixes/app.mjs?v=2.7.1"></script>
 <script type="module" src="push/settings.mjs?v=2.6.18"></script>
 <script type="module" src="assets/navigation/slr-navigation.mjs"></script>
 </body>

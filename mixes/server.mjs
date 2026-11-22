@@ -1,4 +1,5 @@
 import {command,normalizeMix,memberKey} from './model.mjs';
+import {defaultMixTitle} from './presentation.mjs?v=2.7.1';
 import {APP} from '../push/delivery.mjs';
 import {kickDelivery} from '../push/scheduler.mjs';
 const ORIGIN='https://labrats.saltyviewfinder.com';
@@ -59,7 +60,7 @@ export async function experimentRoute(request,env,{activeMembers,loadCatalog}){
   if(request.method==='OPTIONS')return new Response(null,{headers});
   if(request.method!=='POST')return reply({error:'Method not allowed'},405);
   const action=path.slice('/experiments/'.length);
-  if(!['list','get','create','result'].includes(action))return reply({error:'Not found'},404);
+  if(!['list','get','create','result','try'].includes(action))return reply({error:'Not found'},404);
   try{
     const body=await input(request),active=await activeMembers(),member=typeof body.code==='string'?active.get(body.code.trim().toUpperCase()):null;
     if(!member?.subject)return reply({error:'Invalid or revoked invite code.',needsCode:true},401);
@@ -93,7 +94,7 @@ export async function experimentRoute(request,env,{activeMembers,loadCatalog}){
         if(selected.some(entry=>!entry))fail('A selected Lab Rat is no longer active.');
         const participants=[...new Map(selected.map(entry=>[entry.subject,entry])).values()];
         const catalog=await loadCatalog();let ingredients;try{ingredients=normalizeMix(data.ingredients,catalog);}catch(error){fail(error.message);}
-        const now=Date.now(),title=data.title||ingredients.map(row=>row.name).join(' + ').slice(0,80);
+        const now=Date.now(),title=data.title||defaultMixTitle(ingredients);
         const commands=[stmt(db,'INSERT INTO slr_mix_experiments(id,author_subject,author_name,operation_id,request_hash,title,ingredients,created) VALUES(?,?,?,?,?,?,?,?)',id,member.subject,member.name,operationId,requestHash,title,JSON.stringify(ingredients),now),
           ...participants.map(entry=>stmt(db,'INSERT INTO slr_mix_participants(experiment_id,subject,name) VALUES(?,?,?)',id,entry.subject,entry.name)),
           stmt(db,'INSERT INTO slr_mix_results(experiment_id,subject,name,operation_id,request_hash,overall,effects,notes,created) VALUES(?,?,?,?,?,?,?,?,?)',id,member.subject,member.name,operationId,requestHash,data.overall,JSON.stringify(data.effects),data.notes,now)];
@@ -101,11 +102,18 @@ export async function experimentRoute(request,env,{activeMembers,loadCatalog}){
       }
     }else{
       id=data.experimentId;
-      if(!await stmt(db,'SELECT 1 FROM slr_mix_participants WHERE experiment_id=? AND subject=?',id,member.subject).first())fail('Only a participating Lab Rat can add a result.',403);
+      if(!await stmt(db,'SELECT 1 FROM slr_mix_experiments WHERE id=?',id).first())fail('This mix could not be found.',404);
+      if(action==='result'&&!await stmt(db,'SELECT 1 FROM slr_mix_participants WHERE experiment_id=? AND subject=?',id,member.subject).first())fail('Only a participating Lab Rat can add a result.',403);
       const prior=await stmt(db,'SELECT request_hash,operation_id FROM slr_mix_results WHERE experiment_id=? AND subject=?',id,member.subject).first();
       if(prior){if(prior.operation_id!==operationId||prior.request_hash!==requestHash)fail('Your result is already saved for this mix.',409);}
       else{
-        try{await stmt(db,'INSERT INTO slr_mix_results(experiment_id,subject,name,operation_id,request_hash,overall,effects,notes,created) VALUES(?,?,?,?,?,?,?,?,?)',id,member.subject,member.name,operationId,requestHash,data.overall,JSON.stringify(data.effects),data.notes,Date.now()).run();}
+        try{
+          const commands=[];
+          // Trying a public recipe enrolls only the authenticated caller, atomically with their result.
+          if(action==='try')commands.push(stmt(db,'INSERT OR IGNORE INTO slr_mix_participants(experiment_id,subject,name) VALUES(?,?,?)',id,member.subject,member.name));
+          commands.push(stmt(db,'INSERT INTO slr_mix_results(experiment_id,subject,name,operation_id,request_hash,overall,effects,notes,created) VALUES(?,?,?,?,?,?,?,?,?)',id,member.subject,member.name,operationId,requestHash,data.overall,JSON.stringify(data.effects),data.notes,Date.now()));
+          await db.batch(commands);
+        }
         catch(error){const raced=await stmt(db,'SELECT request_hash,operation_id FROM slr_mix_results WHERE experiment_id=? AND subject=?',id,member.subject).first();if(!raced||raced.operation_id!==operationId||raced.request_hash!==requestHash)throw error;}
       }
     }

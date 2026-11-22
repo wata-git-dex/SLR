@@ -62,3 +62,29 @@ test('Worker routes experiments before legacy Session POST; ordinary Notion reco
   assert.equal((await worker.fetch(make('',{kind:'experiment'}),env)).status,400);assert.equal((await worker.fetch(make('experiments/unknown',{}),env)).status,404);
  }finally{globalThis.fetch=originalFetch;}
 });
+
+test('Try This Mix lets an active Rat add only their own result to the existing recipe',async()=>{
+ const {call,DB}=setup(),first=await call('create',input({participants:[]})),id=first.body.record.id;
+ const data={operationId:crypto.randomUUID(),experimentId:id,overall:2,effects:{Energized:2,Creative:1},notes:'My take',member:'Alice',participants:['Amber']};
+ const tried=await call('try',data,'PIERO');assert.equal(tried.status,200);
+ assert.equal(tried.body.record.id,id);assert.equal(tried.body.record.author,'Alice');assert.deepEqual(tried.body.record.ingredients,first.body.record.ingredients);
+ assert.deepEqual(tried.body.record.participants,['Alice','Piero']);assert.equal(tried.body.record.observations.find(row=>row.member==='Alice').overall,4);assert.equal(tried.body.record.observations.find(row=>row.member==='Piero').overall,2);
+ assert.equal(tried.body.mixProgress.piero.completed,1);assert.equal(tried.body.mixProgress.piero.shared,1);assert.equal(tried.body.mixProgress.amber,undefined);
+ assert.equal((await call('list',{scope:'mine'},'PIERO')).body.records.length,1);
+ assert.equal((await call('try',data,'PIERO')).status,200);assert.equal((await call('try',{...data,operationId:crypto.randomUUID()},'PIERO')).status,409);
+ assert.equal(DB.sqlite.prepare('SELECT COUNT(*) n FROM slr_mix_results').get().n,2);assert.equal(DB.sqlite.prepare('SELECT COUNT(*) n FROM slr_mix_experiments').get().n,1);
+ assert.equal((await call('try',data,'REVOKED')).status,401);assert.equal((await call('try',{...data,experimentId:'mix_'+'f'.repeat(64)},'AMBER')).status,404);
+});
+test('failed self-try rolls back enrollment and a stable retry creates one result',async()=>{
+ const {call,DB}=setup(),first=await call('create',input({participants:[]}));
+ const data={operationId:crypto.randomUUID(),experimentId:first.body.record.id,overall:5,effects:{Relaxed:1}};
+ DB.failBatch=true;assert.equal((await call('try',data,'PIERO')).status,503);
+ assert.equal(DB.sqlite.prepare("SELECT COUNT(*) n FROM slr_mix_participants WHERE subject='piero'").get().n,0);assert.equal(DB.sqlite.prepare("SELECT COUNT(*) n FROM slr_mix_results WHERE subject='piero'").get().n,0);
+ assert.equal((await call('try',data,'PIERO')).status,200);assert.equal((await call('try',data,'PIERO')).status,200);
+ assert.equal(DB.sqlite.prepare("SELECT COUNT(*) n FROM slr_mix_results WHERE subject='piero'").get().n,1);
+});
+test('server generates cross-separated names and preserves an explicit custom name',async()=>{
+ const {call}=setup();
+ const auto=await call('create',input({title:''}));assert.equal(auto.status,200);assert.equal(auto.body.record.title,'Durban Poison × Durban Poison');
+ const custom=await call('create',input({title:'The Ultimate Combo'}));assert.equal(custom.body.record.title,'The Ultimate Combo');
+});

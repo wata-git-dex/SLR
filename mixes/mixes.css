@@ -117,7 +117,6 @@
 .expMiniRecipe i{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--ingredient-color)}
 .expMiniRecipe span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .expMiniRecipe small{display:inline;margin-left:4px;color:var(--dim);font-size:9px}
-.expMiniRecipe b{color:var(--ingredient-color);font:9px 'Space Mono',monospace;font-weight:400}
 .expCompactFoot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:9px;color:var(--dim);font:9px/1.5 'Space Mono',monospace}
 .expCompactFoot>span{min-width:0;overflow-wrap:anywhere}.expCompactFoot>div{display:flex;gap:5px;flex-shrink:0;font-size:13px}
 @media(max-width:600px){.expProgress{padding:16px}.expProgressHead{gap:8px}.expProgressHead b{font-size:15px}.expRecord.expCompact{padding:13px 14px 11px}}
@@ -129,7 +128,7 @@
 .labHub.expReview{padding-bottom:calc(var(--phone-dock-clearance) + 12px);scroll-padding-bottom:calc(var(--phone-dock-clearance) + 12px)}
 .expRecord.expCompact{overflow:hidden;border-radius:16px;padding:14px 15px;background:linear-gradient(135deg,color-mix(in srgb,var(--mix-start) 9%,var(--panel)),color-mix(in srgb,var(--mix-end) 6%,var(--panel))) padding-box,linear-gradient(135deg,color-mix(in srgb,var(--mix-start) 60%,var(--line)),color-mix(in srgb,var(--mix-end) 60%,var(--line))) border-box;box-shadow:0 4px 14px #0002}
 .expCompact::before{display:none}
-.expCardStripe{height:3px;border-radius:999px;background:var(--mix-gradient);margin-bottom:13px;opacity:.85}
+.expCardStripe{height:3px;border-radius:999px;background:var(--mix-stripe,var(--mix-gradient));margin-bottom:13px;opacity:1}
 .expCompact h4{font-size:15px;line-height:1.4;min-height:21px}
 .expMiniRecipe{gap:7px;margin:13px 0}
 .expMiniRecipe>div{padding:7px 8px;border:1px solid color-mix(in srgb,var(--ingredient-color) 22%,var(--line));border-radius:9px;background:color-mix(in srgb,var(--ingredient-color) 4%,var(--ink));font-size:11px}
@@ -191,3 +190,46 @@
 .expPersonalResults{display:grid;gap:10px;margin:16px 0}.expPersonalResults>div{padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--ink)}.expPersonalResults .expResultHeading{position:static;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none}.expPersonalResults .expResultHeading::after,.expPersonalResults .expResultHeading::before{display:none}.expPersonalResults b{font-size:13px}.expPersonalResults strong{font:11px 'Space Mono',monospace;color:var(--green)}.expPersonalResults p{font:11px/1.6 'Space Grotesk',sans-serif;color:var(--dim);margin:9px 0 0}.expDetailNotes{white-space:pre-wrap;overflow-wrap:anywhere}
 
 .expPerson{max-width:100%;white-space:normal;overflow-wrap:anywhere}.expPerson button{flex-shrink:0}
+
+/* Mix Log: compact ingredient tiles and details contained within their recipe. */
+.expHistory{align-items:start}
+.expMiniRecipe{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.expMiniRecipe>div{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;min-height:58px;padding:10px;border:1px solid transparent;background:var(--ingredient-color);color:#101510;border-radius:10px}
+.expMiniRecipe span{width:100%;font-size:12px;font-weight:700;line-height:1.4}
+.expMiniRecipe small{font-size:10px;font-weight:400;color:inherit;line-height:1.4}
+.expCompactFoot{align-items:flex-start;flex-direction:column;gap:8px}
+.expCompactFoot>div{flex-wrap:wrap;flex-shrink:1;gap:6px;font-size:16px}
+.expCardActions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+.expRecordAction{width:auto;min-height:44px;margin:0;font-size:12px}
+.expTry{min-height:44px;padding:7px 12px;border:1px solid rgba(var(--accent-rgb),.35);border-radius:999px;color:var(--green);background:rgba(var(--accent-rgb),.08);font:600 12px 'Space Grotesk',sans-serif;cursor:pointer}
+.expInlineDetail{margin-top:8px;border-top:1px solid var(--line);padding-top:12px}
+.expDetailDate{font:10px/1.6 'Space Mono',monospace;color:var(--dim);margin:0}
+.expInlineDetail .expPersonalResults{margin:12px 0 0}.expInlineDetail .expPersonalResults>div{padding:10px}.expInlineDetail .expResultHeading{flex-wrap:wrap}
+.expTry:focus-visible,.expBatchTrigger:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.expIngredientLabel{font:10px 'Space Mono',monospace;color:var(--dim)}
+.expBatchTrigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:56px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--ink);color:var(--text);font:12px 'Space Grotesk',sans-serif;text-align:left;cursor:pointer}
+.expBatchTrigger>span:first-child{min-width:0;overflow-wrap:anywhere}.expBatchTrigger b,.expBatchTrigger small{display:block;line-height:1.5}.expBatchTrigger small{font-size:10px;color:var(--text);margin-top:3px}.expBatchTrigger>span:last-child{flex-shrink:0;color:var(--green);padding:0 2px}.expBatchTrigger:disabled{cursor:default}.expBatchTrigger:disabled>span:last-child{display:none}
+.expPicker{box-sizing:border-box;width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:18px;border:1px solid rgba(var(--accent-rgb),.5);border-radius:20px;background:var(--panel);color:var(--text);box-shadow:0 18px 60px #0007}
+.expPicker::backdrop{background:#0009;backdrop-filter:blur(4px)}
+.expPickerHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.expPickerHead h4{font:700 20px 'Space Grotesk',sans-serif;margin:0}.expPickerHead button{width:44px;font-size:20px}
+.expPickerSearch{display:block;font:11px 'Space Grotesk',sans-serif;color:var(--dim);margin:12px 0}.expPickerSearch input{box-sizing:border-box;display:block;width:100%;min-height:46px;margin-top:8px;padding:11px 12px;background:var(--ink);color:var(--text);border:1px solid var(--line);border-radius:10px;font:16px 'Space Grotesk',sans-serif}
+.expPickerOptions{display:grid;gap:6px;max-height:48dvh;overflow-y:auto;overscroll-behavior:contain;scroll-padding:8px}
+.expPickerOption{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:65px;padding:12px;text-align:left;border:1px solid var(--line);border-left:3px solid var(--option-color);border-radius:10px;background:var(--ink);color:var(--text);font:13px 'Space Grotesk',sans-serif;cursor:pointer}
+.expPickerOption>span:first-child{min-width:0;overflow-wrap:anywhere}.expPickerOption b{color:var(--option-color);line-height:1.4}.expPickerOption small{display:block;color:var(--text);font-size:11px;line-height:1.5;margin-top:4px}.expPickerMeta{flex-shrink:0;text-align:right;font-size:10px}.expPickerMeta>span{color:var(--option-color)}
+.expPickerOption[aria-pressed=true]{border-color:var(--option-color);background:color-mix(in srgb,var(--option-color) 10%,var(--ink))}
+.expPicker button:focus-visible,.expPicker input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(max-width:400px){.expPicker{padding:14px}.expPickerOption{gap:8px;padding:10px}.expPickerMeta{font-size:9px}.expPickerOption small{font-size:10px}}
+@media(forced-colors:active){.expMiniRecipe>div{background:Canvas;color:CanvasText;border-color:CanvasText}.expPickerOption{border-color:ButtonText}.expPickerOption b,.expPickerMeta>span{color:ButtonText}.expPickerOption[aria-pressed=true]{outline:2px solid Highlight}}
+:root.slr-light .expPickerOption b,:root.slr-light .expPickerMeta>span{color:color-mix(in srgb,var(--option-color) 60%,#000)}
+:root.slr-light .expBatchTrigger b{filter:brightness(.6)}
+/* Light mode category tokens are darker for text; soften tile fills for dark lettering. */
+:root.slr-light .expMiniRecipe>div{background:color-mix(in srgb,var(--ingredient-color) 40%,white);color:#101510}
+
+/* Leaf artwork uses the same type-specific shapes as the main strain cards. */
+.expMiniRecipe>div{display:grid;grid-template-columns:minmax(0,1fr) 32px;gap:6px;align-items:start;justify-content:normal}
+.expMiniRecipe .expTypeLeaf{display:block;align-self:start;width:32px;height:32px;flex:none;overflow:visible}
+.expTypeLeaf svg{display:block;width:32px;height:32px}
+.expNameHint{display:block;margin-top:7px;font:11px/1.5 'Space Grotesk',sans-serif;color:var(--dim)}
+.expTypeLeaf svg path[fill]:not([fill="none"]){fill:currentColor}
+.expTypeLeaf svg path[stroke]{stroke:currentColor}
+.expTypeLeaf svg path[stroke-width="1.1"]{opacity:.18}
